@@ -1,0 +1,1430 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartLearn AI | Learn Smarter, Grow Faster</title>
+    <meta name="description" content="SmartLearn AI helps school and college students learn, practice quizzes, explore study materials, and improve their learning.">
+    <meta name="theme-color" content="#6557e8">
+
+    <style>
+        :root {
+            --primary: #6557e8;
+            --primary-dark: #5143d2;
+            --text: #20243b;
+            --muted: #777b90;
+            --background: #f7f8ff;
+            --border: #e9eaf4;
+            --white: #ffffff;
+            --shadow: 0 18px 55px rgba(49, 43, 112, 0.10);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: min(1200px, 90%);
+            margin: 0 auto;
+        }
+
+        /* NAVIGATION */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+        }
+
+        .nav-inner {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -0.7px;
+            white-space: nowrap;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            color: white;
+            background: linear-gradient(135deg, #887aff, #5141d0);
+            box-shadow: 0 5px 15px rgba(101, 87, 232, 0.25);
+        }
+
+        .brand-ai {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 27px;
+        }
+
+        .nav-links a {
+            color: #656a80;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .button {
+            min-height: 44px;
+            padding: 11px 19px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            color: white;
+            background: var(--primary);
+            box-shadow: 0 7px 18px rgba(101, 87, 232, 0.20);
+        }
+
+        .button-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .button-light {
+            color: var(--text);
+            background: white;
+            border-color: var(--border);
+        }
+
+        /* PROFILE DROPDOWN */
+
+        .profile-menu {
+            position: relative;
+        }
+
+        .profile-trigger {
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            background: white;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            cursor: pointer;
+            list-style: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile-trigger::-webkit-details-marker {
+            display: none;
+        }
+
+        .profile-trigger:hover,
+        .profile-menu[open] .profile-trigger {
+            border-color: #c9c2ff;
+            box-shadow: 0 5px 18px rgba(101, 87, 232, 0.10);
+        }
+
+        .profile-avatar {
+            width: 35px;
+            height: 35px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 50%;
+            color: white;
+            background: linear-gradient(135deg, #887aff, #5141d0);
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-chevron {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 270px;
+            padding: 10px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            box-shadow: var(--shadow);
+            animation: dropdownIn 0.18s ease;
+        }
+
+        @keyframes dropdownIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-heading {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 7px;
+        }
+
+        .dropdown-heading strong {
+            display: block;
+            overflow-wrap: anywhere;
+            font-size: 14px;
+        }
+
+        .dropdown-heading small {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .dropdown-link {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 12px;
+            color: #464a60;
+            background: transparent;
+            border: 0;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .dropdown-link:hover {
+            color: var(--primary);
+            background: #f5f3ff;
+        }
+
+        .menu-icon {
+            width: 25px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 7px 2px;
+        }
+
+        .logout-button {
+            color: #d04454;
+        }
+
+        .logout-button:hover {
+            color: #b42335;
+            background: #fff0f1;
+        }
+
+        /* FLASH MESSAGES */
+
+        .flash-area {
+            padding-top: 14px;
+        }
+
+        .flash-message {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            background: #f0edff;
+            color: #5143c2;
+            font-size: 14px;
+        }
+
+        /* HERO SECTION */
+
+        .hero {
+            padding: 88px 0 90px;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse at 80% 20%, #ebe8ff 0%, transparent 36%),
+                linear-gradient(180deg, #fcfcff, #f7f8ff);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #7868f5;
+            box-shadow: 0 0 0 5px rgba(120, 104, 245, 0.12);
+        }
+
+        .hero h1 {
+            max-width: 600px;
+            margin-top: 22px;
+            font-size: clamp(42px, 5vw, 66px);
+            line-height: 1.12;
+            letter-spacing: -2.6px;
+            font-weight: 800;
+        }
+
+        .gradient-text {
+            color: var(--primary);
+            background: linear-gradient(100deg, #7968f4, #4e43d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            max-width: 520px;
+            margin-top: 22px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.9;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .hero-points {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 26px;
+            color: #666b81;
+            font-size: 13px;
+        }
+
+        .hero-points span::before {
+            content: "✓";
+            color: #25a783;
+            font-weight: 800;
+            margin-right: 7px;
+        }
+
+        /* DASHBOARD PREVIEW */
+
+        .visual-wrap {
+            position: relative;
+            min-width: 0;
+        }
+
+        .visual-glow {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            top: 8%;
+            left: 8%;
+            border-radius: 50%;
+            background: #dcd7ff;
+            filter: blur(55px);
+            opacity: 0.65;
+        }
+
+        .learning-preview {
+            position: relative;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid white;
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(57, 52, 107, 0.10);
+            animation: floatCard 5s ease-in-out infinite;
+        }
+
+        @keyframes floatCard {
+            0%, 100% {
+                transform: translateY(0) rotate(1deg);
+            }
+            50% {
+                transform: translateY(-8px) rotate(0);
+            }
+        }
+
+        .preview-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-bottom: 19px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-title {
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .live-tag {
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #e9faf3;
+            color: #198765;
+            font-size: 10px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .preview-welcome {
+            padding: 22px 0;
+        }
+
+        .preview-welcome p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .preview-welcome h3 {
+            margin-top: 4px;
+            font-size: 21px;
+            line-height: 1.4;
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .progress-track {
+            height: 8px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #eeeefa;
+        }
+
+        .progress-fill {
+            width: 72%;
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #8273fa, #5b4bdb);
+        }
+
+        .preview-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 13px;
+            margin-top: 23px;
+        }
+
+        .stat-card {
+            min-width: 0;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(57, 52, 107, 0.07);
+        }
+
+        .stat-icon {
+            width: 35px;
+            height: 35px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 11px;
+            border-radius: 11px;
+            background: #efedff;
+            font-size: 17px;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: #e5f8f1;
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: #eaf2ff;
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: #fff1df;
+        }
+
+        .stat-card strong {
+            display: block;
+            font-size: 16px;
+        }
+
+        .stat-card small {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .floating-note {
+            position: absolute;
+            right: -20px;
+            bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 14px 17px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(57, 52, 107, 0.10);
+            animation: floatNote 4s ease-in-out infinite;
+        }
+
+        @keyframes floatNote {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .floating-note-icon {
+            width: 39px;
+            height: 39px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #fff1dd;
+            font-size: 19px;
+        }
+
+        .floating-note strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .floating-note small {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* GENERAL SECTIONS */
+
+        .section {
+            padding: 85px 0;
+        }
+
+        .section-soft {
+            background: var(--background);
+        }
+
+        .section-heading {
+            max-width: 720px;
+            margin: 0 auto 43px;
+            text-align: center;
+        }
+
+        .section-heading h2 {
+            margin-top: 15px;
+            font-size: clamp(29px, 4vw, 40px);
+            line-height: 1.25;
+            letter-spacing: -1.2px;
+        }
+
+        .section-heading p {
+            margin-top: 13px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* FEATURES */
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .feature-card {
+            min-width: 0;
+            padding: 25px 22px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 19px;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 17px 40px rgba(43, 40, 90, 0.07);
+        }
+
+        .feature-icon {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 20px;
+            border-radius: 13px;
+            font-size: 21px;
+        }
+
+        .icon-purple {
+            background: #efedff;
+            color: #6c5ce7;
+        }
+
+        .icon-blue {
+            background: #eaf2ff;
+            color: #4382d9;
+        }
+
+        .icon-green {
+            background: #e5f8f0;
+            color: #239c79;
+        }
+
+        .icon-orange {
+            background: #fff1df;
+            color: #dc8a32;
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            min-height: 65px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .feature-label {
+            display: inline-block;
+            margin-top: 13px;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* HOW IT WORKS */
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .step-card {
+            padding: 27px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .step-number {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: #efedff;
+            color: var(--primary);
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .step-card h3 {
+            margin-top: 19px;
+            font-size: 17px;
+        }
+
+        .step-card p {
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* CALL TO ACTION */
+
+        .cta-section {
+            padding: 30px 0 85px;
+        }
+
+        .cta-box {
+            position: relative;
+            overflow: hidden;
+            padding: 55px 30px;
+            text-align: center;
+            border-radius: 25px;
+            background: linear-gradient(125deg, #6557e8, #5041ca);
+            color: white;
+        }
+
+        .cta-box::before,
+        .cta-box::after {
+            content: "";
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .cta-box::before {
+            top: -115px;
+            left: -45px;
+        }
+
+        .cta-box::after {
+            right: -55px;
+            bottom: -130px;
+            width: 250px;
+            height: 250px;
+        }
+
+        .cta-box h2 {
+            position: relative;
+            font-size: clamp(27px, 4vw, 39px);
+            letter-spacing: -1px;
+        }
+
+        .cta-box p {
+            position: relative;
+            max-width: 540px;
+            margin: 13px auto 24px;
+            color: #e7e4ff;
+            font-size: 14px;
+        }
+
+        .cta-box .button {
+            position: relative;
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        /* FOOTER */
+
+        .footer {
+            padding: 28px 0;
+            border-top: 1px solid var(--border);
+            background: white;
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .footer p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #666b81;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* TABLET RESPONSIVE */
+
+        @media (max-width: 1000px) {
+            .nav-links {
+                gap: 15px;
+            }
+
+            .hero-grid {
+                gap: 35px;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .floating-note {
+                right: -7px;
+            }
+        }
+
+        /* MOBILE RESPONSIVE */
+
+        @media (max-width: 760px) {
+            .container {
+                width: min(100% - 32px, 560px);
+            }
+
+            .nav-inner {
+                min-height: 67px;
+                gap: 8px;
+            }
+
+            .brand {
+                font-size: 17px;
+                gap: 7px;
+            }
+
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-actions {
+                gap: 0;
+            }
+
+            .profile-trigger {
+                min-height: 42px;
+                padding-right: 9px;
+            }
+
+            .profile-trigger .profile-label,
+            .profile-chevron {
+                display: none;
+            }
+
+            .profile-dropdown {
+                position: absolute;
+                right: 0;
+                width: min(270px, calc(100vw - 32px));
+            }
+
+            .hero {
+                padding: 58px 0 65px;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 45px;
+            }
+
+            .hero h1 {
+                font-size: clamp(39px, 10vw, 55px);
+                letter-spacing: -1.8px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .learning-preview {
+                padding: 19px;
+                animation: none;
+            }
+
+            .floating-note {
+                right: -3px;
+                bottom: -23px;
+                padding: 11px 13px;
+            }
+
+            .section {
+                padding: 65px 0;
+            }
+
+            .feature-grid {
+                gap: 12px;
+            }
+
+            .feature-card {
+                padding: 19px 15px;
+            }
+
+            .feature-card p {
+                min-height: 0;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .step-card {
+                padding: 22px;
+            }
+
+            .cta-section {
+                padding-bottom: 60px;
+            }
+
+            .cta-box {
+                padding: 42px 20px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .brand {
+                font-size: 15px;
+            }
+
+            .brand-icon {
+                width: 31px;
+                height: 31px;
+            }
+
+            .feature-card {
+                padding: 16px 12px;
+            }
+
+            .feature-card h3 {
+                font-size: 14px;
+            }
+
+            .feature-card p {
+                font-size: 11px;
+            }
+
+            .preview-stats {
+                gap: 9px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .hero-actions .button {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar" id="home">
+        <div class="container nav-inner">
+
+            <a class="brand" href="{{ url_for('home') }}" aria-label="SmartLearn AI Home">
+                <span class="brand-icon">✦</span>
+                <span>SmartLearn <span class="brand-ai">AI</span></span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+            </nav>
+
+            <div class="nav-actions">
+
+                <!-- PROFILE MENU -->
+                <details class="profile-menu">
+                    <summary class="profile-trigger">
+                        <span class="profile-avatar" aria-hidden="true">👤</span>
+
+                        <span class="profile-label">
+                            {% if logged_in %}
+                                {{ user_name }}
+                            {% else %}
+                                Profile
+                            {% endif %}
+                        </span>
+
+                        <span class="profile-chevron" aria-hidden="true">▼</span>
+                    </summary>
+
+                    <div class="profile-dropdown">
+
+                        {% if logged_in %}
+
+                            <div class="dropdown-heading">
+                                <strong>{{ user_name }}</strong>
+                                <small>Your SmartLearn AI account</small>
+                            </div>
+
+                            <a class="dropdown-link" href="{{ url_for('profile') }}">
+                                <span class="menu-icon">👤</span>
+                                My Profile
+                            </a>
+
+                            <a class="dropdown-link" href="{{ url_for('dashboard') }}">
+                                <span class="menu-icon">▦</span>
+                                My Dashboard
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <form action="{{ url_for('logout') }}" method="POST">
+                                <button class="dropdown-link logout-button" type="submit">
+                                    <span class="menu-icon">↪</span>
+                                    Log Out
+                                </button>
+                            </form>
+
+                        {% else %}
+
+                            <div class="dropdown-heading">
+                                <strong>Welcome to SmartLearn AI!</strong>
+                                <small>Sign in to continue learning.</small>
+                            </div>
+
+                            <a class="dropdown-link" href="{{ url_for('login') }}">
+                                <span class="menu-icon">↪</span>
+                                Log In
+                            </a>
+
+                            <a class="dropdown-link" href="{{ url_for('register') }}">
+                                <span class="menu-icon">＋</span>
+                                Create Account
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+                </details>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="container flash-area">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="container hero-grid">
+
+                <div class="hero-content">
+
+                    <div class="eyebrow">
+                        <span class="eyebrow-dot"></span>
+                        Your personal learning companion
+                    </div>
+
+                    <h1>
+                        Learn smarter.<br>
+                        Grow <span class="gradient-text">faster.</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        One learning platform for every student. Explore subjects,
+                        solve doubts with AI, practice quizzes, and understand
+                        your progress — all in one place.
+                    </p>
+
+                    <div class="hero-actions">
+                        {% if logged_in %}
+                            <a class="button button-primary"
+                               href="{{ url_for('dashboard') }}">
+                                Continue Learning →
+                            </a>
+                        {% else %}
+                            <a class="button button-primary"
+                               href="{{ url_for('register') }}">
+                                Start Learning →
+                            </a>
+                        {% endif %}
+
+                        <a class="button button-light" href="#features">
+                            Discover the Platform
+                        </a>
+                    </div>
+
+                    <div class="hero-points">
+                        <span>School &amp; college learning</span>
+                        <span>Learn at your own pace</span>
+                    </div>
+
+                </div>
+
+                <!-- DASHBOARD PREVIEW -->
+                <div class="visual-wrap" aria-label="Learning dashboard preview">
+                    <div class="visual-glow"></div>
+
+                    <div class="learning-preview">
+
+                        <div class="preview-top">
+                            <div class="preview-title">Your Learning Space</div>
+                            <span class="live-tag">✦ YOUR JOURNEY</span>
+                        </div>
+
+                        <div class="preview-welcome">
+                            <p>SMALL STEPS, BIG GOALS</p>
+                            <h3>Your next chapter starts here.</h3>
+                        </div>
+
+                        <div class="progress-row">
+                            <span>Learning journey</span>
+                            <span>Ready to begin</span>
+                        </div>
+
+                        <div class="progress-track">
+                            <div class="progress-fill"></div>
+                        </div>
+
+                        <div class="preview-stats">
+
+                            <div class="stat-card">
+                                <div class="stat-icon">✦</div>
+                                <strong>AI Tutor</strong>
+                                <small>Get help with your doubts</small>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">✓</div>
+                                <strong>Smart Quizzes</strong>
+                                <small>Practice with purpose</small>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">▤</div>
+                                <strong>Study Notes</strong>
+                                <small>Explore your subjects</small>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">↗</div>
+                                <strong>My Progress</strong>
+                                <small>Keep growing every day</small>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="floating-note">
+                        <div class="floating-note-icon">📚</div>
+                        <div>
+                            <strong>Built for your growth</strong>
+                            <small>Every step counts</small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="section section-soft" id="features">
+            <div class="container">
+
+                <div class="section-heading">
+                    <div class="eyebrow">Built for your growth</div>
+
+                    <h2>
+                        Everything you need to
+                        <span class="gradient-text">learn better.</span>
+                    </h2>
+
+                    <p>
+                        Study, practice, ask questions, and improve — all in one place.
+                    </p>
+                </div>
+
+                <div class="feature-grid">
+
+                    <article class="feature-card">
+                        <div class="feature-icon icon-purple">✦</div>
+                        <h3>AI Tutor</h3>
+                        <p>
+                            Get topic explanations and step-by-step help
+                            with your doubts.
+                        </p>
+                        <span class="feature-label">Personalized help</span>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon icon-blue">▤</div>
+                        <h3>Study Materials</h3>
+                        <p>
+                            Explore organized lessons and notes for school
+                            and college subjects.
+                        </p>
+                        <span class="feature-label">Learn your way</span>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon icon-green">✓</div>
+                        <h3>Smart Quizzes</h3>
+                        <p>
+                            Practice questions, check your answers, and
+                            learn from mistakes.
+                        </p>
+                        <span class="feature-label">Practice with purpose</span>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon icon-orange">↗</div>
+                        <h3>Progress Tracking</h3>
+                        <p>
+                            Review quiz scores and discover which topics
+                            need more practice.
+                        </p>
+                        <span class="feature-label">See your progress</span>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS -->
+        <section class="section" id="how-it-works">
+            <div class="container">
+
+                <div class="section-heading">
+                    <div class="eyebrow">Simple to get started</div>
+
+                    <h2>
+                        Your learning journey,
+                        <span class="gradient-text">made simple.</span>
+                    </h2>
+
+                    <p>Build good study habits one step at a time.</p>
+                </div>
+
+                <div class="steps-grid">
+
+                    <article class="step-card">
+                        <div class="step-number">01</div>
+                        <h3>Create your account</h3>
+                        <p>
+                            Set up your student profile and personalize
+                            your learning experience.
+                        </p>
+                    </article>
+
+                    <article class="step-card">
+                        <div class="step-number">02</div>
+                        <h3>Learn and practice</h3>
+                        <p>
+                            Explore study materials, ask questions, and
+                            practice topics with quizzes.
+                        </p>
+                    </article>
+
+                    <article class="step-card">
+                        <div class="step-number">03</div>
+                        <h3>Grow with confidence</h3>
+                        <p>
+                            Track your learning journey and focus on
+                            topics where you need more practice.
+                        </p>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CALL TO ACTION -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-box">
+
+                    <h2>Ready to grow?</h2>
+
+                    <p>
+                        Take the next step in your learning journey.
+                        Your future starts with what you learn today.
+                    </p>
+
+                    {% if logged_in %}
+                        <a class="button" href="{{ url_for('dashboard') }}">
+                            Open My Dashboard →
+                        </a>
+                    {% else %}
+                        <a class="button" href="{{ url_for('register') }}">
+                            Create Your Free Account →
+                        </a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-inner">
+
+            <a class="brand" href="{{ url_for('home') }}">
+                <span class="brand-icon">✦</span>
+                <span>SmartLearn <span class="brand-ai">AI</span></span>
+            </a>
+
+            <p>© 2026 SmartLearn AI. Built for student growth.</p>
+
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+
+                {% if logged_in %}
+                    <a href="{{ url_for('profile') }}">My Profile</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Log In</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Close profile menu when clicking outside -->
+    <script>
+        document.addEventListener("click", function (event) {
+            document.querySelectorAll(".profile-menu[open]").forEach(function (menu) {
+                if (!menu.contains(event.target)) {
+                    menu.removeAttribute("open");
+                }
+            });
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                document.querySelectorAll(".profile-menu[open]").forEach(function (menu) {
+                    menu.removeAttribute("open");
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
