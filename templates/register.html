@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Account | SmartLearn AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;font-family:Segoe UI,Arial,sans-serif;background:radial-gradient(circle at top left,#e6e1ff,transparent 45%),#f7f8ff;color:#20243b}.card{width:100%;max-width:440px;padding:30px;background:white;border:1px solid #e9e6f5;border-radius:23px;box-shadow:0 20px 60px #30256d12}.brand{font-size:20px;font-weight:800;text-decoration:none;color:#20243b}.brand span{color:#6855e8}.back{display:block;margin:0 0 22px;color:#6855e8;text-decoration:none;font-size:13px;font-weight:700}h1{margin:12px 0 5px;font-size:28px}p{color:#777b90;font-size:14px;line-height:1.7}label{display:block;margin:15px 0 6px;font-weight:700;font-size:13px}input{width:100%;padding:12px;border:1px solid #dedfeb;border-radius:10px;font:inherit;outline:none}input:focus{border-color:#8574f6;box-shadow:0 0 0 3px #8574f61c}button{width:100%;padding:14px;margin-top:21px;border:0;border-radius:11px;background:#6855e8;color:white;font-weight:800;cursor:pointer}.msg{margin-top:10px;padding:10px;background:#f2efff;border-radius:9px}.bottom{margin-top:18px}.bottom a{color:#6855e8;font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+<main class="card">
+
+<div class="register-brand">
+    <a href="{{ url_for('index') }}" class="back-home">
+        <span>←</span> Back to Home
+    </a>
+
+    <a href="{{ url_for('index') }}" class="brand-logo">
+        <span class="brand-star">✦</span>
+        SmartLearn <span class="brand-ai">AI</span>
+    </a>
+</div>
+
+
+<h1>Create your account</h1><p>Join SmartLearn AI and start learning.</p>
+{% with messages = get_flashed_messages() %}{% for message in messages %}<p class="msg">{{ message }}</p>{% endfor %}{% endwith %}
+<form method="POST">
+<label for="name">Full name *</label>
+<input id="name" name="name" autocomplete="name" required maxlength="100">
+<label for="email">Email address *</label>
+<input id="email" name="email" type="email" autocomplete="email" required maxlength="254">
+<label for="password">Password * (at least 8 characters)</label>
+<input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+<label for="confirm_password">Confirm password *</label>
+<input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" minlength="8" required>
+<button type="submit">Create Account →</button>
+</form>
+<p class="bottom">Already registered? <a href="{{ url_for('login') }}">Log In</a></p>
+</main>
+</body>
