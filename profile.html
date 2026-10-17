@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Profile | SmartLearn AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:28px 15px;background:radial-gradient(circle at top left,#e9e4ff,transparent 35%),#f7f8ff;color:#20243b;font-family:Segoe UI,Arial,sans-serif}.page{max-width:850px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.brand{font-size:20px;font-weight:800;text-decoration:none;color:#20243b}.brand span{color:#6855e8}.top a:last-child{color:#6855e8;text-decoration:none;font-weight:700;font-size:13px}.panel{background:#fff;border:1px solid #ece9f8;border-radius:22px;overflow:hidden;box-shadow:0 20px 55px #30256d10}.cover{height:115px;background:linear-gradient(120deg,#5141c9,#9b8cff)}.content{padding:0 28px 30px}.avatar{width:100px;height:100px;margin-top:-48px;border:5px solid white;border-radius:50%;background:linear-gradient(135deg,#a293ff,#5741ce);display:grid;place-items:center;color:white;font-size:40px;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}h1{font-size:28px;margin:13px 0 3px}.muted{color:#777b90;font-size:13px;margin:0 0 24px}.section-title{font-size:16px;margin:27px 0 13px;padding-bottom:9px;border-bottom:1px solid #eeecf7}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field{min-width:0}.field.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:750;margin-bottom:6px;color:#555970}input,select,textarea{width:100%;padding:12px;border:1px solid #dedfeb;border-radius:10px;background:white;font:inherit;font-size:14px;outline:none}textarea{min-height:78px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:#8574f6;box-shadow:0 0 0 3px #8574f61c}.hint{font-size:11px;color:#777b90;margin-top:5px}.msg{padding:11px;margin:12px 0;background:#f0edff;border-radius:9px;color:#5143c2;font-size:13px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.btn{border:1px solid #e5e2f1;background:white;border-radius:10px;padding:12px 17px;font-weight:750;text-decoration:none;color:#292442;cursor:pointer;font-size:13px}.primary{background:#6855e8;border-color:#6855e8;color:white}.photo-input{border:0;padding:5px 0}.note{margin-top:14px;font-size:11px;color:#777b90;line-height:1.7}
+@media(max-width:540px){body{padding:17px 10px}.content{padding:0 17px 23px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top{align-items:flex-start}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="top">
+<a class="brand" href="{{ url_for('home') }}">✦ SmartLearn <span>AI</span></a>
+<a href="{{ url_for('home') }}">← Home</a>
+</header>
+
+<section class="panel">
+<div class="cover"></div>
+<div class="content">
+<div class="avatar">
+{% if user['profile_photo'] %}
+<img src="{{ url_for('static', filename=user['profile_photo']) }}" alt="Your profile photo">
+{% else %}👤{% endif %}
+</div>
+<h1>My Profile</h1>
+<p class="muted">Manage your personal information and education details.</p>
+
+{% with messages = get_flashed_messages() %}{% for message in messages %}<div class="msg">{{ message }}</div>{% endfor %}{% endwith %}
+
+<form method="POST" enctype="multipart/form-data">
+<h2 class="section-title">📸 Profile Photo</h2>
+<div class="field">
+<label for="profile_photo">Upload or change photo</label>
+<input class="photo-input" id="profile_photo" name="profile_photo" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp">
+<p class="hint">PNG, JPG or WEBP. Maximum file size: 3 MB.</p>
+</div>
+
+<h2 class="section-title">👤 Personal Information</h2>
+<div class="grid">
+<div class="field">
+<label for="name">Full name *</label>
+<input id="name" name="name" value="{{ user['name'] or '' }}" required maxlength="100">
+</div>
+<div class="field">
+<label>Email address</label>
+<input value="{{ user['email'] }}" readonly>
+<p class="hint">Email change is not enabled yet.</p>
+</div>
+<div class="field">
+<label for="date_of_birth">Date of birth</label>
+<input id="date_of_birth" name="date_of_birth" type="date" value="{{ user['date_of_birth'] or '' }}">
+</div>
+<div class="field">
+<label for="gender">Gender (optional)</label>
+<select id="gender" name="gender">
+<option value="">Prefer not to say</option>
+{% for option in ['Female','Male','Non-binary','Other'] %}
+<option value="{{ option }}" {% if user['gender'] == option %}selected{% endif %}>{{ option }}</option>
+{% endfor %}
+</select>
+</div>
+<div class="field">
+<label for="phone">Phone number</label>
+<input id="phone" name="phone" type="tel" autocomplete="tel" value="{{ user['phone'] or '' }}" maxlength="25">
+</div>
+<div class="field">
+<label for="pincode">PIN code</label>
+<input id="pincode" name="pincode" inputmode="numeric" value="{{ user['pincode'] or '' }}" maxlength="12">
+</div>
+<div class="field full">
+<label for="address">Address</label>
+<textarea id="address" name="address" autocomplete="street-address">{{ user['address'] or '' }}</textarea>
+</div>
+<div class="field">
+<label for="city">City</label>
+<input id="city" name="city" autocomplete="address-level2" value="{{ user['city'] or '' }}">
+</div>
+<div class="field">
+<label for="state">State</label>
+<input id="state" name="state" autocomplete="address-level1" value="{{ user['state'] or '' }}">
+</div>
+</div>
+
+<h2 class="section-title">🎓 Education Information</h2>
+<div class="grid">
+<div class="field">
+<label for="education_level">Education level</label>
+<select id="education_level" name="education_level">
+<option value="">Select level</option>
+{% for option in ['School','Diploma','Undergraduate','Postgraduate','PhD','Other'] %}
+<option value="{{ option }}" {% if user['education_level'] == option %}selected{% endif %}>{{ option }}</option>
+{% endfor %}
+</select>
+</div>
+<div class="field">
+<label for="institution">School / College / University</label>
+<input id="institution" name="institution" value="{{ user['institution'] or '' }}">
+</div>
+<div class="field">
+<label for="course">Course / Class</label>
+<input id="course" name="course" placeholder="e.g. B.Tech, Class 12" value="{{ user['course'] or '' }}">
+</div>
+<div class="field">
+<label for="branch">Branch / Stream</label>
+<input id="branch" name="branch" placeholder="e.g. CSE, Science, Commerce" value="{{ user['branch'] or '' }}">
+</div>
+<div class="field">
+<label for="study_year">Year / Semester</label>
+<input id="study_year" name="study_year" placeholder="e.g. 4th Year, Semester 7" value="{{ user['study_year'] or '' }}">
+</div>
+</div>
+
+<div class="buttons">
+<button class="btn primary" type="submit">Save Profile ✓</button>
+<a class="btn" href="{{ url_for('dashboard') }}">My Dashboard</a>
+<a class="btn" href="{{ url_for('home') }}">Cancel</a>
+</div>
+<p class="note">Only provide information you are comfortable storing in your student account. Your password is never shown on this page.</p>
+</form>
+</div>
+</section>
+</main>
+</body>
+</html>
