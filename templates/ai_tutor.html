@@ -19,7 +19,7 @@
         }
         /* Glassmorphism Luxury Look */
         .glass-panel {
-            background: rgba(17, 24, 39, 0.75);
+            background: rgba(17, 24, 39, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -60,7 +60,7 @@
         }
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         ::-webkit-scrollbar-track {
             background: #0b0f19;
@@ -69,9 +69,6 @@
             background: #374151;
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4b5563;
-        }
         .luxury-gradient-text {
             background: linear-gradient(135deg, #c084fc 0%, #60a5fa 100%);
             -webkit-background-clip: text;
@@ -79,12 +76,15 @@
         }
     </style>
 </head>
-<body class="h-screen overflow-hidden flex">
+<body class="h-screen overflow-hidden flex relative">
 
-    <!-- LEFT SIDEBAR: Packed with Luxury Features -->
-    <aside class="w-80 glass-panel border-r border-gray-800 flex flex-col justify-between hidden md:flex z-20">
+    <!-- MOBILE SIDEBAR OVERLAY BACKDROP -->
+    <div id="sidebar-backdrop" onclick="closeMobileSidebar()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
+
+    <!-- SIDEBAR: Responsive Drawer (Hidden on mobile by default, togglable) -->
+    <aside id="sidebar-drawer" class="fixed md:static inset-y-0 left-0 w-80 glass-panel border-r border-gray-800 flex flex-col justify-between z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
         <!-- Sidebar Header -->
-        <div class="p-5 border-b border-gray-800/60 flex items-center justify-between">
+        <div class="p-4 md:p-5 border-b border-gray-800/60 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
                     <i class="fa-solid fa-brain text-white text-lg"></i>
@@ -96,9 +96,14 @@
                     </p>
                 </div>
             </div>
-            <a href="{{ url_for('dashboard') }}" class="text-gray-400 hover:text-white transition p-2 rounded-lg hover:bg-gray-800/50" title="Back to Dashboard">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
+            <div class="flex items-center gap-1">
+                <a href="{{ url_for('dashboard') }}" class="text-gray-400 hover:text-white transition p-2 rounded-lg hover:bg-gray-800/50" title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <button onclick="closeMobileSidebar()" class="md:hidden text-gray-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Sidebar Feature List -->
@@ -107,25 +112,25 @@
             <div>
                 <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 px-2">AI Capabilities</p>
                 <div class="space-y-1.5">
-                    <button onclick="setPrompt('Explain this concept using a real-world analogy:')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                    <button onclick="setPrompt('Explain this concept using a real-world analogy:'); closeMobileSidebar();" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
                         <div class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center group-hover:bg-purple-500/20 transition">
                             <i class="fa-solid fa-lightbulb text-xs"></i>
                         </div>
                         <span>Real-world Analogy</span>
                     </button>
-                    <button onclick="setPrompt('Generate a quick 5-question practice quiz on:')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                    <button onclick="setPrompt('Generate a quick 5-question practice quiz on:'); closeMobileSidebar();" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
                         <div class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:bg-blue-500/20 transition">
                             <i class="fa-solid fa-clipboard-question text-xs"></i>
                         </div>
                         <span>Interactive Quiz</span>
                     </button>
-                    <button onclick="setPrompt('Summarize this topic into simple bullet points:')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                    <button onclick="setPrompt('Summarize this topic into simple bullet points:'); closeMobileSidebar();" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
                         <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-500/20 transition">
                             <i class="fa-solid fa-file-lines text-xs"></i>
                         </div>
                         <span>Smart Summary</span>
                     </button>
-                    <button onclick="setPrompt('Solve step-by-step and explain the math/logic behind:')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                    <button onclick="setPrompt('Solve step-by-step and explain the math/logic behind:'); closeMobileSidebar();" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
                         <div class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:bg-amber-500/20 transition">
                             <i class="fa-solid fa-square-root-variable text-xs"></i>
                         </div>
@@ -138,16 +143,16 @@
             <div>
                 <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 px-2">Expert Modes</p>
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setSubject('Physics & Science')" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
+                    <button onclick="setSubject('Physics & Science'); closeMobileSidebar();" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
                         <i class="fa-solid fa-atom text-purple-400 mb-1 block"></i> Physics
                     </button>
-                    <button onclick="setSubject('Mathematics')" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
+                    <button onclick="setSubject('Mathematics'); closeMobileSidebar();" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
                         <i class="fa-solid fa-calculator text-blue-400 mb-1 block"></i> Math
                     </button>
-                    <button onclick="setSubject('Computer Science & Coding')" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
+                    <button onclick="setSubject('Computer Science & Coding'); closeMobileSidebar();" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
                         <i class="fa-solid fa-code text-emerald-400 mb-1 block"></i> Coding
                     </button>
-                    <button onclick="setSubject('General Studies & History')" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
+                    <button onclick="setSubject('General Studies & History'); closeMobileSidebar();" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
                         <i class="fa-solid fa-book-open text-amber-400 mb-1 block"></i> General
                     </button>
                 </div>
@@ -163,7 +168,7 @@
             </div>
         </div>
 
-        <!-- Sidebar Footer / User Profile snippet -->
+        <!-- Sidebar Footer -->
         <div class="p-4 border-t border-gray-800/60 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 {% if user and user.profile_photo %}
@@ -185,57 +190,57 @@
     <main class="flex-1 flex flex-col h-full bg-[#07090e] relative overflow-hidden">
         
         <!-- Luxury Top Navbar -->
-        <header class="h-16 glass-panel border-b border-gray-800/80 flex items-center justify-between px-6 z-10">
+        <header class="h-16 glass-panel border-b border-gray-800/80 flex items-center justify-between px-4 md:px-6 z-10">
             <div class="flex items-center space-x-3">
-                <div class="md:hidden">
-                    <a href="{{ url_for('dashboard') }}" class="text-gray-400 hover:text-white p-2">
-                        <i class="fa-solid fa-arrow-left"></i>
-                    </a>
-                </div>
+                <!-- Hamburger Toggle for Mobile -->
+                <button onclick="openMobileSidebar()" class="md:hidden text-gray-300 hover:text-white p-2 rounded-lg hover:bg-gray-800/60 focus:outline-none">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                
                 <div>
-                    <h2 class="font-semibold text-white text-base flex items-center gap-2">
-                        SmartLearn AI Tutor <span class="bg-purple-500/10 text-purple-400 text-xs px-2 py-0.5 rounded-full border border-purple-500/20">Pro</span>
+                    <h2 class="font-semibold text-white text-sm md:text-base flex items-center gap-2">
+                        SmartLearn AI <span class="bg-purple-500/10 text-purple-400 text-[10px] md:text-xs px-2 py-0.5 rounded-full border border-purple-500/20">Pro</span>
                     </h2>
-                    <p class="text-xs text-gray-400" id="current-mode">Ready to guide you step-by-step</p>
+                    <p class="text-[11px] md:text-xs text-gray-400 truncate" id="current-mode">Ready to guide you step-by-step</p>
                 </div>
             </div>
 
             <div class="flex items-center space-x-2">
-                <button onclick="clearChat()" class="px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-1.5 border border-gray-800">
-                    <i class="fa-solid fa-trash-can text-red-400"></i> Reset Chat
+                <button onclick="clearChat()" class="px-2.5 py-1.5 md:px-3 md:py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-1.5 border border-gray-800">
+                    <i class="fa-solid fa-trash-can text-red-400"></i> <span class="hidden sm:inline">Reset</span>
                 </button>
             </div>
         </header>
 
         <!-- Chat Scrollable Container -->
-        <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 relative">
+        <div id="chat-container" class="flex-1 overflow-y-auto p-3 md:p-6 relative">
             
             <!-- CENTER WELCOME HERO DISPLAY -->
-            <div id="welcome-hero" class="h-full flex flex-col items-center justify-center text-center max-w-3xl mx-auto py-8 px-4 message-animation">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-blue-500 flex items-center justify-center shadow-2xl shadow-purple-500/30 mb-5 border border-white/10">
-                    <i class="fa-solid fa-brain text-white text-3xl"></i>
+            <div id="welcome-hero" class="h-full flex flex-col items-center justify-center text-center max-w-3xl mx-auto py-6 px-3 message-animation">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-blue-500 flex items-center justify-center shadow-2xl shadow-purple-500/30 mb-4 border border-white/10">
+                    <i class="fa-solid fa-brain text-white text-2xl md:text-3xl"></i>
                 </div>
-                <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">
+                <h2 class="text-xl md:text-3xl font-bold text-white mb-2 leading-tight">
                     What would you like to learn today, <span class="luxury-gradient-text">{{ user.name if user else 'Student' }}</span>?
                 </h2>
-                <p class="text-gray-400 text-sm max-w-md mb-8 leading-relaxed">
+                <p class="text-gray-400 text-xs md:text-sm max-w-md mb-6 md:mb-8 leading-relaxed">
                     Your personal AI tutor is ready! Speak using voice, upload a photo, or choose a topic below to get started.
                 </p>
 
                 <!-- Feature Tip Cards in Center -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full max-w-xl text-left">
-                    <button onclick="setPrompt('Help me revise Physics formulas for my exam')" class="glass-card p-4 rounded-2xl transition flex items-start space-x-3 group">
-                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl text-left">
+                    <button onclick="setPrompt('Help me revise Physics formulas for my exam')" class="glass-card p-3.5 md:p-4 rounded-2xl transition flex items-start space-x-3 group">
+                        <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
                             <i class="fa-solid fa-atom"></i>
                         </div>
                         <div>
                             <h4 class="text-xs font-semibold text-white group-hover:text-purple-300 transition">Physics Revision</h4>
-                            <p class="text-[11px] text-gray-400 mt-0.5">Formulas & step-by-step numeric solutions.</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Formulas & step-by-step solutions.</p>
                         </div>
                     </button>
 
-                    <button onclick="setPrompt('Explain Python loops with a simple real-world example')" class="glass-card p-4 rounded-2xl transition flex items-start space-x-3 group">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                    <button onclick="setPrompt('Explain Python loops with a simple real-world example')" class="glass-card p-3.5 md:p-4 rounded-2xl transition flex items-start space-x-3 group">
+                        <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
                             <i class="fa-solid fa-code"></i>
                         </div>
                         <div>
@@ -244,18 +249,18 @@
                         </div>
                     </button>
 
-                    <button onclick="document.getElementById('file-input').click()" class="glass-card p-4 rounded-2xl transition flex items-start space-x-3 group">
-                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                    <button onclick="document.getElementById('file-input').click()" class="glass-card p-3.5 md:p-4 rounded-2xl transition flex items-start space-x-3 group">
+                        <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
                             <i class="fa-solid fa-camera"></i>
                         </div>
                         <div>
                             <h4 class="text-xs font-semibold text-white group-hover:text-blue-300 transition">Photo & File Doubt</h4>
-                            <p class="text-[11px] text-gray-400 mt-0.5">Attach homework pic or doc for quick answers.</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Attach homework pic or doc for quick answer.</p>
                         </div>
                     </button>
 
-                    <button onclick="openVoiceModal()" class="glass-card p-4 rounded-2xl transition flex items-start space-x-3 group">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                    <button onclick="openVoiceModal()" class="glass-card p-3.5 md:p-4 rounded-2xl transition flex items-start space-x-3 group">
+                        <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
                             <i class="fa-solid fa-microphone"></i>
                         </div>
                         <div>
@@ -267,15 +272,15 @@
             </div>
 
             <!-- Dynamic Messages List -->
-            <div id="messages-list" class="space-y-6"></div>
+            <div id="messages-list" class="space-y-4 md:space-y-6"></div>
 
         </div>
 
-        <!-- Typing Indicator (Hidden by default) -->
-        <div id="typing-indicator" class="hidden px-6 py-2">
+        <!-- Typing Indicator -->
+        <div id="typing-indicator" class="hidden px-4 md:px-6 py-2">
             <div class="flex items-start space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0">
-                    <i class="fa-solid fa-robot text-white text-sm"></i>
+                <div class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-robot text-white text-xs md:text-sm"></i>
                 </div>
                 <div class="glass-panel px-4 py-3 rounded-2xl flex items-center space-x-2">
                     <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
@@ -286,7 +291,7 @@
         </div>
 
         <!-- Uploaded File Preview Box -->
-        <div id="file-preview-box" class="hidden px-6 py-2">
+        <div id="file-preview-box" class="hidden px-4 md:px-6 py-2">
             <div class="glass-panel p-2.5 rounded-xl max-w-xs flex items-center justify-between border border-purple-500/30">
                 <div class="flex items-center space-x-2 truncate">
                     <i class="fa-solid fa-file-image text-purple-400"></i>
@@ -299,94 +304,105 @@
         </div>
 
         <!-- Input Box & Controls Area -->
-        <div class="p-4 md:p-6 glass-panel border-t border-gray-800/80 z-10">
-            <form id="chat-form" onsubmit="sendMessage(event)" class="flex items-center gap-3 max-w-5xl mx-auto">
+        <div class="p-3 md:p-6 glass-panel border-t border-gray-800/80 z-10">
+            <form id="chat-form" onsubmit="sendMessage(event)" class="flex items-center gap-2 md:gap-3 max-w-5xl mx-auto">
                 
                 <!-- Hidden File Input -->
                 <input type="file" id="file-input" class="hidden" accept="image/*,.pdf,.txt,.doc,.docx" onchange="handleFileSelect(event)">
                 
                 <!-- Upload Photo / File Button -->
-                <button type="button" onclick="document.getElementById('file-input').click()" class="w-11 h-11 rounded-2xl glass-input text-gray-400 hover:text-purple-400 hover:border-purple-500/50 transition flex items-center justify-center shrink-0 shadow-md" title="Upload Photo or File">
-                    <i class="fa-solid fa-paperclip text-base"></i>
+                <button type="button" onclick="document.getElementById('file-input').click()" class="w-10 h-10 md:w-11 md:h-11 rounded-xl md:rounded-2xl glass-input text-gray-400 hover:text-purple-400 hover:border-purple-500/50 transition flex items-center justify-center shrink-0 shadow-md" title="Upload Photo or File">
+                    <i class="fa-solid fa-paperclip text-sm md:text-base"></i>
                 </button>
 
                 <!-- Voice Chat Button -->
-                <button type="button" id="voice-btn" onclick="openVoiceModal()" class="w-11 h-11 rounded-2xl glass-input text-gray-400 hover:text-emerald-400 hover:border-emerald-500/50 transition flex items-center justify-center shrink-0 shadow-md" title="Voice Search / Speak">
-                    <i id="mic-icon" class="fa-solid fa-microphone text-base"></i>
+                <button type="button" id="voice-btn" onclick="openVoiceModal()" class="w-10 h-10 md:w-11 md:h-11 rounded-xl md:rounded-2xl glass-input text-gray-400 hover:text-emerald-400 hover:border-emerald-500/50 transition flex items-center justify-center shrink-0 shadow-md" title="Voice Search / Speak">
+                    <i id="mic-icon" class="fa-solid fa-microphone text-sm md:text-base"></i>
                 </button>
 
                 <!-- Text Input -->
                 <div class="flex-1 relative">
-                    <input type="text" id="user-input" placeholder="Ask your question or type a prompt..." 
-                        class="w-full glass-input rounded-2xl px-5 py-3.5 text-sm text-white placeholder-gray-400 focus:outline-none transition">
+                    <input type="text" id="user-input" placeholder="Ask your question..." 
+                        class="w-full glass-input rounded-xl md:rounded-2xl px-3.5 py-2.5 md:px-5 md:py-3.5 text-xs md:text-sm text-white placeholder-gray-400 focus:outline-none transition">
                 </div>
 
                 <!-- Send Button -->
-                <button type="submit" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white flex items-center justify-center shadow-lg shadow-purple-600/30 transition shrink-0 transform hover:scale-105">
-                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                <button type="submit" class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white flex items-center justify-center shadow-lg shadow-purple-600/30 transition shrink-0 transform hover:scale-105">
+                    <i class="fa-solid fa-paper-plane text-xs md:text-sm"></i>
                 </button>
             </form>
-            <p class="text-[11px] text-center text-gray-500 mt-2">SmartLearn AI can make mistakes. Verify important learning concepts.</p>
+            <p class="text-[10px] md:text-[11px] text-center text-gray-500 mt-1.5">SmartLearn AI can make mistakes. Verify important learning concepts.</p>
         </div>
     </main>
 
     <!-- FULLSCREEN ANIMATED LUXURY VOICE ASSISTANT MODAL -->
-    <div id="voice-overlay" class="fixed inset-0 bg-[#07090e]/90 backdrop-blur-2xl z-50 hidden flex flex-col items-center justify-between p-8 message-animation">
+    <div id="voice-overlay" class="fixed inset-0 bg-[#07090e]/95 backdrop-blur-2xl z-50 hidden flex flex-col items-center justify-between p-5 md:p-8 message-animation">
         <!-- Top bar of voice modal -->
         <div class="w-full flex items-center justify-between max-w-4xl">
             <div class="flex items-center space-x-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-xs font-semibold uppercase tracking-widest text-emerald-400">AI Voice Engine Active</span>
+                <span class="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-emerald-400">AI Voice Engine</span>
             </div>
-            <button onclick="closeVoiceModal()" class="w-10 h-10 rounded-2xl glass-panel text-gray-400 hover:text-white flex items-center justify-center border border-gray-800 hover:bg-gray-800/80 transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
+            <button onclick="closeVoiceModal()" class="w-9 h-9 md:w-10 md:h-10 rounded-xl md:rounded-2xl glass-panel text-gray-400 hover:text-white flex items-center justify-center border border-gray-800 hover:bg-gray-800/80 transition">
+                <i class="fa-solid fa-xmark text-base md:text-lg"></i>
             </button>
         </div>
 
         <!-- Center Animated Glowing AI Robot / Orb -->
-        <div class="flex flex-col items-center justify-center my-auto space-y-8">
+        <div class="flex flex-col items-center justify-center my-auto space-y-6 md:space-y-8">
             <div class="relative flex items-center justify-center">
                 <!-- Outer Pulse Rings -->
-                <div class="absolute w-48 h-48 rounded-full bg-purple-600/20 blur-xl animate-ping"></div>
-                <div class="absolute w-36 h-36 rounded-full bg-indigo-500/30 blur-md animate-pulse"></div>
+                <div class="absolute w-40 h-40 md:w-48 md:h-48 rounded-full bg-purple-600/20 blur-xl animate-ping"></div>
+                <div class="absolute w-28 h-28 md:w-36 md:h-36 rounded-full bg-indigo-500/30 blur-md animate-pulse"></div>
                 
                 <!-- Main Animated Robot Orb -->
-                <div class="w-28 h-28 rounded-3xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-500 flex items-center justify-center border border-white/20 shadow-2xl ai-voice-orb relative z-10">
-                    <i id="robot-icon" class="fa-solid fa-robot text-white text-5xl"></i>
+                <div class="w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-500 flex items-center justify-center border border-white/20 shadow-2xl ai-voice-orb relative z-10">
+                    <i id="robot-icon" class="fa-solid fa-robot text-white text-4xl md:text-5xl"></i>
                 </div>
             </div>
 
             <!-- Speech Output Status & Subtitles -->
-            <div class="text-center space-y-2 max-w-lg px-4">
-                <h3 id="voice-status" class="text-xl font-bold text-white tracking-wide">Listening... Speak now</h3>
-                <p id="voice-subtitles" class="text-sm text-purple-300 font-medium italic min-h-[40px] flex items-center justify-center">
+            <div class="text-center space-y-2 max-w-lg px-2">
+                <h3 id="voice-status" class="text-lg md:text-xl font-bold text-white tracking-wide">Listening... Speak now</h3>
+                <p id="voice-subtitles" class="text-xs md:text-sm text-purple-300 font-medium italic min-h-[40px] flex items-center justify-center">
                     "Say something like 'Explain Gravity' or 'Sawal kya hai?'"
                 </p>
             </div>
         </div>
 
         <!-- Bottom Voice Control Buttons -->
-        <div class="flex items-center space-x-4">
-            <button id="voice-listen-toggle" onclick="toggleListeningInModal()" class="px-6 py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-medium text-sm flex items-center space-x-2 shadow-lg shadow-purple-600/30 transition">
+        <div class="flex items-center space-x-3 md:space-x-4 w-full max-w-xs justify-center">
+            <button id="voice-listen-toggle" onclick="toggleListeningInModal()" class="flex-1 py-3 rounded-xl md:rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-medium text-xs md:text-sm flex items-center justify-center space-x-2 shadow-lg shadow-purple-600/30 transition">
                 <i class="fa-solid fa-microphone"></i>
                 <span id="voice-btn-label">Tap to Speak</span>
             </button>
-            <button onclick="closeVoiceModal()" class="px-6 py-3 rounded-2xl glass-panel text-gray-300 hover:text-white font-medium text-sm border border-gray-800 transition">
-                End Voice Session
+            <button onclick="closeVoiceModal()" class="px-4 py-3 rounded-xl md:rounded-2xl glass-panel text-gray-300 hover:text-white font-medium text-xs md:text-sm border border-gray-800 transition">
+                End
             </button>
         </div>
     </div>
 
-    <!-- JavaScript for Dynamic Interactions, Voice & API -->
+    <!-- JavaScript for Mobile Sidebar, Voice & Chat Interactions -->
     <script>
         let selectedFile = null;
+
+        // Mobile Drawer Sidebar Controls
+        function openMobileSidebar() {
+            document.getElementById('sidebar-drawer').classList.remove('-translate-x-full');
+            document.getElementById('sidebar-backdrop').classList.remove('hidden');
+        }
+
+        function closeMobileSidebar() {
+            document.getElementById('sidebar-drawer').classList.add('-translate-x-full');
+            document.getElementById('sidebar-backdrop').classList.add('hidden');
+        }
 
         // Dynamic HTML rendering string for User Avatar Image or Gradient
         const userAvatarHtml = `
             {% if user and user.profile_photo %}
-                <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="User" class="w-9 h-9 rounded-xl object-cover border border-purple-500/40 shadow-md shrink-0">
+                <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="User" class="w-8 h-8 md:w-9 md:h-9 rounded-xl object-cover border border-purple-500/40 shadow-md shrink-0">
             {% else %}
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md shrink-0">
+                <div class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-xs md:text-sm shadow-md shrink-0">
                     {{ user.name[0] if user and user.name else 'U' }}
                 </div>
             {% endif %}
@@ -410,7 +426,6 @@
             document.getElementById('welcome-hero').style.display = 'flex';
         }
 
-        // Handle File Attachment Selection
         function handleFileSelect(event) {
             const file = event.target.files[0];
             if (file) {
@@ -426,7 +441,7 @@
             document.getElementById('file-preview-box').classList.add('hidden');
         }
 
-        /* --- LUXURY VOICE ASSISTANT MODAL & SPEECH SYNTHESIS LOGIC --- */
+        /* VOICE ASSISTANT LOGIC */
         let recognition = null;
         let isListeningModal = false;
         let synth = window.speechSynthesis;
@@ -453,7 +468,7 @@
 
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
-            recognition.lang = 'en-IN'; // Works well for Hindi & English seamlessly
+            recognition.lang = 'en-IN';
             recognition.interimResults = true;
 
             const statusText = document.getElementById('voice-status');
@@ -463,8 +478,8 @@
             recognition.onstart = function() {
                 isListeningModal = true;
                 statusText.innerText = "Listening...";
-                statusText.className = "text-xl font-bold text-emerald-400 tracking-wide";
-                robotIcon.className = "fa-solid fa-robot text-white text-5xl animate-bounce";
+                statusText.className = "text-lg md:text-xl font-bold text-emerald-400 tracking-wide";
+                robotIcon.className = "fa-solid fa-robot text-white text-4xl md:text-5xl animate-bounce";
                 document.getElementById('voice-btn-label').innerText = "Listening...";
             };
 
@@ -482,8 +497,8 @@
 
             recognition.onerror = function(event) {
                 statusText.innerText = "Error listening. Try again.";
-                statusText.className = "text-xl font-bold text-red-400 tracking-wide";
-                robotIcon.className = "fa-solid fa-robot text-white text-5xl";
+                statusText.className = "text-lg md:text-xl font-bold text-red-400 tracking-wide";
+                robotIcon.className = "fa-solid fa-robot text-white text-4xl md:text-5xl";
             };
 
             recognition.onend = function() {
@@ -510,10 +525,9 @@
             const robotIcon = document.getElementById('robot-icon');
 
             statusText.innerText = "AI is Thinking...";
-            statusText.className = "text-xl font-bold text-purple-400 tracking-wide animate-pulse";
-            robotIcon.className = "fa-solid fa-brain text-white text-5xl animate-spin";
+            statusText.className = "text-lg md:text-xl font-bold text-purple-400 tracking-wide animate-pulse";
+            robotIcon.className = "fa-solid fa-brain text-white text-4xl md:text-5xl animate-spin";
 
-            // Add user's voice query to main chat background
             document.getElementById('user-input').value = spokenText;
             
             try {
@@ -527,20 +541,18 @@
                 let aiResponse = data.response || "I could not understand that query.";
 
                 statusText.innerText = "SmartLearn AI Speaking...";
-                statusText.className = "text-xl font-bold text-cyan-400 tracking-wide";
+                statusText.className = "text-lg md:text-xl font-bold text-cyan-400 tracking-wide";
                 subtitles.innerText = `"${aiResponse.substring(0, 120)}..."`;
-                robotIcon.className = "fa-solid fa-volume-high text-white text-5xl animate-pulse";
+                robotIcon.className = "fa-solid fa-volume-high text-white text-4xl md:text-5xl animate-pulse";
 
-                // Speak response out loud
                 speakAIResponse(aiResponse);
 
-                // Also render it inside main chat container
                 const fakeEvent = { preventDefault: () => {} };
                 sendMessage(fakeEvent);
 
             } catch (err) {
                 statusText.innerText = "Error connecting to AI.";
-                statusText.className = "text-xl font-bold text-red-400 tracking-wide";
+                statusText.className = "text-lg md:text-xl font-bold text-red-400 tracking-wide";
             }
         }
 
@@ -548,18 +560,14 @@
             if (!synth) return;
             synth.cancel();
 
-            // Clean markdown syntax for clean speech output
             const cleanText = text.replace(/[*_#`]/g, '');
-
             const utterance = new SpeechSynthesisUtterance(cleanText);
             
-            // Auto Language Voice Selection
             const isHindi = /[\u0900-\u097F]/.test(cleanText) || cleanText.toLowerCase().includes("namaste") || cleanText.toLowerCase().includes("hai");
             utterance.lang = isHindi ? 'hi-IN' : 'en-US';
             utterance.rate = 1.0;
             utterance.pitch = 1.0;
 
-            // Pick male voice if available
             const voices = synth.getVoices();
             const preferredVoice = voices.find(v => (v.lang.includes(utterance.lang) || v.lang.includes('IN')) && v.name.toLowerCase().includes('male'));
             if (preferredVoice) {
@@ -568,13 +576,13 @@
 
             utterance.onend = function() {
                 document.getElementById('voice-status').innerText = "Session Complete. Tap to Speak again";
-                document.getElementById('robot-icon').className = "fa-solid fa-robot text-white text-5xl";
+                document.getElementById('robot-icon').className = "fa-solid fa-robot text-white text-4xl md:text-5xl";
             };
 
             synth.speak(utterance);
         }
 
-        // Send Message Function to Backend API
+        // Send Message Function
         async function sendMessage(event) {
             event.preventDefault();
             const inputField = document.getElementById('user-input');
@@ -582,7 +590,6 @@
 
             if (!messageText && !selectedFile) return;
 
-            // Hide the center welcome hero card on first message
             const hero = document.getElementById('welcome-hero');
             if (hero) {
                 hero.style.display = 'none';
@@ -590,16 +597,15 @@
 
             const messagesList = document.getElementById('messages-list');
 
-            // Append User Message Box (With Profile Pic on Right)
             let fileTagHtml = '';
             if (selectedFile) {
                 fileTagHtml = `<div class="mt-2 text-xs text-purple-300 flex items-center gap-1.5"><i class="fa-solid fa-paperclip"></i> ${selectedFile.name}</div>`;
             }
 
             const userBubble = `
-                <div class="flex items-start justify-end space-x-3 message-animation">
-                    <div class="glass-panel px-5 py-3.5 rounded-2xl max-w-xl text-white text-sm shadow-xl border border-purple-500/30 bg-purple-900/20 leading-relaxed">
-                        <p class="font-semibold text-xs text-purple-300 mb-1 text-right">You</p>
+                <div class="flex items-start justify-end space-x-2 md:space-x-3 message-animation">
+                    <div class="glass-panel px-4 py-3 md:px-5 md:py-3.5 rounded-2xl max-w-[85%] md:max-w-xl text-white text-xs md:text-sm shadow-xl border border-purple-500/30 bg-purple-900/20 leading-relaxed">
+                        <p class="font-semibold text-[10px] md:text-xs text-purple-300 mb-0.5 text-right">You</p>
                         <div>${escapeHtml(messageText)}</div>${fileTagHtml}
                     </div>
                     ${userAvatarHtml}
@@ -607,45 +613,34 @@
             `;
             messagesList.insertAdjacentHTML('beforeend', userBubble);
             
-            // Clear inputs
             inputField.value = '';
             removeFile();
             const container = document.getElementById('chat-container');
             container.scrollTop = container.scrollHeight;
 
-            // Show Typing Indicator
             const typingIndicator = document.getElementById('typing-indicator');
             typingIndicator.classList.remove('hidden');
             container.scrollTop = container.scrollHeight;
 
             try {
-                // Send to Flask backend API
                 const response = await fetch('/api/chat', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: messageText })
                 });
 
                 const data = await response.json();
                 typingIndicator.classList.add('hidden');
 
-                let aiResponseText = "";
-                if (response.ok && data.response) {
-                    aiResponseText = data.response;
-                } else {
-                    aiResponseText = data.error || "Sorry, something went wrong. Please check your API key configuration.";
-                }
+                let aiResponseText = response.ok && data.response ? data.response : (data.error || "Sorry, something went wrong.");
 
-                // Append AI Response Bubble
                 const botBubble = `
-                    <div class="flex items-start space-x-3 message-animation">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
-                            <i class="fa-solid fa-robot text-white text-sm"></i>
+                    <div class="flex items-start space-x-2 md:space-x-3 message-animation">
+                        <div class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
+                            <i class="fa-solid fa-robot text-white text-xs md:text-sm"></i>
                         </div>
-                        <div class="glass-panel p-4 rounded-2xl max-w-2xl text-gray-200 text-sm shadow-xl border border-gray-800 leading-relaxed space-y-2">
-                            <p class="font-semibold text-xs text-purple-300 mb-1">SmartLearn AI Tutor</p>
+                        <div class="glass-panel p-3.5 md:p-4 rounded-2xl max-w-[85%] md:max-w-2xl text-gray-200 text-xs md:text-sm shadow-xl border border-gray-800 leading-relaxed space-y-2">
+                            <p class="font-semibold text-[10px] md:text-xs text-purple-300 mb-0.5">SmartLearn AI Tutor</p>
                             <div class="whitespace-pre-line">${formatAIResponse(aiResponseText)}</div>
                         </div>
                     </div>
@@ -656,11 +651,11 @@
             } catch (error) {
                 typingIndicator.classList.add('hidden');
                 const errorBubble = `
-                    <div class="flex items-start space-x-3 message-animation">
-                        <div class="w-9 h-9 rounded-xl bg-red-600 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-triangle-exclamation text-white text-sm"></i>
+                    <div class="flex items-start space-x-2 md:space-x-3 message-animation">
+                        <div class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-red-600 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation text-white text-xs md:text-sm"></i>
                         </div>
-                        <div class="glass-panel p-4 rounded-2xl max-w-2xl text-red-300 text-sm border border-red-500/30">
+                        <div class="glass-panel p-3.5 md:p-4 rounded-2xl max-w-[85%] md:max-w-2xl text-red-300 text-xs md:text-sm border border-red-500/30">
                             Network error or server connection failed. Please try again.
                         </div>
                     </div>
