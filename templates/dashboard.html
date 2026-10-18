@@ -337,26 +337,19 @@ body {
   <!-- Luxury Welcome Section -->
   <section class="welcome">
     <div class="welcome-tag">✦ PERSONAL LEARNING SPACE</div>
-    <h1>Welcome, <span class="user-name">{{ user['name'] }}</span>! 😊 </h1>
+    <h1>Welcome, <span class="user-name">{{ user['name'] }}</span>!  </h1>
     <p class="subtext">Your learning journey starts here. Choose a tool below to get started and elevate your experience.</p>
   </section>
 
   <!-- Dashboard Grid (5 Luxury Cards) -->
-  <section class="grid">
-    <article class="card">
-      <div class="card-icon-box">✦</div>
-      <h2>AI Tutor</h2>
-      <p>Get instant explanations, smart guidance, and step-by-step help with your study questions.</p>
-    </article>
-
-    <a href="{{ url_for('ai_tutor') }}" style="text-decoration: none; color: inherit;">
+<a href="{{ url_for('ai_tutor') }}" style="text-decoration: none; color: inherit; display: block;">
   <article class="card" style="cursor: pointer;">
     <div class="card-icon-box">✦</div>
     <h2>AI Tutor</h2>
     <p>Get instant explanations, smart guidance, and step-by-step help with your study questions.</p>
   </article>
 </a>
-
+  
     <article class="card">
       <div class="card-icon-box">▤</div>
       <h2>Study Materials</h2>
