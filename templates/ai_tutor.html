@@ -150,7 +150,7 @@
                     <span class="text-xs font-semibold text-purple-300">AI Engine</span>
                     <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">Gemini 1.5</span>
                 </div>
-                <p class="text-xs text-gray-400">Ask questions in English, Hindi or Hinglish seamlessly!</p>
+                <p class="text-xs text-gray-400">Ask questions in English, Hindi, or Hinglish seamlessly!</p>
             </div>
         </div>
 
@@ -201,16 +201,16 @@
         <!-- Chat Scrollable Container -->
         <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 relative">
             
-            <!-- CENTER WELCOME HERO DISPLAY (Shows initially, hides when user chats) -->
+            <!-- CENTER WELCOME HERO DISPLAY (English Text) -->
             <div id="welcome-hero" class="h-full flex flex-col items-center justify-center text-center max-w-3xl mx-auto py-8 px-4 message-animation">
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-blue-500 flex items-center justify-center shadow-2xl shadow-purple-500/30 mb-5 border border-white/10">
                     <i class="fa-solid fa-brain text-white text-3xl"></i>
                 </div>
                 <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">
-                    Aaj kya seekhna chahte hain, <span class="luxury-gradient-text">{{ user.name if user else 'Student' }}</span>?
+                    What would you like to learn today, <span class="luxury-gradient-text">{{ user.name if user else 'Student' }}</span>?
                 </h2>
                 <p class="text-gray-400 text-sm max-w-md mb-8 leading-relaxed">
-                    Aapka personal AI tutor taiyar hai! Voice se boliye, photo upload kijiye ya neeche diye gaye tips se start karein.
+                    Your personal AI tutor is ready! Speak using voice, upload a photo, or choose a topic below to get started.
                 </p>
 
                 <!-- Feature Tip Cards in Center -->
@@ -241,7 +241,7 @@
                         </div>
                         <div>
                             <h4 class="text-xs font-semibold text-white group-hover:text-blue-300 transition">Photo & File Doubt</h4>
-                            <p class="text-[11px] text-gray-400 mt-0.5">Attach homework pic or doc for quick answer.</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Attach homework pic or doc for quick answers.</p>
                         </div>
                     </button>
 
@@ -251,7 +251,7 @@
                         </div>
                         <div>
                             <h4 class="text-xs font-semibold text-white group-hover:text-amber-300 transition">Voice Assistant</h4>
-                            <p class="text-[11px] text-gray-400 mt-0.5">Bolkar sawal poocho in Hindi / English.</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Ask questions using your voice hands-free.</p>
                         </div>
                     </button>
                 </div>
@@ -387,7 +387,7 @@
 
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
-            recognition.lang = 'en-IN';
+            recognition.lang = 'en-US';
             recognition.interimResults = false;
             recognition.maxAlternatives = 1;
 
