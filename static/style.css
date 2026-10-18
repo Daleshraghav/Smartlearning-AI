@@ -946,4 +946,11 @@ a {
     outline-offset: 3px;
 }
 
+.smartlearning-logo {
+    display: block;
+    width: 150px;
+    height: 110px;
+    object-fit: contain;
+    margin: 0 auto 12px;
+}
 
