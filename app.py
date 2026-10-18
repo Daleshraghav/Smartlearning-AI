@@ -1,4 +1,3 @@
-
 import os
 import sqlite3
 import secrets
@@ -12,6 +11,7 @@ from flask import (
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
+from authlib.integrations.flask_client import OAuth
 
 load_dotenv()
 
@@ -26,6 +26,27 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY") or secrets.token_hex(32)
 app.config["MAX_CONTENT_LENGTH"] = 3 * 1024 * 1024
 app.config["UPLOAD_FOLDER"] = str(UPLOAD_FOLDER)
+
+# OAuth Setup for Google and Facebook
+oauth = OAuth(app)
+
+google = oauth.register(
+    name='google',
+    client_id=os.getenv('GOOGLE_CLIENT_ID', 'your_google_client_id'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET', 'your_google_client_secret'),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'}
+)
+
+facebook = oauth.register(
+    name='facebook',
+    client_id=os.getenv('FACEBOOK_CLIENT_ID', 'your_facebook_client_id'),
+    client_secret=os.getenv('FACEBOOK_CLIENT_SECRET', 'your_facebook_client_secret'),
+    api_base_url='https://graph.facebook.com/v12.0/',
+    access_token_url='https://graph.facebook.com/v12.0/oauth/access_token',
+    authorize_url='https://www.facebook.com/v12.0/dialog/oauth',
+    client_kwargs={'scope': 'email public_profile'}
+)
 
 
 def get_db():
@@ -46,7 +67,6 @@ def init_db():
             )
         """)
 
-        # Add profile fields to existing databases safely.
         existing = {
             row["name"] for row in
             db.execute("PRAGMA table_info(users)").fetchall()
@@ -140,7 +160,7 @@ def register():
                 with get_db() as db:
                     cursor = db.execute(
                         """INSERT INTO users (name, email, password_hash)
-                           VALUES (?, ?, ?)""",
+                            VALUES (?, ?, ?)""",
                         (name, email, generate_password_hash(password))
                     )
                     new_id = cursor.lastrowid
@@ -179,6 +199,81 @@ def login():
     return render_template("login.html")
 
 
+# --- GOOGLE OAUTH ROUTES ---
+@app.route('/google-login')
+def google_login():
+    redirect_uri = url_for('google_authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@app.route('/login/google/authorized')
+def google_authorize():
+    token = google.authorize_access_token()
+    user_info = token.get('userinfo')
+    
+    if not user_info:
+        flash("Google authentication failed.")
+        return redirect(url_for('login'))
+    
+    email = user_info.get('email')
+    name = user_info.get('name', 'Google User')
+    
+    with get_db() as db:
+        user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        if not user:
+            dummy_password = generate_password_hash(secrets.token_hex(16))
+            cursor = db.execute(
+                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                (name, email, dummy_password)
+            )
+            user_id = cursor.lastrowid
+        else:
+            user_id = user["id"]
+            
+    session.clear()
+    session["user_id"] = user_id
+    flash("Successfully logged in with Google!")
+    return redirect(url_for("home"))
+
+
+# --- FACEBOOK OAUTH ROUTES ---
+@app.route('/facebook-login')
+def facebook_login():
+    redirect_uri = url_for('facebook_authorize', _external=True)
+    return facebook.authorize_redirect(redirect_uri)
+
+
+@app.route('/login/facebook/authorized')
+def facebook_authorize():
+    token = facebook.authorize_access_token()
+    resp = facebook.get('me?fields=id,name,email')
+    user_info = resp.json()
+    
+    email = user_info.get('email')
+    name = user_info.get('name', 'Facebook User')
+    
+    if not email:
+        flash("Facebook account does not provide an email address.")
+        return redirect(url_for('login'))
+        
+    with get_db() as db:
+        user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        if not user:
+            dummy_password = generate_password_hash(secrets.token_hex(16))
+            cursor = db.execute(
+                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                (name, email, dummy_password)
+            )
+            user_id = cursor.lastrowid
+        else:
+            user_id = user["id"]
+            
+    session.clear()
+    session["user_id"] = user_id
+    flash("Successfully logged in with Facebook!")
+    return redirect(url_for("home"))
+
+
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
@@ -215,7 +310,6 @@ def profile():
                 flash("Use a PNG, JPG, JPEG or WEBP image.")
                 return render_template("profile.html", user=user)
 
-            # Use a random filename to avoid collisions and unsafe paths.
             extension = secure_filename(photo.filename).rsplit(".", 1)[1].lower()
             filename = f"{user['id']}_{secrets.token_hex(12)}.{extension}"
             destination = UPLOAD_FOLDER / filename
