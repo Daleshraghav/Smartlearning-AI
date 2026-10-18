@@ -1,127 +1,474 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Profile | SmartLearn AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-*{box-sizing:border-box}body{margin:0;padding:28px 15px;background:radial-gradient(circle at top left,#e9e4ff,transparent 35%),#f7f8ff;color:#20243b;font-family:Segoe UI,Arial,sans-serif}.page{max-width:850px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.brand{font-size:20px;font-weight:800;text-decoration:none;color:#20243b}.brand span{color:#6855e8}.top a:last-child{color:#6855e8;text-decoration:none;font-weight:700;font-size:13px}.panel{background:#fff;border:1px solid #ece9f8;border-radius:22px;overflow:hidden;box-shadow:0 20px 55px #30256d10}.cover{height:115px;background:linear-gradient(120deg,#5141c9,#9b8cff)}.content{padding:0 28px 30px}.avatar{width:100px;height:100px;margin-top:-48px;border:5px solid white;border-radius:50%;background:linear-gradient(135deg,#a293ff,#5741ce);display:grid;place-items:center;color:white;font-size:40px;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}h1{font-size:28px;margin:13px 0 3px}.muted{color:#777b90;font-size:13px;margin:0 0 24px}.section-title{font-size:16px;margin:27px 0 13px;padding-bottom:9px;border-bottom:1px solid #eeecf7}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field{min-width:0}.field.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:750;margin-bottom:6px;color:#555970}input,select,textarea{width:100%;padding:12px;border:1px solid #dedfeb;border-radius:10px;background:white;font:inherit;font-size:14px;outline:none}textarea{min-height:78px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:#8574f6;box-shadow:0 0 0 3px #8574f61c}.hint{font-size:11px;color:#777b90;margin-top:5px}.msg{padding:11px;margin:12px 0;background:#f0edff;border-radius:9px;color:#5143c2;font-size:13px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.btn{border:1px solid #e5e2f1;background:white;border-radius:10px;padding:12px 17px;font-weight:750;text-decoration:none;color:#292442;cursor:pointer;font-size:13px}.primary{background:#6855e8;border-color:#6855e8;color:white}.photo-input{border:0;padding:5px 0}.note{margin-top:14px;font-size:11px;color:#777b90;line-height:1.7}
-@media(max-width:540px){body{padding:17px 10px}.content{padding:0 17px 23px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top{align-items:flex-start}h1{font-size:24px}}
+  * { box-sizing: border-box; }
+  
+  body {
+    margin: 0;
+    padding: 30px 15px;
+    background: radial-gradient(circle at 10% 10%, rgba(104, 85, 232, 0.08), transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(155, 140, 255, 0.12), transparent 40%),
+                #f8f9ff;
+    color: #1e2238;
+    font-family: 'Plus Jakarta Sans', Segoe UI, sans-serif;
+  }
+
+  .page {
+    max-width: 850px;
+    margin: auto;
+  }
+
+  /* --- Top Header (Centered Logo & Highlighted Home) --- */
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 28px;
+    padding: 0 5px;
+  }
+
+  .brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+    font-weight: 800;
+    text-decoration: none;
+    color: #1e2238;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #4f46e5 0%, #6855e8 50%, #9b8cff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 12px rgba(104, 85, 232, 0.25));
+  }
+
+  .home-btn {
+    margin-left: auto;
+    color: #6855e8;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 8px 16px;
+    background: #ffffff;
+    border: 1.5px solid rgba(104, 85, 232, 0.2);
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(104, 85, 232, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .home-btn:hover {
+    background: #6855e8;
+    color: #ffffff;
+    border-color: #6855e8;
+    box-shadow: 0 6px 20px rgba(104, 85, 232, 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* --- Main Panel --- */
+  .panel {
+    background: #ffffff;
+    border: 1px solid rgba(229, 226, 245, 0.8);
+    border-radius: 26px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(48, 37, 109, 0.07);
+  }
+
+  .cover {
+    height: 130px;
+    background: linear-gradient(120deg, #4338ca, #6855e8, #a293ff);
+    position: relative;
+  }
+
+  .content {
+    padding: 0 32px 35px;
+  }
+
+  .avatar {
+    width: 108px;
+    height: 108px;
+    margin-top: -54px;
+    border: 5px solid #ffffff;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a293ff, #5741ce);
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: 42px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(87, 65, 206, 0.25);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 14px 0 4px;
+    color: #1a1d2e;
+  }
+
+  .muted {
+    color: #6b7088;
+    font-size: 14px;
+    margin: 0 0 24px;
+  }
+
+  /* --- Animated Luxury Flash Toast --- */
+  .msg-container {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    margin: 16px 0 24px;
+    background: linear-gradient(135deg, rgba(240, 237, 255, 0.9), rgba(230, 224, 255, 0.6));
+    border: 1px solid rgba(104, 85, 232, 0.3);
+    border-radius: 14px;
+    color: #4332b3;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(104, 85, 232, 0.12);
+    animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- Colorful Luxury File Upload Zone --- */
+  .upload-box {
+    margin-top: 10px;
+    border: 2px dashed rgba(104, 85, 232, 0.35);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(104, 85, 232, 0.02), rgba(162, 147, 255, 0.05));
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .upload-box:hover {
+    border-color: #6855e8;
+    background: linear-gradient(135deg, rgba(104, 85, 232, 0.06), rgba(162, 147, 255, 0.12));
+    box-shadow: 0 10px 25px rgba(104, 85, 232, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .upload-icon {
+    font-size: 28px;
+    background: linear-gradient(135deg, #5141c9, #9b8cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+    display: inline-block;
+    animation: pulseIcon 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulseIcon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+  }
+
+  .section-title {
+    font-size: 17px;
+    font-weight: 750;
+    margin: 32px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eeecf7;
+    color: #2b2f48;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* --- Inputs & Grid Layout --- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .field { min-width: 0; }
+  .field.full { grid-column: 1/-1; }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 7px;
+    color: #4a4e69;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #dcdbe8;
+    border-radius: 12px;
+    background: #fcfcff;
+    font: inherit;
+    font-size: 14px;
+    color: #1e2238;
+    outline: none;
+    transition: all 0.25s ease;
+  }
+
+  textarea {
+    min-height: 85px;
+    resize: vertical;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: #6855e8;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(104, 85, 232, 0.12);
+  }
+
+  .hint {
+    font-size: 11px;
+    color: #777b90;
+    margin-top: 6px;
+  }
+
+  /* --- Buttons --- */
+  .buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+
+  .btn {
+    border: 1px solid #e1deef;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 13px 22px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #2b2f48;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.25s ease;
+  }
+
+  .btn:hover {
+    background: #f4f3fb;
+    border-color: #d1ccf0;
+  }
+
+  .btn.primary {
+    background: linear-gradient(135deg, #6855e8 0%, #5141c9 100%);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 8px 22px rgba(104, 85, 232, 0.35);
+  }
+
+  .btn.primary:hover {
+    box-shadow: 0 12px 28px rgba(104, 85, 232, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .note {
+    margin-top: 18px;
+    font-size: 12px;
+    color: #83879e;
+    line-height: 1.6;
+  }
+
+  @media(max-width: 540px) {
+    body { padding: 18px 10px; }
+    .content { padding: 0 18px 25px; }
+    .grid { grid-template-columns: 1fr; }
+    .field.full { grid-column: auto; }
+    .brand { position: static; transform: none; }
+    .top { flex-direction: column; gap: 12px; text-align: center; }
+    .home-btn { margin-left: 0; }
+  }
 </style>
 </head>
 <body>
 <main class="page">
-<header class="top">
-<a class="brand" href="{{ url_for('home') }}">✦ SmartLearn <span>AI</span></a>
-<a href="{{ url_for('home') }}">← Home</a>
-</header>
 
-<section class="panel">
-<div class="cover"></div>
-<div class="content">
-<div class="avatar">
-{% if user['profile_photo'] %}
-<img src="{{ url_for('static', filename=user['profile_photo']) }}" alt="Your profile photo">
-{% else %}👤{% endif %}
-</div>
-<h1>My Profile</h1>
-<p class="muted">Manage your personal information and education details.</p>
+  <!-- Centered Logo & Highlighted Home Button -->
+  <header class="top">
+    <a class="brand" href="{{ url_for('home') }}">✦ SmartLearn <span>AI</span></a>
+    <a class="home-btn" href="{{ url_for('home') }}">
+      <i class="fa-solid fa-arrow-left"></i> Home
+    </a>
+  </header>
 
-{% with messages = get_flashed_messages() %}{% for message in messages %}<div class="msg">{{ message }}</div>{% endfor %}{% endwith %}
+  <section class="panel">
+    <div class="cover"></div>
+    <div class="content">
+      
+      <!-- Profile Avatar -->
+      <div class="avatar" id="avatarContainer">
+        {% if user['profile_photo'] %}
+        <img id="avatarImage" src="{{ url_for('static', filename=user['profile_photo']) }}" alt="Your profile photo">
+        {% else %}
+        <span id="avatarPlaceholder">👤</span>
+        {% endif %}
+      </div>
 
-<form method="POST" enctype="multipart/form-data">
-<h2 class="section-title">📸 Profile Photo</h2>
-<div class="field">
-<label for="profile_photo">Upload or change photo</label>
-<input class="photo-input" id="profile_photo" name="profile_photo" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp">
-<p class="hint">PNG, JPG or WEBP. Maximum file size: 3 MB.</p>
-</div>
+      <h1>My Profile</h1>
+      <p class="muted">Manage your personal information and education details.</p>
 
-<h2 class="section-title">👤 Personal Information</h2>
-<div class="grid">
-<div class="field">
-<label for="name">Full name *</label>
-<input id="name" name="name" value="{{ user['name'] or '' }}" required maxlength="100">
-</div>
-<div class="field">
-<label>Email address</label>
-<input value="{{ user['email'] }}" readonly>
-<p class="hint">Email change is not enabled yet.</p>
-</div>
-<div class="field">
-<label for="date_of_birth">Date of birth</label>
-<input id="date_of_birth" name="date_of_birth" type="date" value="{{ user['date_of_birth'] or '' }}">
-</div>
-<div class="field">
-<label for="gender">Gender (optional)</label>
-<select id="gender" name="gender">
-<option value="">Prefer not to say</option>
-{% for option in ['Female','Male','Non-binary','Other'] %}
-<option value="{{ option }}" {% if user['gender'] == option %}selected{% endif %}>{{ option }}</option>
-{% endfor %}
-</select>
-</div>
-<div class="field">
-<label for="phone">Phone number</label>
-<input id="phone" name="phone" type="tel" autocomplete="tel" value="{{ user['phone'] or '' }}" maxlength="25">
-</div>
-<div class="field">
-<label for="pincode">PIN code</label>
-<input id="pincode" name="pincode" inputmode="numeric" value="{{ user['pincode'] or '' }}" maxlength="12">
-</div>
-<div class="field full">
-<label for="address">Address</label>
-<textarea id="address" name="address" autocomplete="street-address">{{ user['address'] or '' }}</textarea>
-</div>
-<div class="field">
-<label for="city">City</label>
-<input id="city" name="city" autocomplete="address-level2" value="{{ user['city'] or '' }}">
-</div>
-<div class="field">
-<label for="state">State</label>
-<input id="state" name="state" autocomplete="address-level1" value="{{ user['state'] or '' }}">
-</div>
-</div>
+      <!-- Animated Luxury Toast Alert -->
+      <div class="msg-container" id="toastAlert">
+        <i class="fa-solid fa-circle-check" style="font-size: 18px;"></i>
+        <span id="toastMessageText">
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}{{ messages[0] }}{% endif %}
+          {% endwith %}
+        </span>
+      </div>
 
-<h2 class="section-title">🎓 Education Information</h2>
-<div class="grid">
-<div class="field">
-<label for="education_level">Education level</label>
-<select id="education_level" name="education_level">
-<option value="">Select level</option>
-{% for option in ['School','Diploma','Undergraduate','Postgraduate','PhD','Other'] %}
-<option value="{{ option }}" {% if user['education_level'] == option %}selected{% endif %}>{{ option }}</option>
-{% endfor %}
-</select>
-</div>
-<div class="field">
-<label for="institution">School / College / University</label>
-<input id="institution" name="institution" value="{{ user['institution'] or '' }}">
-</div>
-<div class="field">
-<label for="course">Course / Class</label>
-<input id="course" name="course" placeholder="e.g. B.Tech, Class 12" value="{{ user['course'] or '' }}">
-</div>
-<div class="field">
-<label for="branch">Branch / Stream</label>
-<input id="branch" name="branch" placeholder="e.g. CSE, Science, Commerce" value="{{ user['branch'] or '' }}">
-</div>
-<div class="field">
-<label for="study_year">Year / Semester</label>
-<input id="study_year" name="study_year" placeholder="e.g. 4th Year, Semester 7" value="{{ user['study_year'] or '' }}">
-</div>
-</div>
+      <form method="POST" enctype="multipart/form-data">
+        
+        <!-- Colorful Luxury Photo Upload Zone -->
+        <h2 class="section-title">📸 Profile Photo</h2>
+        <div class="field">
+          <div class="upload-box" onclick="document.getElementById('profile_photo').click();">
+            <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+            <div style="font-weight: 700; font-size: 14px; color: #30256d;">Upload or Change Photo</div>
+            <p class="hint" style="margin-top: 4px;">Click here to browse files (PNG, JPG, WEBP - Max 3 MB)</p>
+          </div>
+          <input class="photo-input" id="profile_photo" name="profile_photo" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" style="display: none;" onchange="handlePhotoSelect(event)">
+        </div>
 
-<div class="buttons">
-<button class="btn primary" type="submit">Save Profile ✓</button>
-<a class="btn" href="{{ url_for('dashboard') }}">My Dashboard</a>
-<a class="btn" href="{{ url_for('home') }}">Cancel</a>
-</div>
-<p class="note">Only provide information you are comfortable storing in your student account. Your password is never shown on this page.</p>
-</form>
-</div>
-</section>
+        <!-- Personal Information Section -->
+        <h2 class="section-title">👤 Personal Information</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="name">Full name *</label>
+            <input id="name" name="name" value="{{ user['name'] or '' }}" required maxlength="100">
+          </div>
+          <div class="field">
+            <label>Email address</label>
+            <input value="{{ user['email'] }}" readonly style="background: #f0edf9; opacity: 0.8; cursor: not-allowed;">
+            <p class="hint">Email change is not enabled yet.</p>
+          </div>
+          <div class="field">
+            <label for="date_of_birth">Date of birth</label>
+            <input id="date_of_birth" name="date_of_birth" type="date" value="{{ user['date_of_birth'] or '' }}">
+          </div>
+          <div class="field">
+            <label for="gender">Gender (optional)</label>
+            <select id="gender" name="gender">
+              <option value="">Prefer not to say</option>
+              {% for option in ['Female','Male','Non-binary','Other'] %}
+              <option value="{{ option }}" {% if user['gender'] == option %}selected{% endif %}>{{ option }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" value="{{ user['phone'] or '' }}" maxlength="25">
+          </div>
+          <div class="field">
+            <label for="pincode">PIN code</label>
+            <input id="pincode" name="pincode" inputmode="numeric" value="{{ user['pincode'] or '' }}" maxlength="12">
+          </div>
+          <div class="field full">
+            <label for="address">Address</label>
+            <textarea id="address" name="address" autocomplete="street-address">{{ user['address'] or '' }}</textarea>
+          </div>
+          <div class="field">
+            <label for="city">City</label>
+            <input id="city" name="city" autocomplete="address-level2" value="{{ user['city'] or '' }}">
+          </div>
+          <div class="field">
+            <label for="state">State</label>
+            <input id="state" name="state" autocomplete="address-level1" value="{{ user['state'] or '' }}">
+          </div>
+        </div>
+
+        <!-- Education Information Section -->
+        <h2 class="section-title">🎓 Education Information</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="education_level">Education level</label>
+            <select id="education_level" name="education_level">
+              <option value="">Select level</option>
+              {% for option in ['School','Diploma','Undergraduate','Postgraduate','PhD','Other'] %}
+              <option value="{{ option }}" {% if user['education_level'] == option %}selected{% endif %}>{{ option }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field">
+            <label for="institution">School / College / University</label>
+            <input id="institution" name="institution" value="{{ user['institution'] or '' }}">
+          </div>
+          <div class="field">
+            <label for="course">Course / Class</label>
+            <input id="course" name="course" placeholder="e.g. B.Tech, Class 12" value="{{ user['course'] or '' }}">
+          </div>
+          <div class="field">
+            <label for="branch">Branch / Stream</label>
+            <input id="branch" name="branch" placeholder="e.g. CSE, Science, Commerce" value="{{ user['branch'] or '' }}">
+          </div>
+          <div class="field">
+            <label for="study_year">Year / Semester</label>
+            <input id="study_year" name="study_year" placeholder="e.g. 4th Year, Semester 7" value="{{ user['study_year'] or '' }}">
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button class="btn primary" type="submit">Save Profile ✓</button>
+          <a class="btn" href="{{ url_for('dashboard') }}">My Dashboard</a>
+          <a class="btn" href="{{ url_for('home') }}">Cancel</a>
+        </div>
+        <p class="note">Only provide information you are comfortable storing in your student account. Your password is never shown on this page.</p>
+      </form>
+    </div>
+  </section>
 </main>
+
+<script>
+  function handlePhotoSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const container = document.getElementById('avatarContainer');
+        container.innerHTML = `<img src="${e.target.result}" alt="Preview Photo">`;
+      }
+      reader.readAsDataURL(file);
+
+      // Trigger animated toast when photo is selected
+      showToast("New photo selected! Click 'Save Profile ✓' to update.");
+    }
+  }
+
+  function showToast(message) {
+    const alertBox = document.getElementById('toastAlert');
+    const alertText = document.getElementById('toastMessageText');
+    alertText.innerText = message;
+    alertBox.style.display = 'flex';
+  }
+
+  // Automatically trigger toast if Flask passed flash messages
+  window.addEventListener('DOMContentLoaded', () => {
+    const toastText = document.getElementById('toastMessageText').innerText.trim();
+    if (toastText !== '') {
+      document.getElementById('toastAlert').style.display = 'flex';
+    }
+  });
+</script>
 </body>
 </html>
