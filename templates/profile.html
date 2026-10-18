@@ -22,47 +22,16 @@
     margin: auto;
   }
 
-  /* --- Top Header with Luxury Blue Cube for Brand --- */
+  /* --- Top Header with Home Button --- */
   .top {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    position: relative;
-    margin-bottom: 25px;
+    justify-content: flex-end;
+    margin-bottom: 20px;
     padding: 0 5px;
   }
 
-  /* Luxury Blue Cube Header Badge */
-  .brand-cube {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
-    padding: 12px 24px;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    animation: floatCube 4s ease-in-out infinite;
-  }
-
-  @keyframes floatCube {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-4px); }
-  }
-
-  .brand-cube span {
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-    display: block;
-    white-space: nowrap;
-  }
-
   .home-btn {
-    margin-left: auto;
     color: #2563eb;
     text-decoration: none;
     font-weight: 700;
@@ -86,7 +55,7 @@
     transform: translateY(-2px);
   }
 
-  /* --- Main Luxury Panel (Balanced Glassmorphic Theme) --- */
+  /* --- Main Luxury Panel --- */
   .panel {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
@@ -102,10 +71,43 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* --- Cover Banner with Luxury Brand Badge Inside --- */
   .cover {
-    height: 140px;
-    background: linear-gradient(135deg, #1e3a8a, #2563eb, #60a5fa);
+    height: 180px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #60a5fa 100%);
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  /* Luxury Centered Brand Badge inside Banner */
+  .brand-badge-luxury {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 12px 28px;
+    border-radius: 50px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    text-align: center;
+    animation: pulseBadge 3s ease-in-out infinite;
+  }
+
+  @keyframes pulseBadge {
+    0%, 100% { transform: scale(1); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); }
+    50% { transform: scale(1.03); box-shadow: 0 20px 40px rgba(37, 99, 235, 0.4); }
+  }
+
+  .brand-badge-luxury span {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: block;
+    white-space: nowrap;
   }
 
   .content {
@@ -323,28 +325,29 @@
     .content { padding: 0 18px 25px; }
     .grid { grid-template-columns: 1fr; }
     .field.full { grid-column: auto; }
-    .brand-cube { position: static; transform: none; margin-bottom: 10px; width: 100%; }
-    .top { flex-direction: column; gap: 10px; text-align: center; }
-    .home-btn { margin-left: 0; }
+    .brand-badge-luxury { padding: 10px 16px; }
+    .brand-badge-luxury span { font-size: 13px; }
   }
 </style>
 </head>
 <body>
 <main class="page">
 
-  <!-- Centered Luxury Blue Cube Header -->
+  <!-- Top Header with Home Button -->
   <header class="top">
-    <div style="width: 100px;"></div> <!-- Spacer for flex alignment -->
-    <div class="brand-cube">
-      <span>Smartlearning AI by Dalesh Raghav</span>
-    </div>
     <a class="home-btn" href="{{ url_for('home') }}">
       <i class="fa-solid fa-arrow-left"></i> Home
     </a>
   </header>
 
   <section class="panel">
-    <div class="cover"></div>
+    <!-- Cover Banner with Centered Luxury Brand Badge Inside -->
+    <div class="cover">
+      <div class="brand-badge-luxury">
+        <span>Smartlearning AI by Dalesh Raghav</span>
+      </div>
+    </div>
+
     <div class="content">
       
       <!-- Profile Avatar positioned cleanly -->
