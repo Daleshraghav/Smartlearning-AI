@@ -24,6 +24,15 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .glass-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
         .glass-input {
             background: rgba(31, 41, 55, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -138,7 +147,7 @@
             <!-- Study Stats / Info -->
             <div class="p-3.5 rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-purple-500/20">
                 <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-semibold text-purple-300">AI Model</span>
+                    <span class="text-xs font-semibold text-purple-300">AI Engine</span>
                     <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">Gemini 1.5</span>
                 </div>
                 <p class="text-xs text-gray-400">Ask questions in English, Hindi or Hinglish seamlessly!</p>
@@ -148,9 +157,13 @@
         <!-- Sidebar Footer / User Profile snippet -->
         <div class="p-4 border-t border-gray-800/60 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center font-bold text-white text-sm">
-                    {{ user.name[0] if user and user.name else 'U' }}
-                </div>
+                {% if user and user.profile_photo %}
+                    <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="Profile" class="w-9 h-9 rounded-xl object-cover border border-purple-500/40 shadow-sm">
+                {% else %}
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md">
+                        {{ user.name[0] if user and user.name else 'U' }}
+                    </div>
+                {% endif %}
                 <div class="overflow-hidden">
                     <p class="text-sm font-medium text-white truncate">{{ user.name if user else 'Student' }}</p>
                     <p class="text-xs text-gray-400 truncate">{{ user.email if user else 'Active Learner' }}</p>
@@ -180,25 +193,73 @@
 
             <div class="flex items-center space-x-2">
                 <button onclick="clearChat()" class="px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-1.5 border border-gray-800">
-                    <i class="fa-solid fa-trash-can text-red-400"></i> Clear Chat
+                    <i class="fa-solid fa-trash-can text-red-400"></i> Reset Chat
                 </button>
             </div>
         </header>
 
-        <!-- Chat Messages Container -->
-        <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
-            <!-- Welcome Bot Message -->
-            <div class="flex items-start space-x-3 message-animation">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
-                    <i class="fa-solid fa-robot text-white text-sm"></i>
+        <!-- Chat Scrollable Container -->
+        <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 relative">
+            
+            <!-- CENTER WELCOME HERO DISPLAY (Shows initially, hides when user chats) -->
+            <div id="welcome-hero" class="h-full flex flex-col items-center justify-center text-center max-w-3xl mx-auto py-8 px-4 message-animation">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-blue-500 flex items-center justify-center shadow-2xl shadow-purple-500/30 mb-5 border border-white/10">
+                    <i class="fa-solid fa-brain text-white text-3xl"></i>
                 </div>
-                <div class="glass-panel p-4 rounded-2xl max-w-2xl text-gray-200 text-sm shadow-xl border border-gray-800 leading-relaxed">
-                    <p class="font-semibold text-purple-300 mb-1">SmartLearn AI Tutor</p>
-                    Namaste! 🙏 Main aapka personal AI tutor hoon. Aap mujhse kisi bhi subject ke baare mein pooch sakte hain—chahe Physics ho, Math ho ya Coding. 
-                    <br><br>
-                    ✨ **Features:** Aap neeche mic button se **voice me baat** kar sakte hain, ya **photo/file upload** karke uska solution bhi pooch sakte hain! Aaj hum kya seekh rahe hain?
+                <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">
+                    Aaj kya seekhna chahte hain, <span class="luxury-gradient-text">{{ user.name if user else 'Student' }}</span>?
+                </h2>
+                <p class="text-gray-400 text-sm max-w-md mb-8 leading-relaxed">
+                    Aapka personal AI tutor taiyar hai! Voice se boliye, photo upload kijiye ya neeche diye gaye tips se start karein.
+                </p>
+
+                <!-- Feature Tip Cards in Center -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full max-w-xl text-left">
+                    <button onclick="setPrompt('Help me revise Physics formulas for my exam')" class="glass-card p-4 rounded-2xl transition flex items-start space-x-3 group">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-atom"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-semibold text-white group-hover:text-purple-300 transition">Physics Revision</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Formulas & step-by-step numeric solutions.</p>
+                        </div>
+                    </button>
+
+                    <button onclick="setPrompt('Explain Python loops with a simple real-world example')" class="glass-card p-4 rounded-2xl transition flex items-start space-x-3 group">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-semibold text-white group-hover:text-emerald-300 transition">Coding Concepts</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Learn Python, C++ & web logic with ease.</p>
+                        </div>
+                    </button>
+
+                    <button onclick="document.getElementById('file-input').click()" class="glass-card p-4 rounded-2xl transition flex items-start space-x-3 group">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-semibold text-white group-hover:text-blue-300 transition">Photo & File Doubt</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Attach homework pic or doc for quick answer.</p>
+                        </div>
+                    </button>
+
+                    <button onclick="toggleVoiceInput()" class="glass-card p-4 rounded-2xl transition flex items-start space-x-3 group">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-microphone"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-semibold text-white group-hover:text-amber-300 transition">Voice Assistant</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Bolkar sawal poocho in Hindi / English.</p>
+                        </div>
+                    </button>
                 </div>
             </div>
+
+            <!-- Dynamic Messages List -->
+            <div id="messages-list" class="space-y-6"></div>
+
         </div>
 
         <!-- Typing Indicator (Hidden by default) -->
@@ -264,6 +325,17 @@
     <script>
         let selectedFile = null;
 
+        // Dynamic HTML rendering string for User Avatar Image or Gradient
+        const userAvatarHtml = `
+            {% if user and user.profile_photo %}
+                <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="User" class="w-9 h-9 rounded-xl object-cover border border-purple-500/40 shadow-md shrink-0">
+            {% else %}
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md shrink-0">
+                    {{ user.name[0] if user and user.name else 'U' }}
+                </div>
+            {% endif %}
+        `;
+
         function setPrompt(text) {
             const input = document.getElementById('user-input');
             input.value = text;
@@ -278,18 +350,8 @@
         }
 
         function clearChat() {
-            const container = document.getElementById('chat-container');
-            container.innerHTML = `
-                <div class="flex items-start space-x-3 message-animation">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
-                        <i class="fa-solid fa-robot text-white text-sm"></i>
-                    </div>
-                    <div class="glass-panel p-4 rounded-2xl max-w-2xl text-gray-200 text-sm shadow-xl border border-gray-800 leading-relaxed">
-                        <p class="font-semibold text-purple-300 mb-1">SmartLearn AI Tutor</p>
-                        Chat cleared! Naya topic shuru karein? Aapka sawal kya hai?
-                    </div>
-                </div>
-            `;
+            document.getElementById('messages-list').innerHTML = '';
+            document.getElementById('welcome-hero').style.display = 'flex';
         }
 
         // Handle File Attachment Selection
@@ -325,7 +387,7 @@
 
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
-            recognition.lang = 'en-IN'; // Supports English, Hinglish accents well
+            recognition.lang = 'en-IN';
             recognition.interimResults = false;
             recognition.maxAlternatives = 1;
 
@@ -374,9 +436,15 @@
 
             if (!messageText && !selectedFile) return;
 
-            const container = document.getElementById('chat-container');
+            // Hide the center welcome hero card on first message
+            const hero = document.getElementById('welcome-hero');
+            if (hero) {
+                hero.style.display = 'none';
+            }
 
-            // 1. Append User Message
+            const messagesList = document.getElementById('messages-list');
+
+            // 1. Append User Message Box (With Profile Pic on Right)
             let fileTagHtml = '';
             if (selectedFile) {
                 fileTagHtml = `<div class="mt-2 text-xs text-purple-300 flex items-center gap-1.5"><i class="fa-solid fa-paperclip"></i> ${selectedFile.name}</div>`;
@@ -384,21 +452,19 @@
 
             const userBubble = `
                 <div class="flex items-start justify-end space-x-3 message-animation">
-                    <div class="glass-panel p-4 rounded-2xl max-w-2xl text-white text-sm shadow-xl border border-purple-500/30 bg-purple-900/20 leading-relaxed">
-                        <p class="font-semibold text-purple-300 mb-1 text-right">You</p>
+                    <div class="glass-panel px-5 py-3.5 rounded-2xl max-w-xl text-white text-sm shadow-xl border border-purple-500/30 bg-purple-900/20 leading-relaxed">
+                        <p class="font-semibold text-xs text-purple-300 mb-1 text-right">You</p>
                         <div>${escapeHtml(messageText)}</div>${fileTagHtml}
                     </div>
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shrink-0 font-bold text-white text-sm">
-                        {{ user.name[0] if user and user.name else 'U' }}
-                    </div>
+                    ${userAvatarHtml}
                 </div>
             `;
-            container.insertAdjacentHTML('beforeend', userBubble);
+            messagesList.insertAdjacentHTML('beforeend', userBubble);
             
             // Clear inputs
             inputField.value = '';
-            const currentFile = selectedFile;
             removeFile();
+            const container = document.getElementById('chat-container');
             container.scrollTop = container.scrollHeight;
 
             // Show Typing Indicator
@@ -426,19 +492,19 @@
                     aiResponseText = data.error || "Sorry, something went wrong. Please check your API key configuration.";
                 }
 
-                // Append AI Response Bubble with Luxury Animation
+                // Append AI Response Bubble
                 const botBubble = `
                     <div class="flex items-start space-x-3 message-animation">
                         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
                             <i class="fa-solid fa-robot text-white text-sm"></i>
                         </div>
                         <div class="glass-panel p-4 rounded-2xl max-w-2xl text-gray-200 text-sm shadow-xl border border-gray-800 leading-relaxed space-y-2">
-                            <p class="font-semibold text-purple-300 mb-1">SmartLearn AI Tutor</p>
+                            <p class="font-semibold text-xs text-purple-300 mb-1">SmartLearn AI Tutor</p>
                             <div class="whitespace-pre-line">${formatAIResponse(aiResponseText)}</div>
                         </div>
                     </div>
                 `;
-                container.insertAdjacentHTML('beforeend', botBubble);
+                messagesList.insertAdjacentHTML('beforeend', botBubble);
                 container.scrollTop = container.scrollHeight;
 
             } catch (error) {
@@ -453,7 +519,7 @@
                         </div>
                     </div>
                 `;
-                container.insertAdjacentHTML('beforeend', errorBubble);
+                messagesList.insertAdjacentHTML('beforeend', errorBubble);
                 container.scrollTop = container.scrollHeight;
             }
         }
@@ -463,7 +529,6 @@
         }
 
         function formatAIResponse(text) {
-            // Basic markdown bold/code cleanup for rich look
             return escapeHtml(text)
                 .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
                 .replace(/`([^`]+)`/g, '<code class="bg-gray-800 text-purple-300 px-1.5 py-0.5 rounded text-xs font-mono">$1</code>');
