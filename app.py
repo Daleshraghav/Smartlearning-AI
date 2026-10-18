@@ -3,7 +3,7 @@ import sqlite3
 import secrets
 from pathlib import Path
 from functools import wraps
-from datetime import timedelta  # <-- Session lifetime ke liye import
+from datetime import timedelta
 
 from flask import (
     Flask, render_template, request, redirect,
@@ -11,6 +11,7 @@ from flask import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 from authlib.integrations.flask_client import OAuth
 
@@ -24,13 +25,11 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 app = Flask(__name__)
-from werkzeug.middleware.proxy_fix import ProxyFix
-
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 app.secret_key = os.getenv("SECRET_KEY") or secrets.token_hex(32)
 
-# --- Session Lifetime Setting Added ---
-app.permanent_session_lifetime = timedelta(days=7) 
+# Session Lifetime Configuration
+app.permanent_session_lifetime = timedelta(days=7)
 
 app.config["MAX_CONTENT_LENGTH"] = 3 * 1024 * 1024
 app.config["UPLOAD_FOLDER"] = str(UPLOAD_FOLDER)
@@ -174,7 +173,7 @@ def register():
                     new_id = cursor.lastrowid
 
                 session.clear()
-                session.permanent = True  # <-- Permanent session
+                session.permanent = True
                 session["user_id"] = new_id
                 return redirect(url_for("home"))
 
@@ -200,7 +199,7 @@ def login():
 
         if user and check_password_hash(user["password_hash"], password):
             session.clear()
-            session.permanent = True  # <-- Permanent session
+            session.permanent = True
             session["user_id"] = user["id"]
             return redirect(url_for("home"))
 
@@ -218,33 +217,37 @@ def google_login():
 
 @app.route('/login/google/authorized')
 def google_authorize():
-    token = google.authorize_access_token()
-    user_info = token.get('userinfo')
-    
-    if not user_info:
-        flash("Google authentication failed.")
-        return redirect(url_for('login'))
-    
-    email = user_info.get('email')
-    name = user_info.get('name', 'Google User')
-    
-    with get_db() as db:
-        user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
-        if not user:
-            dummy_password = generate_password_hash(secrets.token_hex(16))
-            cursor = db.execute(
-                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
-                (name, email, dummy_password)
-            )
-            user_id = cursor.lastrowid
-        else:
-            user_id = user["id"]
-            
-    session.clear()
-    session.permanent = True  # <-- Permanent session for Google login
-    session["user_id"] = user_id
-    flash("Successfully logged in with Google!")
-    return redirect(url_for("home"))
+    try:
+        token = google.authorize_access_token()
+        user_info = token.get('userinfo')
+        
+        if not user_info:
+            flash("Google authentication failed.")
+            return redirect(url_for('login'))
+        
+        email = user_info.get('email')
+        name = user_info.get('name', 'Google User')
+        
+        with get_db() as db:
+            user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+            if not user:
+                dummy_password = generate_password_hash(secrets.token_hex(16))
+                cursor = db.execute(
+                    "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                    (name, email, dummy_password)
+                )
+                user_id = cursor.lastrowid
+            else:
+                user_id = user["id"]
+                
+        session.clear()
+        session.permanent = True
+        session["user_id"] = user_id
+        flash("Successfully logged in with Google!")
+        return redirect(url_for("home"))
+    except Exception as e:
+        flash(f"Google login error: {str(e)}")
+        return redirect(url_for("login"))
 
 
 # --- FACEBOOK OAUTH ROUTES ---
@@ -256,34 +259,38 @@ def facebook_login():
 
 @app.route('/login/facebook/authorized')
 def facebook_authorize():
-    token = facebook.authorize_access_token()
-    resp = facebook.get('me?fields=id,name,email')
-    user_info = resp.json()
-    
-    email = user_info.get('email')
-    name = user_info.get('name', 'Facebook User')
-    
-    if not email:
-        flash("Facebook account does not provide an email address.")
-        return redirect(url_for('login'))
+    try:
+        token = facebook.authorize_access_token()
+        resp = facebook.get('me?fields=id,name,email')
+        user_info = resp.json()
         
-    with get_db() as db:
-        user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
-        if not user:
-            dummy_password = generate_password_hash(secrets.token_hex(16))
-            cursor = db.execute(
-                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
-                (name, email, dummy_password)
-            )
-            user_id = cursor.lastrowid
-        else:
-            user_id = user["id"]
+        email = user_info.get('email')
+        name = user_info.get('name', 'Facebook User')
+        
+        if not email:
+            flash("Facebook account does not provide an email address.")
+            return redirect(url_for('login'))
             
-    session.clear()
-    session.permanent = True  # <-- Permanent session for Facebook login
-    session["user_id"] = user_id
-    flash("Successfully logged in with Facebook!")
-    return redirect(url_for("home"))
+        with get_db() as db:
+            user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+            if not user:
+                dummy_password = generate_password_hash(secrets.token_hex(16))
+                cursor = db.execute(
+                    "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                    (name, email, dummy_password)
+                )
+                user_id = cursor.lastrowid
+            else:
+                user_id = user["id"]
+                
+        session.clear()
+        session.permanent = True
+        session["user_id"] = user_id
+        flash("Successfully logged in with Facebook!")
+        return redirect(url_for("home"))
+    except Exception as e:
+        flash(f"Facebook login error: {str(e)}")
+        return redirect(url_for("login"))
 
 
 @app.route("/profile", methods=["GET", "POST"])
