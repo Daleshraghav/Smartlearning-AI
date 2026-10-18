@@ -3,6 +3,7 @@ import sqlite3
 import secrets
 from pathlib import Path
 from functools import wraps
+from datetime import timedelta  # <-- Session lifetime ke liye import
 
 from flask import (
     Flask, render_template, request, redirect,
@@ -25,9 +26,12 @@ UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 app = Flask(__name__)
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1) # Yeh line add karni hai
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 app.secret_key = os.getenv("SECRET_KEY") or secrets.token_hex(32)
+
+# --- Session Lifetime Setting Added ---
+app.permanent_session_lifetime = timedelta(days=7) 
+
 app.config["MAX_CONTENT_LENGTH"] = 3 * 1024 * 1024
 app.config["UPLOAD_FOLDER"] = str(UPLOAD_FOLDER)
 
@@ -170,6 +174,7 @@ def register():
                     new_id = cursor.lastrowid
 
                 session.clear()
+                session.permanent = True  # <-- Permanent session
                 session["user_id"] = new_id
                 return redirect(url_for("home"))
 
@@ -195,6 +200,7 @@ def login():
 
         if user and check_password_hash(user["password_hash"], password):
             session.clear()
+            session.permanent = True  # <-- Permanent session
             session["user_id"] = user["id"]
             return redirect(url_for("home"))
 
@@ -235,6 +241,7 @@ def google_authorize():
             user_id = user["id"]
             
     session.clear()
+    session.permanent = True  # <-- Permanent session for Google login
     session["user_id"] = user_id
     flash("Successfully logged in with Google!")
     return redirect(url_for("home"))
@@ -273,6 +280,7 @@ def facebook_authorize():
             user_id = user["id"]
             
     session.clear()
+    session.permanent = True  # <-- Permanent session for Facebook login
     session["user_id"] = user_id
     flash("Successfully logged in with Facebook!")
     return redirect(url_for("home"))
