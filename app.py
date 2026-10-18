@@ -26,29 +26,38 @@ UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
-app.secret_key = os.getenv("SECRET_KEY") or secrets.token_hex(32)
 
-# Session Lifetime Configuration
+# Secret Key configuration for persistent sessions across restarts
+app.secret_key = os.getenv("SECRET_KEY", "smartlearn_ultra_secret_key_2026_dalesh_raghav")
+
+# Session Lifetime Configuration (7 Days)
 app.permanent_session_lifetime = timedelta(days=7)
 
-app.config["MAX_CONTENT_LENGTH"] = 3 * 1024 * 1024
-app.config["UPLOAD_FOLDER"] = str(UPLOAD_FOLDER)
+# Cookie security settings for HTTPS / Render environment
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+    SESSION_REFRESH_EACH_REQUEST=True,
+    MAX_CONTENT_LENGTH=3 * 1024 * 1024,
+    UPLOAD_FOLDER=str(UPLOAD_FOLDER)
+)
 
 # OAuth Setup for Google and Facebook
 oauth = OAuth(app)
 
 google = oauth.register(
     name='google',
-    client_id=os.getenv('GOOGLE_CLIENT_ID', 'your_google_client_id'),
-    client_secret=os.getenv('GOOGLE_CLIENT_SECRET', 'your_google_client_secret'),
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
     client_kwargs={'scope': 'openid email profile'}
 )
 
 facebook = oauth.register(
     name='facebook',
-    client_id=os.getenv('FACEBOOK_CLIENT_ID', 'your_facebook_client_id'),
-    client_secret=os.getenv('FACEBOOK_CLIENT_SECRET', 'your_facebook_client_secret'),
+    client_id=os.getenv('FACEBOOK_CLIENT_ID'),
+    client_secret=os.getenv('FACEBOOK_CLIENT_SECRET'),
     api_base_url='https://graph.facebook.com/v12.0/',
     access_token_url='https://graph.facebook.com/v12.0/oauth/access_token',
     authorize_url='https://www.facebook.com/v12.0/dialog/oauth',
