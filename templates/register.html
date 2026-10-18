@@ -17,209 +17,271 @@
             box-sizing: border-box;
         }
 
-     
-/* COMPACT LUXURY REGISTER PAGE */
+        body.register-page {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: #211b38;
+            background:
+                radial-gradient(circle at 10% 15%, #e8dcff 0, transparent 32%),
+                radial-gradient(circle at 90% 85%, #dddfff 0, transparent 35%),
+                linear-gradient(135deg, #faf8ff, #f0efff, #fffaff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 16px;
+            overflow-x: hidden;
+        }
 
-body.register-page {
-    min-height: 100vh;
-    padding: 12px 16px;
-}
+        .register-shell {
+            width: 100%;
+            max-width: 490px;
+            animation: cardEnter 0.8s ease both;
+        }
 
-.register-shell {
-    max-width: 430px;
-}
+        .brand-heading {
+            text-align: center;
+            margin-bottom: 22px;
+            animation: brandEnter 0.9s ease both;
+        }
 
-.brand-heading {
-    margin-bottom: 12px;
-}
+        .brand-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 12px;
+            display: grid;
+            place-items: center;
+            border-radius: 20px;
+            color: white;
+            font-size: 30px;
+            background: linear-gradient(135deg, #a78bfa, #6544e8);
+            box-shadow: 0 10px 30px #7654e84a;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
 
-.brand-icon {
-    width: 43px;
-    height: 43px;
-    margin-bottom: 6px;
-    border-radius: 14px;
-    font-size: 23px;
-}
+        .brand-heading h1 {
+            margin: 0;
+            font-size: clamp(29px, 6vw, 36px);
+            font-weight: 850;
+            letter-spacing: -1.1px;
+            background: linear-gradient(100deg, #5936cb, #9264f4, #4930a7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
 
-.brand-heading h1 {
-    font-size: 29px;
-    letter-spacing: -0.7px;
-}
+        .brand-heading p {
+            margin: 8px 0 0;
+            color: #79718f;
+            font-size: 14px;
+        }
 
-.brand-heading p {
-    margin-top: 4px;
-    font-size: 12px;
-}
+        .register-card {
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 27px;
+            padding: 29px;
+            box-shadow:
+                0 24px 70px rgba(74, 48, 145, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
 
-.register-card {
-    padding: 20px 24px;
-    border-radius: 22px;
-}
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border: 1px solid #e7ddff;
+            border-radius: 12px;
+            background: #f7f3ff;
+            color: #6844ce;
+            text-decoration: none;
+            font-weight: 750;
+            font-size: 13px;
+            transition: 0.25s ease;
+        }
 
-.back-home {
-    padding: 7px 11px;
-    font-size: 12px;
-}
+        .back-home:hover {
+            background: #eee6ff;
+            border-color: #b9a0ff;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px #7654e81a;
+        }
 
-.form-heading {
-    margin: 14px 0 16px;
-}
+        .form-heading {
+            margin: 23px 0 25px;
+        }
 
-.form-heading h2 {
-    font-size: 25px;
-}
+        .form-heading h2 {
+            margin: 0;
+            font-size: clamp(25px, 5vw, 30px);
+            font-weight: 800;
+            letter-spacing: -0.6px;
+        }
 
-.form-heading p {
-    margin-top: 5px;
-    font-size: 12px;
-}
+        .form-heading p {
+            margin: 9px 0 0;
+            color: #888198;
+            font-size: 14px;
+            line-height: 1.6;
+        }
 
-.register-form .form-group {
-    margin-bottom: 12px;
-}
+        .register-form .form-group {
+            margin-bottom: 19px;
+        }
 
-.register-form label {
-    margin-bottom: 5px;
-    font-size: 12px;
-}
+        .register-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 750;
+            color: #38304c;
+        }
 
-.register-form input {
-    min-height: 42px;
-    padding: 9px 12px;
-    border-radius: 10px;
-    font-size: 13px;
-}
+        .register-form input {
+            width: 100%;
+            min-height: 49px;
+            padding: 12px 15px;
+            border: 1px solid #e5e0ee;
+            border-radius: 13px;
+            background: #fff;
+            color: #251e39;
+            font: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.25s ease,
+                        box-shadow 0.25s ease,
+                        transform 0.25s ease;
+        }
 
-.create-account-btn {
-    min-height: 44px;
-    border-radius: 10px;
-    font-size: 13px;
-}
+        .register-form input:hover {
+            border-color: #c8b6f7;
+        }
 
-.login-prompt {
-    margin-top: 14px;
-    font-size: 12px;
-}
+        .register-form input:focus {
+            border-color: #8058ed;
+            box-shadow: 0 0 0 4px rgba(128, 88, 237, 0.12);
+            transform: translateY(-1px);
+        }
 
-/* LAPTOP: fit the form on one screen */
-@media (min-width: 700px) and (min-height: 650px) {
-    body.register-page {
-        padding-top: 8px;
-        padding-bottom: 8px;
-    }
+        .create-account-btn {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-height: 51px;
+            margin-top: 3px;
+            border: 0;
+            border-radius: 13px;
+            background: linear-gradient(110deg, #7856ec, #6240dc, #8861f5);
+            background-size: 200% 100%;
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 9px 22px rgba(106, 69, 224, 0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: buttonGlow 3s ease-in-out infinite;
+        }
 
-    .register-shell {
-        max-width: 410px;
-    }
+        .create-account-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 13px 28px rgba(106, 69, 224, 0.35);
+        }
 
-    .brand-heading {
-        margin-bottom: 9px;
-    }
+        .create-account-btn:active {
+            transform: scale(0.985);
+        }
 
-    .brand-icon {
-        width: 38px;
-        height: 38px;
-        font-size: 21px;
-    }
+        .login-prompt {
+            margin: 23px 0 0;
+            color: #8b8498;
+            font-size: 14px;
+            line-height: 1.7;
+        }
 
-    .brand-heading h1 {
-        font-size: 27px;
-    }
+        .login-prompt a {
+            color: #6944d5;
+            font-weight: 800;
+            text-decoration: none;
+        }
 
-    .register-card {
-        padding: 17px 23px;
-    }
+        .login-prompt a:hover {
+            text-decoration: underline;
+        }
 
-    .form-heading {
-        margin: 12px 0 13px;
-    }
+        .register-message {
+            padding: 11px 13px;
+            margin-bottom: 16px;
+            border-radius: 11px;
+            background: #fff0f1;
+            color: #b42336;
+            font-size: 13px;
+        }
 
-    .form-heading h2 {
-        font-size: 23px;
-    }
+        @keyframes cardEnter {
+            from { opacity: 0; transform: translateY(24px) scale(0.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
-    .register-form .form-group {
-        margin-bottom: 10px;
-    }
+        @keyframes brandEnter {
+            from { opacity: 0; transform: translateY(-14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .register-form input {
-        min-height: 39px;
-    }
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
 
-    .create-account-btn {
-        min-height: 41px;
-    }
+        @keyframes buttonGlow {
+            0%, 100% { box-shadow: 0 9px 22px #6a45e040; }
+            50% { box-shadow: 0 10px 30px #6a45e066; }
+        }
 
-    .login-prompt {
-        margin-top: 11px;
-    }
-}
+        @media (max-width: 480px) {
+            body.register-page {
+                padding: 22px 13px;
+                align-items: flex-start;
+            }
 
-/* SHORT LAPTOP SCREENS */
-@media (min-width: 700px) and (max-height: 649px) {
-    body.register-page {
-        align-items: flex-start;
-        padding-top: 8px;
-        padding-bottom: 8px;
-    }
+            .register-shell {
+                max-width: 100%;
+            }
 
-    .brand-heading {
-        margin-bottom: 8px;
-    }
+            .brand-heading {
+                margin-bottom: 18px;
+            }
 
-    .brand-icon {
-        width: 35px;
-        height: 35px;
-        margin-bottom: 4px;
-        font-size: 19px;
-    }
+            .brand-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 17px;
+                font-size: 26px;
+            }
 
-    .brand-heading h1 {
-        font-size: 25px;
-    }
+            .register-card {
+                padding: 23px 19px;
+                border-radius: 22px;
+            }
 
-    .brand-heading p {
-        margin-top: 3px;
-    }
+            .form-heading {
+                margin: 21px 0 22px;
+            }
 
-    .register-card {
-        padding: 14px 22px;
-    }
+            .register-form .form-group {
+                margin-bottom: 17px;
+            }
+        }
 
-    .form-heading {
-        margin: 9px 0 11px;
-    }
-
-    .form-heading h2 {
-        font-size: 21px;
-    }
-
-    .form-heading p {
-        margin-top: 3px;
-    }
-
-    .register-form .form-group {
-        margin-bottom: 8px;
-    }
-
-    .register-form label {
-        margin-bottom: 4px;
-    }
-
-    .register-form input {
-        min-height: 35px;
-        padding: 7px 10px;
-    }
-
-    .create-account-btn {
-        min-height: 37px;
-    }
-
-    .login-prompt {
-        margin-top: 8px;
-    }
-}
-
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 
