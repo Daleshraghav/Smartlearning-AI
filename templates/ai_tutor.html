@@ -1,583 +1,473 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Tutor | SmartLearn AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-main: #0b0f19;
-  --bg-sidebar: #111827;
-  --card-bg: rgba(255, 255, 255, 0.04);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --accent-purple: #8b5cf6;
-  --accent-blue: #38bdf8;
-  --accent-gold: #fbbf24;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  height: 100vh;
-  display: flex;
-  overflow: hidden;
-}
-
-/* Sidebar Styling */
-.sidebar {
-  width: 260px;
-  background-color: var(--bg-sidebar);
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  gap: 20px;
-}
-
-.brand-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.back-btn {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  transition: all 0.2s;
-}
-
-.back-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.new-chat-btn {
-  background: linear-gradient(135deg, #8b5cf6, #6366f1);
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-  transition: all 0.2s;
-}
-
-.new-chat-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
-}
-
-.history-section {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.history-title {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-}
-
-.history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.history-item {
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--text-muted);
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: background 0.2s;
-}
-
-.history-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-main);
-}
-
-/* Main Chat Container */
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-/* Header */
-.chat-header {
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.tutor-title {
-  font-size: 18px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tutor-badge {
-  font-size: 11px;
-  background: rgba(139, 92, 246, 0.2);
-  color: var(--accent-purple);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  padding: 3px 8px;
-  border-radius: 12px;
-}
-
-/* Chat Messages Box */
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 30px 20%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* Welcome Screen Mode */
-.welcome-screen {
-  text-align: center;
-  margin: auto;
-  max-width: 600px;
-}
-
-.welcome-screen h2 {
-  font-size: 32px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  background: linear-gradient(135deg, #ffffff, #94a3b8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.welcome-screen p {
-  color: var(--text-muted);
-  font-size: 15px;
-  margin-bottom: 30px;
-}
-
-.feature-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.feature-btn {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  padding: 16px;
-  border-radius: 16px;
-  color: var(--text-main);
-  text-align: left;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.feature-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(139, 92, 246, 0.4);
-  transform: translateY(-2px);
-}
-
-.feature-btn span {
-  font-size: 18px;
-}
-
-/* Message Bubbles */
-.message {
-  display: flex;
-  gap: 14px;
-  max-width: 100%;
-}
-
-.message.user {
-  justify-content: flex-end;
-}
-
-.avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.avatar.ai {
-  background: linear-gradient(135deg, #8b5cf6, #38bdf8);
-  color: white;
-}
-
-.avatar.user {
-  background: #334155;
-  color: white;
-}
-
-.message-content {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  padding: 16px 20px;
-  border-radius: 18px;
-  font-size: 14.5px;
-  line-height: 1.6;
-  max-width: 80%;
-  white-space: pre-wrap;
-}
-
-.message.user .message-content {
-  background: #2e1065;
-  border-color: rgba(139, 92, 246, 0.3);
-}
-
-.message-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.action-icon {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 12px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
-
-.action-icon:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-/* Typing Indicator */
-.typing {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 20px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-purple);
-  border-radius: 50%;
-  animation: blink 1.4s infinite ease-in-out both;
-}
-
-.dot:nth-child(2) { animation-delay: 0.2s; }
-.dot:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes blink {
-  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
-  40% { opacity: 1; transform: scale(1.1); }
-}
-
-/* Chat Input Bar */
-.input-area {
-  padding: 20px 20%;
-  background: var(--bg-main);
-}
-
-.input-container {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 24px;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: border-color 0.2s;
-}
-
-.input-container:focus-within {
-  border-color: var(--accent-purple);
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
-}
-
-.input-container textarea {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-main);
-  font-family: inherit;
-  font-size: 14.5px;
-  resize: none;
-  outline: none;
-  max-height: 120px;
-  height: 24px;
-}
-
-.send-btn {
-  background: var(--accent-purple);
-  color: white;
-  border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  transition: transform 0.2s;
-}
-
-.send-btn:hover {
-  transform: scale(1.05);
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .sidebar { display: none; }
-  .chat-messages, .input-area { padding-left: 16px; padding-right: 16px; }
-  .feature-cards { grid-template-columns: 1fr; }
-}
-</style>
-</head>
-<body>
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="brand-box">
-      <a href="{{ url_for('dashboard') }}" class="back-btn">← Dashboard</a>
-    </div>
-
-    <button class="new-chat-btn" onclick="startNewChat()">
-      <span>+</span> New Chat
-    </button>
-
-    <div class="history-section">
-      <div class="history-title">Recent Chats</div>
-      <div class="history-list" id="historyList">
-        <div class="history-item">Quantum Physics Basics</div>
-        <div class="history-item">Calculus Integration</div>
-        <div class="history-item">Python Data Structures</div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <header class="chat-header">
-      <div class="tutor-title">
-        ✦ SmartLearn AI Tutor
-        <span class="tutor-badge">Gemini Flash 1.5</span>
-      </div>
-    </header>
-
-    <!-- Chat Messages Box -->
-    <div class="chat-messages" id="chatMessages">
-      
-      <!-- Initial Welcome Display -->
-      <div class="welcome-screen" id="welcomeScreen">
-        <h2>How can I help your learning today?</h2>
-        <p>Ask any doubt, request a quiz, or ask for step-by-step topic explanations.</p>
-
-        <div class="feature-cards">
-          <button class="feature-btn" onclick="sendQuickPrompt('Explain the theory of Relativity in simple terms.')">
-            <span>✦ Explain Concept</span>
-            Theory of Relativity simply
-          </button>
-          <button class="feature-btn" onclick="sendQuickPrompt('Generate a 5-question Quiz on Python Loops with answers.')">
-            <span>📝 Generate Quiz</span>
-            5 Questions on Python Loops
-          </button>
-          <button class="feature-btn" onclick="sendQuickPrompt('Create a 7-day study plan for Physics Board Exams.')">
-            <span>📅 Study Timetable</span>
-            7-Day Physics Study Plan
-          </button>
-          <button class="feature-btn" onclick="sendQuickPrompt('Explain Calculus Integration step by step with examples.')">
-            <span>💡 Solve Math Concept</span>
-            Calculus Integration basics
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Input Bar -->
-    <div class="input-area">
-      <div class="input-container">
-        <textarea id="userInput" placeholder="Ask AI Tutor anything..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
-        <button class="send-btn" onclick="sendMessage()">➔</button>
-      </div>
-    </div>
-  </main>
-
-<script>
-  const chatMessages = document.getElementById('chatMessages');
-  const userInput = document.getElementById('userInput');
-  const welcomeScreen = document.getElementById('welcomeScreen');
-
-  function handleKeyPress(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  }
-
-  function sendQuickPrompt(text) {
-    userInput.value = text;
-    sendMessage();
-  }
-
-  async function sendMessage() {
-    const message = userInput.value.trim();
-    if (!message) return;
-
-    // Hide welcome screen
-    if (welcomeScreen) {
-      welcomeScreen.style.display = 'none';
-    }
-
-    // Render User Message
-    appendMessage(message, 'user');
-    userInput.value = '';
-
-    // Render Typing Indicator
-    const typingId = showTyping();
-
-    try {
-      // Call Flask Backend Gemini API Route
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
-      });
-
-      const data = await response.json();
-      removeTyping(typingId);
-
-      if (data.status === 'success') {
-        appendMessage(data.response, 'ai');
-      } else {
-        appendMessage("Error: " + (data.error || "Unable to get response."), 'ai');
-      }
-    } catch (err) {
-      removeTyping(typingId);
-      appendMessage("Network Error: Could not connect to backend server.", 'ai');
-    }
-  }
-
-  function appendMessage(text, sender) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `message ${sender}`;
-
-    const isAI = sender === 'ai';
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLearn AI - Luxury Tutor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    // Convert basic linebreaks and markdown bold text
-    let formattedText = text
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n/g, '<br>');
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+        }
+        /* Glassmorphism Luxury Look */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-input {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+        }
+        /* Custom Message Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-animation {
+            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+        .luxury-gradient-text {
+            background: linear-gradient(135deg, #c084fc 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="h-screen overflow-hidden flex">
 
-    msgDiv.innerHTML = `
-      <div class="avatar ${sender}">${isAI ? '✦' : '👤'}</div>
-      <div>
-        <div class="message-content">${formattedText}</div>
-        ${isAI ? `
-          <div class="message-actions">
-            <button class="action-icon" onclick="copyText(this)">📋 Copy</button>
-            <button class="action-icon" onclick="speakText(this)">🔊 Listen</button>
-          </div>
-        ` : ''}
-      </div>
-    `;
+    <!-- LEFT SIDEBAR: Packed with Luxury Features -->
+    <aside class="w-80 glass-panel border-r border-gray-800 flex flex-col justify-between hidden md:flex z-20">
+        <!-- Sidebar Header -->
+        <div class="p-5 border-b border-gray-800/60 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <i class="fa-solid fa-brain text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base tracking-wide text-white">SmartLearn <span class="luxury-gradient-text">AI</span></h1>
+                    <p class="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Online & Ready
+                    </p>
+                </div>
+            </div>
+            <a href="{{ url_for('dashboard') }}" class="text-gray-400 hover:text-white transition p-2 rounded-lg hover:bg-gray-800/50" title="Back to Dashboard">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+        </div>
 
-    chatMessages.appendChild(msgDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
+        <!-- Sidebar Feature List -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-6">
+            <!-- Quick Actions -->
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 px-2">AI Capabilities</p>
+                <div class="space-y-1.5">
+                    <button onclick="setPrompt('Explain this concept using a real-world analogy:')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                        <div class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center group-hover:bg-purple-500/20 transition">
+                            <i class="fa-solid fa-lightbulb text-xs"></i>
+                        </div>
+                        <span>Real-world Analogy</span>
+                    </button>
+                    <button onclick="setPrompt('Generate a quick 5-question practice quiz on:')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                        <div class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:bg-blue-500/20 transition">
+                            <i class="fa-solid fa-clipboard-question text-xs"></i>
+                        </div>
+                        <span>Interactive Quiz</span>
+                    </button>
+                    <button onclick="setPrompt('Summarize this topic into simple bullet points:')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-500/20 transition">
+                            <i class="fa-solid fa-file-lines text-xs"></i>
+                        </div>
+                        <span>Smart Summary</span>
+                    </button>
+                    <button onclick="setPrompt('Solve step-by-step and explain the math/logic behind:')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                        <div class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:bg-amber-500/20 transition">
+                            <i class="fa-solid fa-square-root-variable text-xs"></i>
+                        </div>
+                        <span>Step-by-Step Solver</span>
+                    </button>
+                </div>
+            </div>
 
-  function showTyping() {
-    const id = 'typing-' + Date.now();
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'message ai';
-    typingDiv.id = id;
-    typingDiv.innerHTML = `
-      <div class="avatar ai">✦</div>
-      <div class="message-content typing">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      </div>
-    `;
-    chatMessages.appendChild(typingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    return id;
-  }
+            <!-- Subject Selectors -->
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 px-2">Expert Modes</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setSubject('Physics & Science')" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
+                        <i class="fa-solid fa-atom text-purple-400 mb-1 block"></i> Physics
+                    </button>
+                    <button onclick="setSubject('Mathematics')" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
+                        <i class="fa-solid fa-calculator text-blue-400 mb-1 block"></i> Math
+                    </button>
+                    <button onclick="setSubject('Computer Science & Coding')" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
+                        <i class="fa-solid fa-code text-emerald-400 mb-1 block"></i> Coding
+                    </button>
+                    <button onclick="setSubject('General Studies & History')" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white hover:border-purple-500/50 transition text-center">
+                        <i class="fa-solid fa-book-open text-amber-400 mb-1 block"></i> General
+                    </button>
+                </div>
+            </div>
 
-  function removeTyping(id) {
-    const el = document.getElementById(id);
-    if (el) el.remove();
-  }
+            <!-- Study Stats / Info -->
+            <div class="p-3.5 rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-purple-500/20">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-purple-300">AI Model</span>
+                    <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">Gemini 1.5</span>
+                </div>
+                <p class="text-xs text-gray-400">Ask questions in English, Hindi or Hinglish seamlessly!</p>
+            </div>
+        </div>
 
-  function copyText(btn) {
-    const text = btn.closest('.message').querySelector('.message-content').innerText;
-    navigator.clipboard.writeText(text);
-    btn.innerText = '✓ Copied';
-    setTimeout(() => btn.innerText = '📋 Copy', 2000);
-  }
+        <!-- Sidebar Footer / User Profile snippet -->
+        <div class="p-4 border-t border-gray-800/60 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center font-bold text-white text-sm">
+                    {{ user.name[0] if user and user.name else 'U' }}
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-medium text-white truncate">{{ user.name if user else 'Student' }}</p>
+                    <p class="text-xs text-gray-400 truncate">{{ user.email if user else 'Active Learner' }}</p>
+                </div>
+            </div>
+        </div>
+    </aside>
 
-  function speakText(btn) {
-    const text = btn.closest('.message').querySelector('.message-content').innerText;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(utterance);
-  }
+    <!-- MAIN CHAT AREA -->
+    <main class="flex-1 flex flex-col h-full bg-[#07090e] relative overflow-hidden">
+        
+        <!-- Luxury Top Navbar -->
+        <header class="h-16 glass-panel border-b border-gray-800/80 flex items-center justify-between px-6 z-10">
+            <div class="flex items-center space-x-3">
+                <div class="md:hidden">
+                    <a href="{{ url_for('dashboard') }}" class="text-gray-400 hover:text-white p-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div>
+                    <h2 class="font-semibold text-white text-base flex items-center gap-2">
+                        SmartLearn AI Tutor <span class="bg-purple-500/10 text-purple-400 text-xs px-2 py-0.5 rounded-full border border-purple-500/20">Pro</span>
+                    </h2>
+                    <p class="text-xs text-gray-400" id="current-mode">Ready to guide you step-by-step</p>
+                </div>
+            </div>
 
-  function startNewChat() {
-    chatMessages.innerHTML = '';
-    if (welcomeScreen) {
-      chatMessages.appendChild(welcomeScreen);
-      welcomeScreen.style.display = 'block';
-    }
-  }
-</script>
+            <div class="flex items-center space-x-2">
+                <button onclick="clearChat()" class="px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-1.5 border border-gray-800">
+                    <i class="fa-solid fa-trash-can text-red-400"></i> Clear Chat
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Messages Container -->
+        <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+            <!-- Welcome Bot Message -->
+            <div class="flex items-start space-x-3 message-animation">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
+                    <i class="fa-solid fa-robot text-white text-sm"></i>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl max-w-2xl text-gray-200 text-sm shadow-xl border border-gray-800 leading-relaxed">
+                    <p class="font-semibold text-purple-300 mb-1">SmartLearn AI Tutor</p>
+                    Namaste! 🙏 Main aapka personal AI tutor hoon. Aap mujhse kisi bhi subject ke baare mein pooch sakte hain—chahe Physics ho, Math ho ya Coding. 
+                    <br><br>
+                    ✨ **Features:** Aap neeche mic button se **voice me baat** kar sakte hain, ya **photo/file upload** karke uska solution bhi pooch sakte hain! Aaj hum kya seekh rahe hain?
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing Indicator (Hidden by default) -->
+        <div id="typing-indicator" class="hidden px-6 py-2">
+            <div class="flex items-start space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-robot text-white text-sm"></i>
+                </div>
+                <div class="glass-panel px-4 py-3 rounded-2xl flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                    <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Uploaded File Preview Box -->
+        <div id="file-preview-box" class="hidden px-6 py-2">
+            <div class="glass-panel p-2.5 rounded-xl max-w-xs flex items-center justify-between border border-purple-500/30">
+                <div class="flex items-center space-x-2 truncate">
+                    <i class="fa-solid fa-file-image text-purple-400"></i>
+                    <span id="file-name-display" class="text-xs text-gray-300 truncate">filename.jpg</span>
+                </div>
+                <button onclick="removeFile()" class="text-gray-400 hover:text-red-400 p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Input Box & Controls Area -->
+        <div class="p-4 md:p-6 glass-panel border-t border-gray-800/80 z-10">
+            <form id="chat-form" onsubmit="sendMessage(event)" class="flex items-center gap-3 max-w-5xl mx-auto">
+                
+                <!-- Hidden File Input -->
+                <input type="file" id="file-input" class="hidden" accept="image/*,.pdf,.txt,.doc,.docx" onchange="handleFileSelect(event)">
+                
+                <!-- Upload Photo / File Button -->
+                <button type="button" onclick="document.getElementById('file-input').click()" class="w-11 h-11 rounded-2xl glass-input text-gray-400 hover:text-purple-400 hover:border-purple-500/50 transition flex items-center justify-center shrink-0 shadow-md" title="Upload Photo or File">
+                    <i class="fa-solid fa-paperclip text-base"></i>
+                </button>
+
+                <!-- Voice Chat Button -->
+                <button type="button" id="voice-btn" onclick="toggleVoiceInput()" class="w-11 h-11 rounded-2xl glass-input text-gray-400 hover:text-emerald-400 hover:border-emerald-500/50 transition flex items-center justify-center shrink-0 shadow-md" title="Voice Search / Speak">
+                    <i id="mic-icon" class="fa-solid fa-microphone text-base"></i>
+                </button>
+
+                <!-- Text Input -->
+                <div class="flex-1 relative">
+                    <input type="text" id="user-input" placeholder="Ask your question or type a prompt..." 
+                        class="w-full glass-input rounded-2xl px-5 py-3.5 text-sm text-white placeholder-gray-400 focus:outline-none transition">
+                </div>
+
+                <!-- Send Button -->
+                <button type="submit" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white flex items-center justify-center shadow-lg shadow-purple-600/30 transition shrink-0 transform hover:scale-105">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                </button>
+            </form>
+            <p class="text-[11px] text-center text-gray-500 mt-2">SmartLearn AI can make mistakes. Verify important learning concepts.</p>
+        </div>
+    </main>
+
+    <!-- JavaScript for Dynamic Interactions, Voice & API -->
+    <script>
+        let selectedFile = null;
+
+        function setPrompt(text) {
+            const input = document.getElementById('user-input');
+            input.value = text;
+            input.focus();
+        }
+
+        function setSubject(subjectName) {
+            document.getElementById('current-mode').innerText = "Expert Mode: " + subjectName;
+            const input = document.getElementById('user-input');
+            input.value = `Act as an expert in ${subjectName}. Let's discuss: `;
+            input.focus();
+        }
+
+        function clearChat() {
+            const container = document.getElementById('chat-container');
+            container.innerHTML = `
+                <div class="flex items-start space-x-3 message-animation">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
+                        <i class="fa-solid fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl max-w-2xl text-gray-200 text-sm shadow-xl border border-gray-800 leading-relaxed">
+                        <p class="font-semibold text-purple-300 mb-1">SmartLearn AI Tutor</p>
+                        Chat cleared! Naya topic shuru karein? Aapka sawal kya hai?
+                    </div>
+                </div>
+            `;
+        }
+
+        // Handle File Attachment Selection
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedFile = file;
+                document.getElementById('file-name-display').innerText = file.name;
+                document.getElementById('file-preview-box').classList.remove('hidden');
+            }
+        }
+
+        function removeFile() {
+            selectedFile = null;
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-preview-box').classList.add('hidden');
+        }
+
+        // Voice Recognition (Web Speech API)
+        let recognition = null;
+        let isRecording = false;
+
+        function toggleVoiceInput() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Speech recognition is not supported in your browser. Try using Chrome!");
+                return;
+            }
+
+            if (isRecording) {
+                recognition.stop();
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-IN'; // Supports English, Hinglish accents well
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            const micIcon = document.getElementById('mic-icon');
+            const voiceBtn = document.getElementById('voice-btn');
+
+            recognition.onstart = function() {
+                isRecording = true;
+                micIcon.classList.remove('fa-microphone');
+                micIcon.classList.add('fa-microphone-lines', 'fa-beat', 'text-emerald-400');
+                voiceBtn.classList.add('border-emerald-500', 'bg-emerald-500/10');
+            };
+
+            recognition.onresult = function(event) {
+                const speechToText = event.results[0][0].transcript;
+                const input = document.getElementById('user-input');
+                input.value += (input.value ? ' ' : '') + speechToText;
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Speech recognition error", event.error);
+                stopVoiceUI();
+            };
+
+            recognition.onend = function() {
+                stopVoiceUI();
+            };
+
+            recognition.start();
+        }
+
+        function stopVoiceUI() {
+            isRecording = false;
+            const micIcon = document.getElementById('mic-icon');
+            const voiceBtn = document.getElementById('voice-btn');
+            micIcon.classList.remove('fa-microphone-lines', 'fa-beat', 'text-emerald-400');
+            micIcon.classList.add('fa-microphone');
+            voiceBtn.classList.remove('border-emerald-500', 'bg-emerald-500/10');
+        }
+
+        // Send Message Function to Backend API
+        async function sendMessage(event) {
+            event.preventDefault();
+            const inputField = document.getElementById('user-input');
+            const messageText = inputField.value.trim();
+
+            if (!messageText && !selectedFile) return;
+
+            const container = document.getElementById('chat-container');
+
+            // 1. Append User Message
+            let fileTagHtml = '';
+            if (selectedFile) {
+                fileTagHtml = `<div class="mt-2 text-xs text-purple-300 flex items-center gap-1.5"><i class="fa-solid fa-paperclip"></i> ${selectedFile.name}</div>`;
+            }
+
+            const userBubble = `
+                <div class="flex items-start justify-end space-x-3 message-animation">
+                    <div class="glass-panel p-4 rounded-2xl max-w-2xl text-white text-sm shadow-xl border border-purple-500/30 bg-purple-900/20 leading-relaxed">
+                        <p class="font-semibold text-purple-300 mb-1 text-right">You</p>
+                        <div>${escapeHtml(messageText)}</div>${fileTagHtml}
+                    </div>
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shrink-0 font-bold text-white text-sm">
+                        {{ user.name[0] if user and user.name else 'U' }}
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', userBubble);
+            
+            // Clear inputs
+            inputField.value = '';
+            const currentFile = selectedFile;
+            removeFile();
+            container.scrollTop = container.scrollHeight;
+
+            // Show Typing Indicator
+            const typingIndicator = document.getElementById('typing-indicator');
+            typingIndicator.classList.remove('hidden');
+            container.scrollTop = container.scrollHeight;
+
+            try {
+                // Send to Flask backend API
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: messageText })
+                });
+
+                const data = await response.json();
+                typingIndicator.classList.add('hidden');
+
+                let aiResponseText = "";
+                if (response.ok && data.response) {
+                    aiResponseText = data.response;
+                } else {
+                    aiResponseText = data.error || "Sorry, something went wrong. Please check your API key configuration.";
+                }
+
+                // Append AI Response Bubble with Luxury Animation
+                const botBubble = `
+                    <div class="flex items-start space-x-3 message-animation">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
+                            <i class="fa-solid fa-robot text-white text-sm"></i>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl max-w-2xl text-gray-200 text-sm shadow-xl border border-gray-800 leading-relaxed space-y-2">
+                            <p class="font-semibold text-purple-300 mb-1">SmartLearn AI Tutor</p>
+                            <div class="whitespace-pre-line">${formatAIResponse(aiResponseText)}</div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', botBubble);
+                container.scrollTop = container.scrollHeight;
+
+            } catch (error) {
+                typingIndicator.classList.add('hidden');
+                const errorBubble = `
+                    <div class="flex items-start space-x-3 message-animation">
+                        <div class="w-9 h-9 rounded-xl bg-red-600 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation text-white text-sm"></i>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl max-w-2xl text-red-300 text-sm border border-red-500/30">
+                            Network error or server connection failed. Please try again.
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', errorBubble);
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function formatAIResponse(text) {
+            // Basic markdown bold/code cleanup for rich look
+            return escapeHtml(text)
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
+                .replace(/`([^`]+)`/g, '<code class="bg-gray-800 text-purple-300 px-1.5 py-0.5 rounded text-xs font-mono">$1</code>');
+        }
+    </script>
 </body>
 </html>
