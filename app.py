@@ -45,7 +45,7 @@ app.config.update(
 )
 
 # --- GEMINI API CONFIGURATION ---
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = "AQ.Ab8RN6ITBSQssYrbj_u2_ot_drA1VgIORWzrrkgYLsbLeTSEdQ"
 model = None
 
 if GEMINI_API_KEY:
@@ -408,7 +408,7 @@ def ai_tutor():
 @login_required
 def chat_with_tutor():
     if not model:
-        return jsonify({"error": "Gemini API key is missing or not configured in .env."}), 500
+        return jsonify({"error": "Gemini API key is missing or not configured."}), 500
 
     data = request.get_json() or {}
     user_message = data.get("message", "")
