@@ -1,72 +1,3 @@
-# 1. SABSE UPR (Top lines me yeh imports likhne hain)
-import os
-from flask import Flask, render_template, request, jsonify
-import google.generativeai as genai
-from dotenv import load_dotenv
-
-# Environment variables load karne ke liye
-load_dotenv()
-
-app = Flask(__name__)
-
-# 2. API KEY AUR MODEL SETUP (Imports ke turant baad)
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-
-SYSTEM_INSTRUCTION = """
-You are 'SmartLearn AI Tutor', a highly intelligent, encouraging, and patient personal tutor for students.
-"""
-
-model = None
-if GEMINI_API_KEY:
-    model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
-        system_instruction=SYSTEM_INSTRUCTION
-    )
-
-# 3. ROUTES (Beech me saare @app.route waale functions aayenge)
-@app.route('/')
-@app.route('/home')
-def home():
-    user = {
-        'name': 'dalesh raghav'
-    }
-    return render_template('dashboard.html', user=user)
-
-@app.route('/tutor')
-def ai_tutor():
-    return render_template('ai_tutor.html')
-
-@app.route('/profile')
-def profile():
-    return render_template('profile.html')
-
-# 4. API CHAT ROUTE (Yeh bhi routes ke sath hi aayega)
-@app.route('/api/chat', methods=['POST'])
-def chat_with_tutor():
-    if not model:
-        return jsonify({"error": "Gemini API key setup nahi hai."}), 500
-
-    data = request.get_json()
-    user_message = data.get("message", "")
-
-    if not user_message.strip():
-        return jsonify({"error": "Message khali nahi ho sakta."}), 400
-
-    try:
-        response = model.generate_content(user_message)
-        return jsonify({
-            "response": response.text,
-            "status": "success"
-        })
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# 5. SABSE NICHE (File ke bilkul aakhri me yeh likhna hai)
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
-
 import os
 import sqlite3
 import secrets
@@ -76,13 +7,14 @@ from datetime import timedelta
 
 from flask import (
     Flask, render_template, request, redirect,
-    url_for, session, flash
+    url_for, session, flash, jsonify
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 from authlib.integrations.flask_client import OAuth
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -111,6 +43,30 @@ app.config.update(
     MAX_CONTENT_LENGTH=3 * 1024 * 1024,
     UPLOAD_FOLDER=str(UPLOAD_FOLDER)
 )
+
+# --- GEMINI API CONFIGURATION ---
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+model = None
+
+if GEMINI_API_KEY:
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
+        SYSTEM_INSTRUCTION = """
+        You are 'SmartLearn AI Tutor', a highly intelligent, encouraging, and patient personal tutor for students.
+        
+        Your Instructions:
+        1. Explain complex topics in simple, easy-to-understand steps using real-world analogies.
+        2. Don't just give direct homework answers; guide the student step-by-step so they learn the concept.
+        3. Be friendly, motivating, and interactive.
+        4. Support English, Hinglish, and Hindi seamlessly depending on what language the user speaks.
+        5. End helpful responses with a short follow-up question to test their understanding.
+        """
+        model = genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            system_instruction=SYSTEM_INSTRUCTION
+        )
+    except Exception as e:
+        print("Gemini Config Error:", e)
 
 # OAuth Setup for Google and Facebook
 oauth = OAuth(app)
@@ -226,7 +182,7 @@ def home():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if session.get("user_id"):
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard"))
 
     if request.method == "POST":
         name = request.form.get("name", "").strip()
@@ -253,7 +209,7 @@ def register():
                 session.clear()
                 session.permanent = True
                 session["user_id"] = new_id
-                return redirect(url_for("home"))
+                return redirect(url_for("dashboard"))
 
             except sqlite3.IntegrityError:
                 flash("This email already has an account. Please log in.")
@@ -264,7 +220,7 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if session.get("user_id"):
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard"))
 
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
@@ -279,7 +235,7 @@ def login():
             session.clear()
             session.permanent = True
             session["user_id"] = user["id"]
-            return redirect(url_for("home"))
+            return redirect(url_for("dashboard"))
 
         flash("Incorrect email or password. Please try again.")
 
@@ -322,10 +278,10 @@ def google_authorize():
         session.permanent = True
         session["user_id"] = user_id
         flash("Successfully logged in with Google!")
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard"))
     except Exception as e:
         flash(f"Google login error: {str(e)}")
-        return redirect(url_for("login"))
+        return redirect(url_for('login'))
 
 
 # --- FACEBOOK OAUTH ROUTES ---
@@ -365,7 +321,7 @@ def facebook_authorize():
         session.permanent = True
         session["user_id"] = user_id
         flash("Successfully logged in with Facebook!")
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard"))
     except Exception as e:
         flash(f"Facebook login error: {str(e)}")
         return redirect(url_for("login"))
@@ -438,6 +394,36 @@ def profile():
 @login_required
 def dashboard():
     return render_template("dashboard.html", user=current_user())
+
+
+# --- NEW: AI TUTOR ROUTE ---
+@app.route("/tutor")
+@login_required
+def ai_tutor():
+    return render_template("ai_tutor.html", user=current_user())
+
+
+# --- NEW: GEMINI CHAT API ---
+@app.route("/api/chat", methods=["POST"])
+@login_required
+def chat_with_tutor():
+    if not model:
+        return jsonify({"error": "Gemini API key is missing or not configured in .env."}), 500
+
+    data = request.get_json() or {}
+    user_message = data.get("message", "")
+
+    if not user_message.strip():
+        return jsonify({"error": "Message cannot be empty."}), 400
+
+    try:
+        response = model.generate_content(user_message)
+        return jsonify({
+            "response": response.text,
+            "status": "success"
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/logout", methods=["POST"])
