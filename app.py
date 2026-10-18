@@ -1,3 +1,72 @@
+# 1. SABSE UPR (Top lines me yeh imports likhne hain)
+import os
+from flask import Flask, render_template, request, jsonify
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+# Environment variables load karne ke liye
+load_dotenv()
+
+app = Flask(__name__)
+
+# 2. API KEY AUR MODEL SETUP (Imports ke turant baad)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+
+SYSTEM_INSTRUCTION = """
+You are 'SmartLearn AI Tutor', a highly intelligent, encouraging, and patient personal tutor for students.
+"""
+
+model = None
+if GEMINI_API_KEY:
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        system_instruction=SYSTEM_INSTRUCTION
+    )
+
+# 3. ROUTES (Beech me saare @app.route waale functions aayenge)
+@app.route('/')
+@app.route('/home')
+def home():
+    user = {
+        'name': 'dalesh raghav'
+    }
+    return render_template('dashboard.html', user=user)
+
+@app.route('/tutor')
+def ai_tutor():
+    return render_template('ai_tutor.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+# 4. API CHAT ROUTE (Yeh bhi routes ke sath hi aayega)
+@app.route('/api/chat', methods=['POST'])
+def chat_with_tutor():
+    if not model:
+        return jsonify({"error": "Gemini API key setup nahi hai."}), 500
+
+    data = request.get_json()
+    user_message = data.get("message", "")
+
+    if not user_message.strip():
+        return jsonify({"error": "Message khali nahi ho sakta."}), 400
+
+    try:
+        response = model.generate_content(user_message)
+        return jsonify({
+            "response": response.text,
+            "status": "success"
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# 5. SABSE NICHE (File ke bilkul aakhri me yeh likhna hai)
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
+
 import os
 import sqlite3
 import secrets
