@@ -72,7 +72,6 @@
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* Background Ambient Glows */
         .ambient-glow {
             position: absolute;
             border-radius: 50%;
@@ -98,7 +97,6 @@
             background: rgba(236, 72, 153, 0.22);
         }
 
-        /* Top Theme Toggle Button Fixed Right */
         .top-right-controls {
             position: fixed;
             top: 20px;
@@ -126,7 +124,6 @@
             transform: rotate(15deg) scale(1.08);
         }
 
-        /* Container Shell */
         .register-shell {
             width: 100%;
             max-width: 460px;
@@ -134,7 +131,6 @@
             animation: cardFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
-        /* Center Header */
         .brand-header-center {
             text-align: center;
             margin-bottom: 16px;
@@ -177,7 +173,6 @@
             font-weight: 500;
         }
 
-        /* Card Container */
         .register-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -188,7 +183,6 @@
             -webkit-backdrop-filter: var(--glass-blur);
         }
 
-        /* Top Bar Inside Card (Fixes Back Button Position) */
         .card-top-bar {
             display: flex;
             align-items: center;
@@ -222,7 +216,6 @@
             font-weight: 800;
         }
 
-        /* Social Grid Links */
         .social-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -258,7 +251,6 @@
             height: 16px;
         }
 
-        /* Divider */
         .divider {
             display: flex;
             align-items: center;
@@ -280,14 +272,12 @@
             padding: 0 10px;
         }
 
-        /* 2-Column Grid */
         .form-grid-2col {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
 
-        /* Inputs */
         .form-group {
             position: relative;
             margin-bottom: 12px;
@@ -329,7 +319,6 @@
             box-shadow: 0 0 0 4px rgba(146, 100, 244, 0.18);
         }
 
-        /* Password Field Wrapper */
         .password-container {
             position: relative;
         }
@@ -347,7 +336,6 @@
             padding: 3px;
         }
 
-        /* Strength Meter */
         .strength-meter {
             height: 3px;
             width: 100%;
@@ -371,7 +359,6 @@
             display: block;
         }
 
-        /* Submit Button */
         .register-btn {
             width: 100%;
             height: 46px;
@@ -393,11 +380,6 @@
             box-shadow: 0 12px 28px rgba(120, 86, 236, 0.5);
         }
 
-        .register-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Prompt Footer */
         .login-prompt {
             margin-top: 14px;
             text-align: center;
@@ -463,21 +445,17 @@
 
 <body class="register-page">
 
-    <!-- Ambient Glowing Orbs -->
     <div class="ambient-glow orb-1"></div>
     <div class="ambient-glow orb-2"></div>
 
-    <!-- Top Right Fixed Theme Control -->
     <div class="top-right-controls">
         <button class="theme-toggle-btn" id="themeToggle" title="Toggle Light/Dark Theme">
             <span id="themeIcon">☀️</span>
         </button>
     </div>
 
-    <!-- Container Shell -->
     <main class="register-shell">
 
-        <!-- Center Branding Header -->
         <header class="brand-header-center">
             <a href="{{ url_for('home') }}" class="brand-logo-link">
                 <div class="brand-logo-icon" aria-hidden="true">✦</div>
@@ -486,10 +464,8 @@
             <p>Create your account and begin your learning journey.</p>
         </header>
 
-        <!-- Glassmorphism Card -->
         <section class="register-card">
 
-            <!-- Card Inner Top Bar (Fixes Back Button Overlay) -->
             <div class="card-top-bar">
                 <a href="{{ url_for('home') }}" class="back-home">
                     ← Back to Home
@@ -499,13 +475,13 @@
                 </div>
             </div>
 
-            <!-- Social Sign-Up Buttons with Dynamic OAuth Fallback -->
+            <!-- Social Sign-Up Links -->
             <div class="social-grid">
-                <a href="{{ url_for('google_login') if 'google_login' in endpoints else '#' }}" class="social-btn" onclick="handleSocialAuth('Google', event)">
+                <a href="{{ url_for('google_login') }}" class="social-btn">
                     <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"/></svg>
                     Google
                 </a>
-                <a href="{{ url_for('facebook_login') if 'facebook_login' in endpoints else '#' }}" class="social-btn" onclick="handleSocialAuth('Facebook', event)">
+                <a href="{{ url_for('facebook_login') }}" class="social-btn">
                     <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                     Facebook
                 </a>
@@ -513,7 +489,6 @@
 
             <div class="divider"><span>Or register with email</span></div>
 
-            <!-- Flash Error Messages -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
@@ -524,7 +499,6 @@
                 {% endif %}
             {% endwith %}
 
-            <!-- Register Form -->
             <form class="register-form" method="POST" action="{{ url_for('register') }}">
 
                 <div class="form-grid-2col">
@@ -581,7 +555,6 @@
     </main>
 
     <script>
-        // 1. Theme Toggle
         const themeBtn = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const htmlTag = document.documentElement;
@@ -597,7 +570,6 @@
             }
         });
 
-        // 2. Password Visibility Toggle
         function togglePass(inputId, eyeId) {
             const input = document.getElementById(inputId);
             const eye = document.getElementById(eyeId);
@@ -610,7 +582,6 @@
             }
         }
 
-        // 3. Password Strength Bar
         const passwordInput = document.getElementById('password');
         const strengthBar = document.getElementById('strengthBar');
         const strengthText = document.getElementById('strengthText');
@@ -642,7 +613,6 @@
             }
         });
 
-        // 4. Form Password Matching
         const registerForm = document.querySelector(".register-form");
         if (registerForm) {
             registerForm.addEventListener("submit", function (event) {
@@ -661,15 +631,6 @@
             document.getElementById("confirm_password").addEventListener("input", function () {
                 this.setCustomValidity("");
             });
-        }
-
-        // 5. Social Auth Handling Alert if OAuth Route isn't active
-        function handleSocialAuth(provider, e) {
-            const link = e.currentTarget.getAttribute('href');
-            if (!link || link === '#') {
-                e.preventDefault();
-                alert(provider + " Sign-In integration requires OAuth Client Credentials (API Key & Secret) to be configured in your backend app.");
-            }
         }
     </script>
 </body>
