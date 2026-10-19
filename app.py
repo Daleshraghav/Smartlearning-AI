@@ -69,7 +69,7 @@ app.config.update(
 # --------------------------------------------------------------
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
 
 SYSTEM_INSTRUCTION = """
 You are 'SmartLearn AI Tutor', a highly intelligent, encouraging, and patient personal tutor for students.
