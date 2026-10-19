@@ -544,43 +544,50 @@ button:focus-visible {
 
 
    
-/* AI Tutor card — Light Luxury Theme */
+
+/* FORCE LIGHT LUXURY COLOR FOR AI TUTOR CARD */
+#aiTutorCard,
+.aiTutorCard,
 .ai-tutor-card,
-a[href*="ai_tutor"].tool-card,
-.ai-tutor-tool-card {
+.ai-tutor-tool-card,
+.ai-tutor-tool,
+a[href*="ai_tutor"],
+a[href*="ai-tutor"] {
     background: linear-gradient(
         135deg,
         #ffffff 0%,
-        #f5f3ff 55%,
-        #eff6ff 100%
+        #f8f5ff 50%,
+        #eef5ff 100%
     ) !important;
 
+    background-color: #ffffff !important;
     color: #1e293b !important;
-    border: 1px solid #e0e7ff !important;
-    border-radius: 20px !important;
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.09) !important;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid #e5e7ff !important;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.10) !important;
 }
 
-.ai-tutor-card:hover,
-a[href*="ai_tutor"].tool-card:hover,
-.ai-tutor-tool-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 30px rgba(99, 102, 241, 0.15) !important;
+#aiTutorCard *,
+.aiTutorCard *,
+.ai-tutor-card *,
+.ai-tutor-tool-card *,
+.ai-tutor-tool * {
+    color: #334155;
 }
 
+#aiTutorCard h3,
+.aiTutorCard h3,
 .ai-tutor-card h3,
-.ai-tutor-card p,
-.ai-tutor-tool-card h3,
-.ai-tutor-tool-card p {
-    color: #334155 !important;
+.ai-tutor-tool-card h3 {
+    color: #1e1b4b !important;
 }
 
-.ai-tutor-card .tool-icon,
-.ai-tutor-tool-card .tool-icon {
-    background: linear-gradient(135deg, #ede9fe, #dbeafe) !important;
-    color: #6d28d9 !important;
+#aiTutorCard i,
+.aiTutorCard i,
+.ai-tutor-card i,
+.ai-tutor-tool-card i {
+    color: #7c3aed !important;
 }
+
 
 }
 
