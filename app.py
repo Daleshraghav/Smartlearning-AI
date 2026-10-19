@@ -17,8 +17,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 from authlib.integrations.flask_client import OAuth
-from google import genai
-from google.genai import types
+from groq import Groq
 
 load_dotenv()
 
@@ -65,11 +64,11 @@ app.config.update(
 )
 
 # ---------------------------------------------------------------
-# GEMINI CONFIGURATION  (key comes from environment)
+# GROQ CONFIGURATION  (key comes from environment)
 # --------------------------------------------------------------
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 
 SYSTEM_INSTRUCTION = """
 You are 'SmartLearn AI Tutor', a highly intelligent, encouraging, and patient personal tutor for students.
@@ -84,15 +83,15 @@ Your Instructions:
 
 client = None
 
-if GEMINI_API_KEY:
+if GROQ_API_KEY:
     try:
-        client = genai.Client(api_key=GEMINI_API_KEY)
-        logger.info("Gemini client initialized successfully")
+        client = Groq(api_key=GROQ_API_KEY)
+        logger.info("Groq client initialized successfully")
     except Exception:
-        logger.exception("Gemini configuration error")
+        logger.exception("Groq configuration error")
 else:
     logger.warning(
-        "GEMINI_API_KEY is not set - AI tutor will be disabled."
+        "GROQ_API_KEY is not set - AI tutor will be disabled."
     )
 
 # ---------------------------------------------------------------
@@ -575,7 +574,7 @@ def dashboard():
 # AI TUTOR
 # ---------------------------------------------------------------
 MAX_MESSAGE_CHARS = 2000
-HISTORY_TURNS = 20  # how many past messages are sent to Gemini
+HISTORY_TURNS = 20  # number of recent chat messages included as context
 
 
 @app.route("/tutor")
@@ -585,7 +584,7 @@ def ai_tutor():
 
 
 def load_history(user_id, limit=HISTORY_TURNS):
-    """Load recent chat messages in the google-genai SDK format."""
+    """Load recent chat messages in OpenAI-compatible chat format."""
     with get_db() as db:
         rows = db.execute(
             "SELECT role, content FROM chat_history "
@@ -595,18 +594,16 @@ def load_history(user_id, limit=HISTORY_TURNS):
 
     rows = list(reversed(rows))
 
-    # A Gemini conversation history should start with a user turn.
-    while rows and rows[0]["role"] != "user":
+    # Ensure conversation context starts with a user message.
+    while rows and rows[0]["role"] not in ("user",):
         rows.pop(0)
 
-    return [
-        types.Content(
-            role=row["role"],
-            parts=[types.Part.from_text(text=row["content"])],
-        )
-        for row in rows
-    ]
-
+    history = []
+    for row in rows:
+        role = "assistant" if row["role"] == "model" else row["role"]
+        if role in ("user", "assistant"):
+            history.append({"role": role, "content": row["content"]})
+    return history
 
 def save_message(user_id, role, content):
     with get_db() as db:
@@ -621,7 +618,7 @@ def save_message(user_id, role, content):
 @login_required
 def chat_with_tutor():
     if client is None:
-        return jsonify({"error": "AI tutor is not configured. Check GEMINI_API_KEY in Render Environment."}), 503
+        return jsonify({"error": "AI tutor is not configured. Add GROQ_API_KEY in Render Environment."}), 503
 
     user_id = session["user_id"]
 
@@ -641,16 +638,17 @@ def chat_with_tutor():
         }), 400
 
     try:
-        chat = client.chats.create(
-            model=GEMINI_MODEL,
-            history=load_history(user_id),
-            config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_INSTRUCTION
-            ),
-        )
+        messages = [{"role": "system", "content": SYSTEM_INSTRUCTION}]
+        messages.extend(load_history(user_id))
+        messages.append({"role": "user", "content": user_message})
 
-        response = chat.send_message(user_message)
-        reply = response.text
+        response = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=messages,
+            temperature=0.7,
+            max_tokens=2048,
+        )
+        reply = (response.choices[0].message.content or "").strip()
 
         if not reply:
             reply = (
@@ -661,11 +659,10 @@ def chat_with_tutor():
         save_message(user_id, "user", user_message)
         save_message(user_id, "model", reply)
 
-
         return jsonify({"response": reply, "status": "success"})
 
     except Exception:
-        logger.exception("Gemini chat error")
+        logger.exception("Groq chat error")
         return jsonify({
             "error": "The AI tutor is unavailable right now. "
                      "Please try again shortly."
