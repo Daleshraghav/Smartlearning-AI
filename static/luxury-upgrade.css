@@ -541,6 +541,47 @@ button:focus-visible {
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
     }
+
+
+   
+/* AI Tutor card — Light Luxury Theme */
+.ai-tutor-card,
+a[href*="ai_tutor"].tool-card,
+.ai-tutor-tool-card {
+    background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #f5f3ff 55%,
+        #eff6ff 100%
+    ) !important;
+
+    color: #1e293b !important;
+    border: 1px solid #e0e7ff !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.09) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ai-tutor-card:hover,
+a[href*="ai_tutor"].tool-card:hover,
+.ai-tutor-tool-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(99, 102, 241, 0.15) !important;
+}
+
+.ai-tutor-card h3,
+.ai-tutor-card p,
+.ai-tutor-tool-card h3,
+.ai-tutor-tool-card p {
+    color: #334155 !important;
+}
+
+.ai-tutor-card .tool-icon,
+.ai-tutor-tool-card .tool-icon {
+    background: linear-gradient(135deg, #ede9fe, #dbeafe) !important;
+    color: #6d28d9 !important;
+}
+
 }
 
 
