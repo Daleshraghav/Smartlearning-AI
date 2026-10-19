@@ -633,18 +633,26 @@ def chat_with_tutor():
         }), 400
 
     try:
-        chat = model.start_chat(history=load_history(user_id))
-        response = chat.send_message(user_message)
+        chat = client.chats.create(
+            model=GEMINI_MODEL,
+            history=load_history(user_id),
+            config=types.GenerateContentConfig(
+                system_instruction=SYSTEM_INSTRUCTION
+            ),
+        )
 
-        try:
-            reply = response.text
-        except ValueError:
-            # Response was blocked by safety filters or empty
-            reply = ("I can't answer that one. Could you rephrase your "
-                     "question about the topic?")
+        response = chat.send_message(user_message)
+        reply = response.text
+
+        if not reply:
+            reply = (
+                "I couldn't generate a reply just now. "
+                "Please try asking in a different way."
+            )
 
         save_message(user_id, "user", user_message)
         save_message(user_id, "model", reply)
+
 
         return jsonify({"response": reply, "status": "success"})
 
