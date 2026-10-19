@@ -141,232 +141,119 @@
         }
 
         /* AI answer formatting */
-        .ai-answer-content {
-            overflow-wrap: anywhere;
-            line-height: 1.75;
-            font-size: clamp(13px, 1.1vw, 15px);
-            min-width: 0;
-        }
+     
+/* Clear, transparent AI answers */
+.ai-answer-content {
+    background: transparent !important;
+    color: #f1f5f9 !important;
+    font-size: 16px !important;
+    line-height: 1.95 !important;
+    letter-spacing: 0.15px;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    min-width: 0;
+    padding: 0 !important;
+}
 
-        .ai-answer-content h1,
-        .ai-answer-content h2,
-        .ai-answer-content h3 {
-            color: #fff;
-            font-weight: 750;
-            margin: 1.1em 0 .5em;
-            line-height: 1.35;
-        }
+.ai-answer-content p {
+    margin: 0 0 18px !important;
+}
 
-        .ai-answer-content h1 { font-size: 1.45em; }
-        .ai-answer-content h2 { font-size: 1.25em; }
-        .ai-answer-content h3 { font-size: 1.1em; }
+.ai-answer-content h1,
+.ai-answer-content h2,
+.ai-answer-content h3 {
+    color: #ffffff !important;
+    font-weight: 750;
+    line-height: 1.5 !important;
+    margin: 24px 0 12px !important;
+}
 
-        .ai-answer-content p {
-            margin: .55em 0;
-        }
+.ai-answer-content h1 { font-size: 25px !important; }
+.ai-answer-content h2 { font-size: 21px !important; }
+.ai-answer-content h3 { font-size: 18px !important; }
 
-        .ai-answer-content ul,
-        .ai-answer-content ol {
-            padding-left: 1.5rem;
-            margin: .65em 0;
-        }
+.ai-answer-content ul,
+.ai-answer-content ol {
+    padding-left: 26px !important;
+    margin: 14px 0 20px !important;
+}
 
-        .ai-answer-content li {
-            margin: .25em 0;
-        }
+.ai-answer-content li {
+    padding-left: 4px;
+    margin: 9px 0 !important;
+    line-height: 1.85 !important;
+}
 
-        .ai-answer-content a {
-            color: #c4b5fd;
-            text-decoration: underline;
-        }
+.ai-answer-content strong {
+    color: #ffffff;
+    font-weight: 750;
+}
 
-        .ai-answer-content blockquote {
-            border-left: 3px solid #8b5cf6;
-            padding: .4rem .85rem;
-            margin: .8rem 0;
-            color: #cbd5e1;
-            background: #8b5cf610;
-            border-radius: 0 .6rem .6rem 0;
-        }
+.ai-answer-content blockquote {
+    background: transparent !important;
+    border-left: 3px solid #a78bfa;
+    padding: 8px 14px;
+    margin: 18px 0;
+}
 
-        .ai-answer-content table {
-            display: block;
-            max-width: 100%;
-            overflow-x: auto;
-            border-collapse: collapse;
-            margin: .8rem 0;
-        }
+.ai-answer-content pre {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 14px !important;
+    line-height: 1.7;
+    border-radius: 10px;
+}
 
-        .ai-answer-content th,
-        .ai-answer-content td {
-            border: 1px solid #475569;
-            padding: .5rem .7rem;
-            text-align: left;
-        }
+.ai-answer-content table {
+    max-width: 100%;
+    overflow-x: auto;
+}
 
-        .ai-answer-content th {
-            background: #312e8155;
-            color: #fff;
-        }
+@media (max-width: 640px) {
+    .ai-answer-content {
+        font-size: 15px !important;
+        line-height: 1.9 !important;
+    }
 
-        .ai-answer-content pre {
-            max-width: 100%;
-            overflow-x: auto;
-            background: #070b14;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 1rem;
-            margin: .75rem 0;
-            white-space: pre;
-        }
+    .ai-answer-content h1 { font-size: 22px !important; }
+    .ai-answer-content h2 { font-size: 19px !important; }
+    .ai-answer-content h3 { font-size: 17px !important; }
 
-        .ai-answer-content code {
-            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            background: #1e293b;
-            color: #ddd6fe;
-            padding: .12rem .3rem;
-            border-radius: 5px;
-            font-size: .92em;
-        }
+    .ai-answer-content p {
+        margin-bottom: 16px !important;
+    }
+}
 
-        .ai-answer-content pre code {
-            background: transparent;
-            padding: 0;
-            color: #e2e8f0;
-        }
+/* Smaller Copy, Save and Read Aloud actions */
+.answer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 14px;
+}
 
-        .answer-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
+.answer-actions button {
+    min-width: 29px !important;
+    min-height: 29px !important;
+    padding: 5px 8px !important;
+    font-size: 11px !important;
+    border: 1px solid rgba(148, 163, 184, 0.22) !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    color: #aebbd0 !important;
+}
 
-        .answer-actions button {
-            min-height: 34px;
-            min-width: 34px;
-            border: 1px solid #374151;
-            border-radius: 9px;
-            padding: 5px 9px;
-            color: #cbd5e1;
-            font-size: 12px;
-            transition: .2s;
-        }
+.answer-actions button i {
+    font-size: 11px;
+}
 
-        .answer-actions button:hover {
-            color: #fff;
-            border-color: #8b5cf6;
-            background: #8b5cf622;
-        }
+.answer-actions button:hover {
+    color: #ffffff !important;
+    border-color: #a78bfa !important;
+    background: rgba(139, 92, 246, 0.10) !important;
+}
 
-        .study-modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background: #020617bb;
-            backdrop-filter: blur(8px);
-            z-index: 80;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-
-        .study-modal {
-            width: min(720px, 100%);
-            max-height: 85dvh;
-            overflow: auto;
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 25px 80px #0008;
-        }
-
-        .study-item {
-            border: 1px solid #374151;
-            border-radius: 12px;
-            padding: 12px;
-            background: #0f172a;
-            margin-top: 10px;
-        }
-
-        .study-item p {
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-            color: #cbd5e1;
-            font-size: 13px;
-            margin-top: 6px;
-        }
-
-        .study-modal textarea,
-        .study-modal input,
-        .study-modal select {
-            width: 100%;
-            background: #0b1220;
-            border: 1px solid #374151;
-            border-radius: 10px;
-            padding: 10px;
-            color: #f8fafc;
-            outline: none;
-        }
-
-        .study-modal textarea:focus,
-        .study-modal input:focus {
-            border-color: #8b5cf6;
-        }
-
-        /* Mobile and tablet improvements */
-        @media (max-width: 640px) {
-            body {
-                font-size: 14px;
-            }
-
-            #sidebar-drawer {
-                width: min(85vw, 320px);
-                max-width: 320px;
-            }
-
-            #chat-container {
-                padding: 12px;
-                padding-bottom: 8px;
-                scroll-behavior: smooth;
-            }
-
-            .ai-answer-content {
-                font-size: 14px;
-                line-height: 1.7;
-            }
-
-            .ai-answer-content pre {
-                padding: 10px;
-                font-size: 12px;
-            }
-
-            .study-modal {
-                padding: 15px;
-                border-radius: 16px;
-                max-height: 88dvh;
-            }
-
-            .answer-actions button {
-                padding: 6px 8px;
-            }
-
-            input,
-            textarea,
-            select {
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .ai-answer-content {
-                font-size: 13px;
-            }
-
-            .answer-actions button {
-                min-width: 30px;
-                padding: 5px 6px;
-            }
         }
     </style>
 </head>
@@ -510,14 +397,37 @@
             </div>
         </div>
 
-        <div class="px-4 pb-4 grid grid-cols-2 gap-2">
-            <button type="button" onclick="openStudyLibrary('saved')" class="glass-card rounded-xl p-3 text-left text-xs text-gray-200">
-                <i class="fa-regular fa-bookmark text-purple-300 mr-2"></i>Saved Answers
-            </button>
-            <button type="button" onclick="openStudyLibrary('notes')" class="glass-card rounded-xl p-3 text-left text-xs text-gray-200">
-                <i class="fa-regular fa-note-sticky text-cyan-300 mr-2"></i>Study Notes
-            </button>
-        </div>
+      
+<div class="px-4 pb-4 space-y-2">
+    <button
+        type="button"
+        onclick="openStudyLibrary('saved'); closeMobileSidebar();"
+        class="w-full glass-card rounded-xl p-3 text-left text-sm text-gray-200 flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-purple-500/15 text-purple-300 flex items-center justify-center">
+            <i class="fa-solid fa-bookmark"></i>
+        </span>
+        <span class="flex-1">
+            <span class="block font-semibold">Saved Messages</span>
+            <span class="block text-xs text-gray-400 mt-1">View all saved answers</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
+    </button>
+
+    <button
+        type="button"
+        onclick="openStudyLibrary('notes'); closeMobileSidebar();"
+        class="w-full glass-card rounded-xl p-3 text-left text-sm text-gray-200 flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-cyan-500/15 text-cyan-300 flex items-center justify-center">
+            <i class="fa-regular fa-note-sticky"></i>
+        </span>
+        <span class="flex-1">
+            <span class="block font-semibold">Study Notes</span>
+            <span class="block text-xs text-gray-400 mt-1">View your personal notes</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
+    </button>
+</div>
+
     </aside>
 
     <!-- Main chat area -->
@@ -959,34 +869,37 @@ function appendUserMessage(text) {
     list.appendChild(row);
 }
 
+
 function appendAIMessage(text) {
     const list = document.getElementById("messages-list");
     const row = document.createElement("div");
 
-    row.className = "flex items-start gap-2 md:gap-3 message-animation";
+    row.className = "flex items-start gap-3 message-animation";
     row.setAttribute("data-answer-card", "");
 
     row.innerHTML = `
-        <div class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
+        <div class="w-8 h-8 shrink-0 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
             <i class="fa-solid fa-brain text-white text-sm"></i>
         </div>
 
-        <div class="min-w-0 flex-1 rounded-2xl border border-gray-800 bg-gray-900/80 p-3 md:p-5">
-            <p class="text-xs font-semibold text-purple-300 mb-2">SmartLearn AI Tutor</p>
+        <div class="min-w-0 flex-1 bg-transparent border-0 shadow-none p-0">
+            <p class="text-xs font-semibold text-purple-300 mb-3">
+                SmartLearn AI Tutor
+            </p>
 
-            <div class="ai-answer-content break-words"></div>
+            <div class="ai-answer-content"></div>
 
-            <div class="answer-actions mt-3">
-                <button type="button" onclick="copyAnswer(this)">
+            <div class="answer-actions">
+                <button type="button" onclick="copyAnswer(this)" title="Copy answer" aria-label="Copy answer">
                     <i class="fa-regular fa-copy"></i> Copy
                 </button>
 
-                <button type="button" onclick="saveAnswer(this)">
+                <button type="button" onclick="saveAnswer(this)" title="Tap to save; double-tap to unsave" aria-label="Save answer">
                     <i class="fa-regular fa-bookmark"></i> Save
                 </button>
 
-                <button type="button" onclick="speakAnswer(this)">
-                    <i class="fa-solid fa-volume-high"></i> Read aloud
+                <button type="button" onclick="speakAnswer(this)" title="Read answer aloud" aria-label="Read answer aloud">
+                    <i class="fa-solid fa-volume-high"></i> Read
                 </button>
             </div>
         </div>
@@ -1001,6 +914,7 @@ function appendAIMessage(text) {
         MathJax.typesetPromise([content]).catch(() => {});
     }
 }
+
 
 function showChat() {
     document.getElementById("welcome-screen")?.classList.add("hidden");
@@ -1163,16 +1077,43 @@ function writeItems(key, items) {
     }
 }
 
+
+const saveTapTimes = new WeakMap();
+
 function saveAnswer(button) {
     const card = button.closest("[data-answer-card]");
     const content = card?.querySelector(".ai-answer-content")?.innerText?.trim();
 
     if (!content) return;
 
-    const items = readItems(SAVED_KEY);
+    const now = Date.now();
+    const previousTap = saveTapTimes.get(button) || 0;
+    saveTapTimes.set(button, now);
 
-    if (items.some(item => item.content === content)) {
-        showToast("This answer is already saved.");
+    let items = readItems(SAVED_KEY);
+    const existing = items.find(item => item.content === content);
+
+    // Double tap within 350ms removes the saved answer.
+    if (now - previousTap < 350) {
+        if (existing) {
+            items = items.filter(item => item.content !== content);
+
+            if (writeItems(SAVED_KEY, items)) {
+                button.innerHTML = '<i class="fa-regular fa-bookmark"></i> Save';
+                showToast("Answer unsaved.");
+            }
+        } else {
+            showToast("Answer is not saved.");
+        }
+
+        saveTapTimes.delete(button);
+        return;
+    }
+
+    // First tap saves the answer if it isn't already saved.
+    if (existing) {
+        button.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
+        showToast("Already saved. Double-tap to unsave.");
         return;
     }
 
@@ -1185,9 +1126,10 @@ function saveAnswer(button) {
 
     if (writeItems(SAVED_KEY, items)) {
         button.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
-        showToast("Answer saved on this device.");
+        showToast("Answer saved!");
     }
 }
+
 
 function speakAnswer(button) {
     const text = button.closest("[data-answer-card]")?.querySelector(".ai-answer-content")?.innerText;
