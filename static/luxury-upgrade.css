@@ -544,29 +544,40 @@ button:focus-visible {
 
 
    
+/* ==========================================
+   AI TUTOR — MATCHING LIGHT LUXURY CARD
+   ========================================== */
 
-/* AI TUTOR CARD — LIGHT LUXURY THEME */
 .tools-grid > a.tool-card.active-card {
-    background: linear-gradient(135deg, #fffdf7 0%, #f4f0e6 55%, #e8f0ed 100%) !important;
-    background-color: #fffdf7 !important;
-    border: 1px solid #d8c9a6 !important;
+    background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #f8f5ec 50%,
+        #edf5f1 100%
+    ) !important;
+
+    background-color: #ffffff !important;
     color: #26352f !important;
-    box-shadow: 0 8px 24px rgba(91, 77, 49, 0.10) !important;
+    border: 1px solid #e3d8bd !important;
+    box-shadow: 0 10px 30px rgba(48, 58, 45, 0.09) !important;
 }
 
-/* AI Tutor card text */
+/* Card heading and description */
 .tools-grid > a.tool-card.active-card h3,
-.tools-grid > a.tool-card.active-card p,
-.tools-grid > a.tool-card.active-card .tool-icon,
-.tools-grid > a.tool-card.active-card .card-arrow {
+.tools-grid > a.tool-card.active-card p {
     color: #26352f !important;
+}
+
+/* Icon */
+.tools-grid > a.tool-card.active-card .tool-icon {
+    color: #8b7445 !important;
 }
 
 /* Start Learning pill */
 .tools-grid > a.tool-card.active-card .pill {
-    background: #e6ddc7 !important;
-    color: #4b402b !important;
-    border: 1px solid #d2c29e !important;
+    background: #f0e8d5 !important;
+    color: #59482b !important;
+    border: 1px solid #e2d4b5 !important;
 }
 
 /* Active label */
@@ -574,10 +585,16 @@ button:focus-visible {
     color: #47765c !important;
 }
 
-/* Keep the light color when hovering */
+/* Hover effect */
 .tools-grid > a.tool-card.active-card:hover {
-    background: linear-gradient(135deg, #ffffff 0%, #f6f0df 55%, #e4efe8 100%) !important;
-    color: #26352f !important;
-}
+    background: linear-gradient(
+        135deg,
+        #ffffff,
+        #f4efdf,
+        #e7f2eb
+    ) !important;
 
+    border-color: #cdbb91 !important;
+    transform: translateY(-4px);
+}
 
