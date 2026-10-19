@@ -799,7 +799,9 @@ button { font: inherit; }
   font-weight: 800;
 }
 </style>
-  
+'''
+print("Part 1 prepared through the end of the main card styles. Part 2 will continue with motivation, animations, responsive CSS, HTML body and JavaScript.")
+
   
 /* =========================================================
    PART 2 — MOTIVATION, ANIMATIONS, RESPONSIVE CSS
@@ -1298,14 +1300,13 @@ button { font: inherit; }
                 <span>AI Tutor</span>
                 <span class="nav-sparkle">✦</span>
             </a>
-          
-<a href="#" class="nav-link"
-   onclick="event.preventDefault(); alert('Study Materials page is coming soon!');">
-    <span class="nav-icon">▤</span>
-    <span>Study Materials</span>
-    <span class="nav-sparkle">✦</span>
-</a>
-          
+
+            <a href="{{ url_for('study_materials') }}" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>Study Materials</span>
+                <span class="nav-sparkle">✦</span>
+            </a>
+
             <a href="{{ url_for('smart_quizzes') }}" class="nav-link">
                 <span class="nav-icon">◇</span>
                 <span>Smart Quizzes</span>
@@ -1487,7 +1488,7 @@ button { font: inherit; }
 
         <footer class="learning-footer">
             <span>Made for your learning journey <strong>with care ✦</strong></span>
-    
+            <span class="footer-stars">✦ ✧ ✦</span>
         </footer>
 
     </main>
