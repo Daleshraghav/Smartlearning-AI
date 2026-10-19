@@ -17,7 +17,8 @@ from werkzeug.utils import secure_filename
 from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 from authlib.integrations.flask_client import OAuth
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 load_dotenv()
 
@@ -80,18 +81,18 @@ Your Instructions:
 5. End helpful responses with a short follow-up question to test their understanding.
 """
 
-model = None
+client = None
+
 if GEMINI_API_KEY:
     try:
-        genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel(
-            model_name=GEMINI_MODEL,
-            system_instruction=SYSTEM_INSTRUCTION,
-        )
+        client = genai.Client(api_key=GEMINI_API_KEY)
+        logger.info("Gemini client initialized successfully")
     except Exception:
         logger.exception("Gemini configuration error")
 else:
-    logger.warning("GEMINI_API_KEY is not set - AI tutor will be disabled.")
+    logger.warning(
+        "GEMINI_API_KEY is not set - AI tutor will be disabled."
+    )
 
 # ---------------------------------------------------------------
 # OAUTH (Google + Facebook)
