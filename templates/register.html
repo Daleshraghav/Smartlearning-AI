@@ -508,7 +508,15 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="email" id="email" name="email" autocomplete="email" placeholder=" " required>
+                       <input
+    type="email"
+    id="email"
+    name="email"
+    autocomplete="email"
+    placeholder=" "
+    maxlength="254"
+    required
+>
                         <label for="email">Email Address *</label>
                     </div>
                 </div>
@@ -539,9 +547,9 @@
                     </div>
                 </div>
 
-                <button type="submit" class="register-btn">
-                    Create Account →
-                </button>
+              <button type="submit" class="register-btn" id="registerBtn">
+    Create Account →
+</button>
 
             </form>
 
@@ -613,25 +621,64 @@
             }
         });
 
-        const registerForm = document.querySelector(".register-form");
-        if (registerForm) {
-            registerForm.addEventListener("submit", function (event) {
-                const password = document.getElementById("password");
-                const confirmPassword = document.getElementById("confirm_password");
+      
+const registerForm = document.querySelector(".register-form");
+const registerBtn = document.getElementById("registerBtn");
 
-                if (password.value !== confirmPassword.value) {
-                    event.preventDefault();
-                    confirmPassword.setCustomValidity("Passwords do not match.");
-                    confirmPassword.reportValidity();
-                } else {
-                    confirmPassword.setCustomValidity("");
-                }
-            });
+if (registerForm) {
+    registerForm.addEventListener("submit", function (event) {
+        const fullName = document.getElementById("full_name");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirm_password");
 
-            document.getElementById("confirm_password").addEventListener("input", function () {
-                this.setCustomValidity("");
-            });
+        // Remove extra spaces from name and email
+        fullName.value = fullName.value.trim();
+        email.value = email.value.trim().toLowerCase();
+
+        if (!fullName.value || !email.value ||
+            !password.value || !confirmPassword.value) {
+            event.preventDefault();
+            alert("Please complete all required fields.");
+            return;
         }
+
+        if (password.value.length < 8) {
+            event.preventDefault();
+            password.focus();
+            alert("Password must be at least 8 characters.");
+            return;
+        }
+
+        if (password.value !== confirmPassword.value) {
+            event.preventDefault();
+            confirmPassword.setCustomValidity("Passwords do not match.");
+            confirmPassword.reportValidity();
+            return;
+        }
+
+        confirmPassword.setCustomValidity("");
+
+        // Prevent accidental double-click submissions
+        if (registerForm.dataset.submitting === "true") {
+            event.preventDefault();
+            return;
+        }
+
+        registerForm.dataset.submitting = "true";
+
+        if (registerBtn) {
+            registerBtn.disabled = true;
+            registerBtn.textContent = "Creating Account...";
+        }
+    });
+
+    document.getElementById("confirm_password")
+        .addEventListener("input", function () {
+            this.setCustomValidity("");
+        });
+}
+
     </script>
 </body>
 </html>
