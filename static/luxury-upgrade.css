@@ -542,3 +542,358 @@ button:focus-visible {
         transition-duration: .01ms !important;
     }
 }
+
+
+
+/* ==========================================
+   LUXURY ANIMATED — YOUR LEARNING SPACE
+   ========================================== */
+
+.visual-wrap {
+    position: relative;
+    isolation: isolate;
+    perspective: 1200px;
+}
+
+/* Animated neon aura behind the whole box */
+.visual-glow {
+    position: absolute;
+    inset: -12%;
+    z-index: -1;
+    border-radius: 40%;
+    background: conic-gradient(
+        from 0deg,
+        #29e5ff,
+        #7657ff,
+        #f28cff,
+        #29e5ff
+    ) !important;
+    filter: blur(65px) !important;
+    opacity: .48 !important;
+    animation: learningAura 9s linear infinite;
+}
+
+/* The entire learning dashboard */
+.learning-preview {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: 26px !important;
+    border-radius: 28px !important;
+    background:
+        linear-gradient(145deg,
+            rgba(255,255,255,.98),
+            rgba(238,244,255,.94)
+        ) !important;
+    border: 1px solid rgba(255,255,255,.9) !important;
+    outline: 1px solid rgba(100,140,255,.35);
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.28),
+        0 0 35px rgba(41,229,255,.15),
+        inset 0 1px 0 rgba(255,255,255,.95) !important;
+    transform-style: preserve-3d;
+    animation: learningBoxFloat 5s ease-in-out infinite;
+    transition:
+        box-shadow .35s ease,
+        border-color .35s ease;
+}
+
+/* Soft moving light across the box */
+.learning-preview::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -70%;
+    left: -60%;
+    width: 55%;
+    height: 240%;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.7),
+        transparent
+    );
+    transform: rotate(25deg);
+    animation: learningLightSweep 7s ease-in-out infinite;
+}
+
+/* Subtle neon border */
+.learning-preview::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+        135deg,
+        rgba(41,229,255,.8),
+        transparent 30%,
+        rgba(139,92,246,.55) 70%,
+        rgba(242,140,255,.7)
+    );
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+.learning-preview:hover {
+    box-shadow:
+        0 35px 95px rgba(0,0,0,.32),
+        0 0 42px rgba(41,229,255,.22),
+        0 0 65px rgba(139,92,246,.16),
+        inset 0 1px 0 #fff !important;
+}
+
+/* Top title row */
+.preview-top {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 17px !important;
+    border-bottom: 1px solid #e0e8ff !important;
+}
+
+.preview-title {
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    letter-spacing: -.4px;
+    color: #111b49 !important;
+}
+
+.live-tag {
+    padding: 7px 10px !important;
+    border: 1px solid rgba(41,190,220,.25);
+    border-radius: 30px !important;
+    color: #075a78 !important;
+    background: linear-gradient(120deg,#e1fbff,#eeeaff) !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: .7px;
+    box-shadow: 0 0 18px rgba(41,229,255,.12);
+    animation: learningTagGlow 3s ease-in-out infinite;
+}
+
+/* Welcome area */
+.preview-welcome {
+    position: relative;
+    margin: 21px 0 !important;
+    padding: 20px !important;
+    overflow: hidden;
+    border-radius: 19px !important;
+    border: 1px solid rgba(150,164,255,.22);
+    background:
+        radial-gradient(circle at 100% 0%,
+            rgba(41,229,255,.2), transparent 45%),
+        linear-gradient(125deg,#101b50,#29205e 62%,#3c2369) !important;
+    box-shadow: 0 12px 28px rgba(37,34,105,.18);
+}
+
+.preview-welcome p {
+    color: #9ff5ff !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1.7px;
+}
+
+.preview-welcome h3 {
+    max-width: 300px;
+    color: #fff !important;
+    font-size: clamp(20px, 2.4vw, 27px) !important;
+    line-height: 1.25 !important;
+    letter-spacing: -.7px;
+}
+
+/* Progress row */
+.progress-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    color: #52638c !important;
+    font-size: 12px !important;
+    font-weight: 650;
+}
+
+.progress-track {
+    height: 9px !important;
+    margin-top: 11px !important;
+    overflow: hidden;
+    border-radius: 30px !important;
+    background: #e3e9fa !important;
+    box-shadow: inset 0 1px 3px rgba(20,40,90,.1);
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,#7657ff,#a56aff,#29e5ff,#8bffd0
+    ) !important;
+    background-size: 200% 100%;
+    box-shadow: 0 0 13px rgba(41,229,255,.42);
+    animation:
+        learningProgressShine 4s linear infinite,
+        learningProgressPulse 3s ease-in-out infinite;
+}
+
+/* Four premium mini-cards */
+.preview-stats {
+    gap: 13px !important;
+    margin-top: 21px !important;
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    padding: 17px 14px !important;
+    border: 1px solid #e0e8ff !important;
+    border-radius: 17px !important;
+    background: linear-gradient(145deg,#fff,#f4f7ff) !important;
+    box-shadow: 0 5px 16px rgba(37,57,120,.055);
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease !important;
+}
+
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    border-radius: 10px;
+    background: linear-gradient(90deg,#8b5cf6,#29e5ff);
+    opacity: .6;
+    transition: left .3s ease, right .3s ease, opacity .3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px) scale(1.015) !important;
+    border-color: #a8b9ff !important;
+    box-shadow:
+        0 14px 28px rgba(67,73,160,.13),
+        0 0 16px rgba(41,229,255,.08) !important;
+}
+
+.stat-card:hover::before {
+    left: 0;
+    right: 0;
+    opacity: 1;
+}
+
+.stat-icon {
+    display: grid;
+    place-items: center;
+    width: 43px;
+    height: 43px;
+    margin-bottom: 12px;
+    border-radius: 14px !important;
+    color: #4d3ad0 !important;
+    background: linear-gradient(135deg,#e9e5ff,#d9faff) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.stat-card:hover .stat-icon {
+    transform: translateY(-2px) rotate(-5deg);
+    box-shadow: 0 5px 18px rgba(109,91,255,.18);
+}
+
+.stat-card strong {
+    display: block;
+    color: #101b49 !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+}
+
+.stat-card small {
+    display: block;
+    margin-top: 5px;
+    color: #657394 !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+}
+
+/* Animations */
+@keyframes learningAura {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes learningBoxFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+}
+
+@keyframes learningLightSweep {
+    0%, 15% { left: -65%; }
+    45%, 100% { left: 130%; }
+}
+
+@keyframes learningTagGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(41,229,255,.08); }
+    50% { box-shadow: 0 0 18px rgba(41,229,255,.24); }
+}
+
+@keyframes learningProgressShine {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+}
+
+@keyframes learningProgressPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.15); }
+}
+
+/* Phone layout */
+@media (max-width: 760px) {
+    .learning-preview {
+        padding: 17px !important;
+        border-radius: 22px !important;
+    }
+
+    .preview-top {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .preview-title { font-size: 15px !important; }
+
+    .preview-welcome {
+        margin: 17px 0 !important;
+        padding: 17px !important;
+    }
+
+    .preview-welcome h3 { font-size: 22px !important; }
+
+    .preview-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .stat-card { padding: 14px 12px !important; }
+    .stat-icon { width: 38px; height: 38px; }
+}
+
+/* Respect reduced-motion accessibility settings */
+@media (prefers-reduced-motion: reduce) {
+    .learning-preview,
+    .visual-glow,
+    .learning-preview::before,
+    .live-tag,
+    .progress-fill {
+        animation: none !important;
+    }
+
+    .stat-card,
+    .stat-icon {
+        transition: none !important;
+    }
+}
