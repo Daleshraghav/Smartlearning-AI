@@ -1,8 +1,7 @@
-Flask
-python-dotenv
+
+Flask==3.0.0
+python-dotenv==1.0.0
 gunicorn
 Authlib
 requests
-Flask==3.0.0
-google-generativeai==0.8.3
-python-dotenv==1.0.0
+google-genai
