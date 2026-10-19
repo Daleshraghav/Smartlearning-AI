@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +26,9 @@
   padding: 0;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
@@ -40,8 +41,14 @@ body {
   overflow-x: hidden;
 }
 
-a { color: inherit; text-decoration: none; }
-button { font: inherit; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
 
 .dashboard {
   display: grid;
@@ -49,7 +56,7 @@ button { font: inherit; }
   min-height: 100vh;
 }
 
-/* LUXURY SIDEBAR */
+/* SIDEBAR */
 
 .sidebar {
   position: sticky;
@@ -61,42 +68,12 @@ button { font: inherit; }
   color: white;
   background:
     radial-gradient(circle at 15% 80%, #343080, transparent 35%),
-    radial-gradient(circle at 100% 0%, #31216b66, transparent 35%),
     linear-gradient(160deg, #080d2c, #171443 65%, #080d2c);
   overflow: hidden;
   z-index: 20;
 }
 
-.sidebar::before {
-  content: "";
-  position: absolute;
-  width: 230px;
-  height: 230px;
-  right: -150px;
-  top: 22%;
-  border: 1px solid #8d7cff40;
-  border-radius: 50%;
-  box-shadow: 0 0 50px #8065ff22;
-  animation: sidebarOrbit 18s linear infinite;
-  pointer-events: none;
-}
-
-.sidebar::after {
-  content: "";
-  position: absolute;
-  width: 160px;
-  height: 160px;
-  left: -110px;
-  bottom: 10%;
-  border: 1px dashed #46e8ff45;
-  border-radius: 50%;
-  animation: sidebarOrbit 24s linear infinite reverse;
-  pointer-events: none;
-}
-
 .brand {
-  position: relative;
-  z-index: 1;
   display: flex;
   align-items: center;
   gap: 11px;
@@ -107,16 +84,13 @@ button { font: inherit; }
 .brand-logo {
   display: grid;
   place-items: center;
-  flex: 0 0 43px;
   width: 43px;
   height: 43px;
-  border: 1px solid #ffffff55;
   border-radius: 14px;
   font-size: 23px;
   background: linear-gradient(135deg, #a26cff, #536bff, #32e5e9);
   box-shadow: 0 0 25px #695cff77;
-  animation: logoGlow 4s ease-in-out infinite,
-             logoFloat 4s ease-in-out infinite;
+  animation: logoGlow 4s ease-in-out infinite;
 }
 
 .brand-name {
@@ -125,7 +99,9 @@ button { font: inherit; }
   white-space: nowrap;
 }
 
-.brand-name span { color: #53eaff; }
+.brand-name span {
+  color: #53eaff;
+}
 
 .brand small {
   display: block;
@@ -135,118 +111,48 @@ button { font: inherit; }
   letter-spacing: 1.5px;
 }
 
-/* SIX ANIMATED SIDEBAR TOOLS */
-
 .nav {
-  position: relative;
-  z-index: 1;
   display: grid;
-  gap: 10px;
+  gap: 9px;
   margin-top: 24px;
 }
 
 .nav a {
-  position: relative;
-  isolation: isolate;
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 48px;
-  padding: 12px;
-  border: 1px solid #ffffff0b;
-  border-radius: 15px;
+  padding: 13px;
+  border: 1px solid transparent;
+  border-radius: 14px;
   color: #d0d7ff;
   font-size: 12px;
-  font-weight: 750;
-  overflow: hidden;
-  transition:
-    color .28s,
-    transform .28s,
-    border-color .28s,
-    box-shadow .28s,
-    background .28s;
-  animation: navEnter .65s both;
+  font-weight: 700;
+  transition: .25s ease;
 }
 
-.nav a:nth-child(1) { animation-delay: .04s; }
-.nav a:nth-child(2) { animation-delay: .10s; }
-.nav a:nth-child(3) { animation-delay: .16s; }
-.nav a:nth-child(4) { animation-delay: .22s; }
-.nav a:nth-child(5) { animation-delay: .28s; }
-.nav a:nth-child(6) { animation-delay: .34s; }
-
-.nav a::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background: linear-gradient(105deg, #5555ff, #883eff, #2bcff5);
-  opacity: 0;
-  transition: opacity .3s;
+.nav-icon {
+  width: 25px;
+  text-align: center;
+  font-size: 20px;
 }
-
-.nav a::after {
-  content: "";
-  position: absolute;
-  top: -40%;
-  left: -120%;
-  width: 55%;
-  height: 180%;
-  background: linear-gradient(90deg, transparent, #ffffff35, transparent);
-  transform: skewX(-20deg);
-  transition: left .65s;
-}
-
-.nav a:hover::before,
-.nav a.active::before { opacity: 1; }
-
-.nav a:hover::after,
-.nav a.active::after { left: 150%; }
 
 .nav a:hover,
 .nav a.active {
   color: white;
-  border-color: #bcb4ff66;
-  box-shadow: 0 9px 25px #563dff45, inset 0 1px #ffffff25;
-  transform: translateX(4px);
+  background: linear-gradient(105deg, #5555ff, #883eff);
+  border-color: #aaa0ff66;
+  box-shadow: 0 8px 24px #563dff55;
+  transform: translateX(3px);
 }
-
-.nav-icon {
-  position: relative;
-  display: grid;
-  place-items: center;
-  flex: 0 0 29px;
-  width: 29px;
-  height: 29px;
-  border: 1px solid #ffffff20;
-  border-radius: 10px;
-  background: #ffffff0c;
-  color: #8eeeff;
-  text-align: center;
-  font-size: 19px;
-  transition: transform .3s, background .3s, box-shadow .3s;
-}
-
-.nav a:hover .nav-icon,
-.nav a.active .nav-icon {
-  transform: rotate(-7deg) scale(1.08);
-  background: #ffffff24;
-  box-shadow: 0 0 15px #8c8cff55;
-  color: white;
-}
-
-.nav a span:last-child { position: relative; }
 
 .sidebar-note {
   position: relative;
-  z-index: 1;
   margin-top: auto;
   padding: 18px 14px;
   border: 1px solid #a6b7ff45;
   border-radius: 19px;
   background: linear-gradient(145deg, #313c9b99, #6040c766);
   overflow: hidden;
-  animation: noteGlow 5s ease-in-out infinite;
 }
 
 .sidebar-note::after {
@@ -259,7 +165,6 @@ button { font: inherit; }
   background: #35d8ff;
   filter: blur(35px);
   opacity: .6;
-  pointer-events: none;
 }
 
 .sidebar-note strong {
@@ -278,7 +183,6 @@ button { font: inherit; }
   color: #ffdc82;
   margin-top: 12px;
   letter-spacing: 4px;
-  animation: starTwinkle 2.5s ease-in-out infinite;
 }
 
 /* MAIN CONTENT */
@@ -360,7 +264,7 @@ button { font: inherit; }
   cursor: pointer;
 }
 
-/* WELCOME SECTION — BUTTONS REMOVED */
+/* DARK LUXURY WELCOME SECTION */
 
 .welcome {
   position: relative;
@@ -368,10 +272,10 @@ button { font: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  min-height: 275px;
-  padding: clamp(25px, 3vw, 38px);
-  margin-bottom: 26px;
+  gap: 20px;
+  min-height: 325px;
+  padding: clamp(25px, 3vw, 42px);
+  margin-bottom: 30px;
   border: 1px solid #aaa5ff55;
   border-radius: 26px;
   overflow: hidden;
@@ -457,7 +361,52 @@ button { font: inherit; }
   line-height: 1.9;
 }
 
-/* FLOATING ROBOT ART */
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin-top: 24px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 19px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  transition: transform .25s, box-shadow .25s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-primary {
+  color: white;
+  background: linear-gradient(100deg, #d94dff, #645dff 52%, #27d8ff);
+  box-shadow: 0 8px 28px #7b4cff70;
+  background-size: 160% 100%;
+  animation: gradientFlow 5s ease infinite;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 35px #8d4dff99;
+}
+
+.btn-outline {
+  color: #f6f7ff;
+  border: 1px solid #c3caff91;
+  background: #ffffff08;
+}
+
+.btn-outline:hover {
+  background: #ffffff15;
+}
+
+/* ANIMATED HERO ART */
 
 .hero-art {
   position: relative;
@@ -517,8 +466,16 @@ button { font: inherit; }
   animation: floating 4s ease-in-out infinite;
 }
 
-.label-one { top: 14px; left: -2px; }
-.label-two { bottom: 16px; right: -4px; animation-delay: -2s; }
+.label-one {
+  top: 14px;
+  left: -2px;
+}
+
+.label-two {
+  bottom: 16px;
+  right: -4px;
+  animation-delay: -2s;
+}
 
 .sparkle {
   position: absolute;
@@ -530,7 +487,7 @@ button { font: inherit; }
   animation: sparkle 2s ease-in-out infinite;
 }
 
-/* LEARNING TOOLS HEADING */
+/* LEARNING TOOLS */
 
 .section-heading {
   display: flex;
@@ -578,13 +535,13 @@ button { font: inherit; }
   white-space: nowrap;
 }
 
+/* COLORFUL CARDS */
+
 .tools-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 14px;
 }
-
-/* CARD BASE */
 
 .tool-card {
   --tint: #f0edff;
@@ -635,7 +592,9 @@ button { font: inherit; }
   transition: transform .4s;
 }
 
-.tool-card:hover::before { transform: scale(1.6); }
+.tool-card:hover::before {
+  transform: scale(1.6);
+}
 
 .tool-card::after {
   content: "";
@@ -650,7 +609,9 @@ button { font: inherit; }
   pointer-events: none;
 }
 
-.tool-card:hover::after { left: 150%; }
+.tool-card:hover::after {
+  left: 150%;
+}
 
 .purple-card {
   --tint: #f0edff;
@@ -701,7 +662,9 @@ button { font: inherit; }
   transition: transform .3s;
 }
 
-.tool-card:hover .tool-icon { transform: rotate(-7deg) scale(1.08); }
+.tool-card:hover .tool-icon {
+  transform: rotate(-7deg) scale(1.08);
+}
 
 .tool-card h3 {
   margin: 0 0 8px;
@@ -743,532 +706,564 @@ button { font: inherit; }
   transition: transform .25s;
 }
 
-.tool-card:hover .card-arrow { transform: translateX(4px); }
+.tool-card:hover .card-arrow {
+  transform: translateX(4px);
+}
 
+  
 /* AI TUTOR — LIGHT LUXURY CARD */
-
 .active-card {
   --tint: #f0edff;
   --glow: #8a5cff;
   --tone: #7242ed;
   --deep: #292064;
+
   color: var(--deep);
   border: 1px solid #e3dcff;
   background: linear-gradient(145deg, #f0edff 0%, #ffffff 80%);
   box-shadow: 0 10px 28px #394b8d12;
 }
 
-.active-card h3 { color: var(--deep); }
-.active-card p { color: #69769c; }
+/* Match other cards' heading and description */
+.active-card h3 {
+  color: var(--deep);
+}
 
+.active-card p {
+  color: #69769c;
+}
+
+/* Luxury purple icon */
 .active-card .tool-icon {
   color: white;
   background: linear-gradient(140deg, var(--glow), var(--tone));
   box-shadow: 0 7px 18px #6d55ff30;
 }
 
+/* Light Start Learning pill */
 .active-card .pill {
   color: var(--tone);
   border: 1px solid #dcd2ff;
   background: #ffffffd9;
 }
 
-.active-card .card-arrow { color: var(--tone); }
+/* Arrow */
+.active-card .card-arrow {
+  color: var(--tone);
+}
 
+/* Green Active badge */
 .active-card .active-label {
   color: #087b60;
   border-color: #9be7d1;
   background: #e3fbf3;
 }
 
+/* Keep a premium hover effect */
 .active-card:hover {
   border-color: var(--glow);
   box-shadow: 0 20px 35px #35437b22;
 }
+
 
 .active-label {
   position: absolute;
   top: 12px;
   right: 10px;
   padding: 5px 7px;
-  border: 1px solid #9be7d1;
+  border: 1px solid #39edbd55;
   border-radius: 999px;
-  color: #087b60;
-  background: #e3fbf3;
+  color: #6cf5cb;
+  background: #28d9a21b;
   font-size: 8px;
   font-weight: 800;
 }
-</style>
-'''
-print("Part 1 prepared through the end of the main card styles. Part 2 will continue with motivation, animations, responsive CSS, HTML body and JavaScript.")
 
-  
-/* =========================================================
-   PART 2 — MOTIVATION, ANIMATIONS, RESPONSIVE CSS
-========================================================= */
+/* MOTIVATION PANEL */
 
 .motivation {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 22px;
-    margin-top: 28px;
-    padding: 24px 28px;
-    border: 1px solid rgba(155, 125, 255, .22);
-    border-radius: 24px;
-    background:
-        radial-gradient(circle at 90% 10%, rgba(190, 165, 255, .2), transparent 35%),
-        linear-gradient(120deg, #ffffff, #f8f5ff);
-    box-shadow: 0 12px 32px rgba(90, 65, 150, .07);
-    animation: riseIn .7s ease both;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid #dfe5ff;
+  border-radius: 19px;
+  background: linear-gradient(100deg, #e9edff, white 48%, #e7fbff);
+  box-shadow: 0 8px 24px #4659a30a;
+  animation: riseIn .7s .3s both;
 }
 
-.motivation::before {
-    content: "✦";
-    position: absolute;
-    top: 12px;
-    right: 22px;
-    color: #b49aff;
-    font-size: 24px;
-    animation: starTwinkle 2s ease-in-out infinite;
+.motivation-icon {
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: linear-gradient(140deg, #c9b7ff, #a5edff);
+  box-shadow: inset 0 0 0 1px white;
+  font-size: 23px;
 }
 
-.motivation h3 {
-    margin: 0 0 8px;
-    color: #34245d;
-    font-size: 19px;
+.motivation-copy {
+  flex: 1;
 }
 
-.motivation p {
-    margin: 0;
-    color: #79728e;
-    font-size: 13px;
-    line-height: 1.7;
+.motivation-copy strong {
+  color: #252f73;
+  font-size: 13px;
 }
 
-.motivation-badge {
-    flex-shrink: 0;
-    display: grid;
-    place-items: center;
-    width: 62px;
-    height: 62px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #eee6ff, #fff1f7);
-    box-shadow: 0 8px 20px rgba(133, 101, 210, .14);
-    font-size: 29px;
-    animation: floating 3s ease-in-out infinite;
+.motivation-copy p {
+  margin-top: 5px;
+  color: #7b85ac;
+  font-size: 10px;
+  line-height: 1.6;
 }
 
-.learning-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 24px 2px 10px;
-    color: #938ba5;
-    font-size: 11px;
+.steps {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 25px);
 }
 
-.learning-footer strong {
-    color: #7860ba;
-    font-weight: 800;
+.step {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #58659c;
+  font-size: 9px;
+  white-space: nowrap;
 }
 
-.footer-stars {
-    color: #b49aff;
-    letter-spacing: 5px;
-    animation: starTwinkle 3s ease-in-out infinite;
+.step-icon {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  color: #6758d6;
+  background: white;
+  box-shadow: 0 4px 12px #4c58a014;
+  font-size: 15px;
 }
 
-/* LUXURY ANIMATIONS */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 17px;
+  padding: 15px 2px 2px;
+  color: #8790b3;
+  font-size: 9px;
+}
+
+.footer strong {
+  color: #29366f;
+  font-size: 11px;
+}
+
+/* ANIMATION KEYFRAMES */
 
 @keyframes riseIn {
-    from {
-        opacity: 0;
-        transform: translateY(18px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes floating {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-7px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 @keyframes orbit {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes ringSpin {
-    from { transform: rotateX(65deg) rotate(0deg); }
-    to { transform: rotateX(65deg) rotate(360deg); }
+  from { transform: rotateX(65deg) rotateZ(0); }
+  to { transform: rotateX(65deg) rotateZ(360deg); }
 }
 
 @keyframes sparkle {
-    0%, 100% {
-        opacity: .45;
-        transform: scale(.8) rotate(0deg);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.15) rotate(25deg);
-    }
+  0%, 100% { opacity: .45; transform: scale(.8); }
+  50% { opacity: 1; transform: scale(1.25); }
 }
 
 @keyframes logoGlow {
-    0%, 100% {
-        box-shadow: 0 0 0 rgba(174, 145, 255, 0);
-    }
-    50% {
-        box-shadow: 0 0 22px rgba(174, 145, 255, .42);
-    }
+  0%, 100% { box-shadow: 0 0 18px #695cff55; }
+  50% { box-shadow: 0 0 30px #32dfff88; }
 }
 
-@keyframes logoFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-@keyframes sidebarOrbit {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes navEnter {
-    from {
-        opacity: .5;
-        transform: translateX(-5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes noteGlow {
-    0%, 100% {
-        box-shadow: 0 8px 22px rgba(132, 99, 210, .07);
-    }
-    50% {
-        box-shadow: 0 10px 27px rgba(132, 99, 210, .16);
-    }
-}
-
-@keyframes starTwinkle {
-    0%, 100% {
-        opacity: .55;
-        transform: scale(.9);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.12);
-    }
-}
-
-/* LAPTOP AND TABLET */
+/* TABLETS */
 
 @media (max-width: 1200px) {
-    .dashboard {
-        grid-template-columns: 215px minmax(0, 1fr);
-    }
+  .dashboard {
+    grid-template-columns: 215px minmax(0, 1fr);
+  }
 
-    .main {
-        padding: 25px;
-    }
+  .tools-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 
-    .tools-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+  .tool-card {
+    min-height: 220px;
+  }
 
-    .welcome {
-        padding: 30px;
-    }
+  .hero-art {
+    flex-basis: 25%;
+    transform: scale(.85);
+  }
 
-    .hero-art {
-        transform: scale(.88);
-        transform-origin: center right;
-        margin-left: -15px;
-    }
-
-    .tool-card {
-        min-height: 215px;
-    }
+  .welcome {
+    padding: 30px;
+  }
 }
 
 /* MOBILE NAVIGATION */
 
 @media (max-width: 800px) {
-    .dashboard {
-        display: block;
-        min-height: 100vh;
-    }
+  .dashboard {
+    display: block;
+  }
 
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        z-index: 1000;
-        width: 260px;
-        max-width: 85vw;
-        overflow-y: auto;
-        transform: translateX(-110%);
-        transition: transform .32s ease;
-        box-shadow: 18px 0 45px rgba(42, 28, 76, .15);
-    }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 255px;
+    max-width: 84vw;
+    height: 100dvh;
+    transform: translateX(-110%);
+    transition: transform .3s ease;
+    box-shadow: 20px 0 55px #080d2c55;
+  }
 
-    .sidebar.open {
-        transform: translateX(0);
-    }
+  .sidebar.open {
+    transform: translateX(0);
+  }
 
-    .main {
-        width: 100%;
-        min-width: 0;
-        padding: 20px;
-    }
+  .menu-toggle {
+    display: inline-grid;
+    place-items: center;
+  }
 
-    .topbar {
-        gap: 12px;
-        margin-bottom: 20px;
-    }
+  .main {
+    padding: 15px 16px 18px;
+  }
 
-    .menu-toggle {
-        display: grid;
-        flex-shrink: 0;
-    }
+  .hero-art {
+    flex-basis: 170px;
+    transform: scale(.78);
+    margin-inline: -20px;
+  }
 
-    .welcome {
-        min-height: 245px;
-        padding: 25px;
-    }
+  .welcome {
+    padding: 28px 24px;
+  }
 
-    .welcome-content {
-        max-width: 68%;
-    }
+  .tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-    .welcome h1 {
-        font-size: clamp(25px, 5vw, 34px);
-    }
+  .motivation {
+    flex-wrap: wrap;
+  }
 
-    .hero-art {
-        right: -8px;
-        transform: scale(.76);
-        transform-origin: center right;
-        margin-left: -30px;
-    }
-
-    .tools-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 15px;
-    }
-
-    .tool-card {
-        min-height: 205px;
-        padding: 19px;
-    }
-
-    .motivation {
-        padding: 22px;
-    }
+  .steps {
+    justify-content: space-between;
+    width: 100%;
+  }
 }
 
 /* PHONE */
 
 @media (max-width: 560px) {
-    .main {
-        padding: 14px;
-    }
+  .main {
+    padding: 12px 12px 16px;
+  }
 
-    .topbar {
-        margin-bottom: 15px;
-    }
+  .topbar {
+    gap: 8px;
+    margin-bottom: 15px;
+  }
 
-    .topbar-title {
-        font-size: 13px;
-    }
+  .back-button {
+    padding: 10px 12px;
+    font-size: 10px;
+  }
 
-    .welcome {
-        min-height: 220px;
-        padding: 21px 18px;
-        border-radius: 23px;
-    }
+  .student-chip {
+    gap: 7px;
+    padding: 5px 8px 5px 5px;
+  }
 
-    .welcome-content {
-        max-width: 73%;
-        z-index: 2;
-    }
+  .avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
 
-    .welcome h1 {
-        margin: 10px 0;
-        font-size: clamp(23px, 6vw, 29px);
-        line-height: 1.18;
-    }
+  .student-chip strong {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 10px;
+  }
 
-    .welcome p {
-        max-width: 245px;
-        font-size: 11px;
-        line-height: 1.65;
-    }
+  .student-chip small {
+    font-size: 8px;
+  }
 
-    .welcome-eyebrow {
-        font-size: 9px;
-        letter-spacing: 1.2px;
-    }
+  .welcome {
+    display: block;
+    padding: 24px 19px 17px;
+    margin-bottom: 24px;
+    border-radius: 22px;
+  }
 
-    .hero-art {
-        right: -42px;
-        bottom: -12px;
-        transform: scale(.58);
-        transform-origin: bottom right;
-        opacity: .9;
-    }
+  .eyebrow {
+    margin-bottom: 13px;
+    padding: 6px 9px;
+    font-size: 9px;
+    letter-spacing: .7px;
+  }
 
-    .section-heading {
-        align-items: flex-start;
-        gap: 10px;
-        margin: 25px 0 15px;
-    }
+  .welcome h1 {
+    font-size: clamp(30px, 8vw, 37px);
+    letter-spacing: -1px;
+  }
 
-    .section-heading h2 {
-        font-size: 19px;
-    }
+  .welcome-copy > p {
+    font-size: 11px;
+    line-height: 1.8;
+  }
 
-    .section-heading p {
-        font-size: 11px;
-    }
+  .welcome-actions {
+    gap: 8px;
+    margin-top: 18px;
+  }
 
-    .tool-count {
-        flex-shrink: 0;
-        padding: 7px 9px;
-        font-size: 10px;
-    }
+  .btn {
+    padding: 11px 13px;
+    font-size: 10px;
+  }
 
-    .tools-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 11px;
-    }
+  .hero-art {
+    width: 100%;
+    height: 125px;
+    min-width: 0;
+    margin: 7px 0 -5px;
+    transform: none;
+  }
 
-    .tool-card {
-        min-height: 190px;
-        padding: 15px 12px;
-        border-radius: 19px;
-    }
+  .robot {
+    width: 70px;
+    height: 70px;
+    border-radius: 23px;
+    font-size: 34px;
+  }
 
-    .tool-icon {
-        width: 43px;
-        height: 43px;
-        margin-bottom: 13px;
-        border-radius: 14px;
-        font-size: 22px;
-    }
+  .ring {
+    width: 125px;
+    height: 125px;
+  }
 
-    .tool-card h3 {
-        font-size: 13px;
-        line-height: 1.35;
-    }
+  .ring-two {
+    width: 150px;
+    height: 150px;
+  }
 
-    .tool-card p {
-        font-size: 10px;
-        line-height: 1.55;
-    }
+  .float-label {
+    padding: 7px 9px;
+    font-size: 8px;
+  }
 
-    .tool-arrow {
-        right: 12px;
-        bottom: 12px;
-        width: 25px;
-        height: 25px;
-        font-size: 12px;
-    }
+  .label-one {
+    top: 7px;
+    left: 8%;
+  }
 
-    .active-label {
-        top: 9px;
-        right: 9px;
-        padding: 4px 6px;
-        font-size: 8px;
-    }
+  .label-two {
+    right: 6%;
+    bottom: 5px;
+  }
 
-    .motivation {
-        gap: 12px;
-        margin-top: 20px;
-        padding: 18px 15px;
-        border-radius: 19px;
-    }
+  .sparkle {
+    top: 4px;
+    right: 20%;
+  }
 
-    .motivation h3 {
-        font-size: 15px;
-    }
+  .section-heading {
+    align-items: flex-start;
+    margin-bottom: 13px;
+  }
 
-    .motivation p {
-        font-size: 11px;
-    }
+  .section-heading h2 {
+    font-size: 20px;
+  }
 
-    .motivation-badge {
-        width: 45px;
-        height: 45px;
-        border-radius: 15px;
-        font-size: 22px;
-    }
+  .section-heading p {
+    max-width: 255px;
+    font-size: 10px;
+  }
 
-    .learning-footer {
-        font-size: 10px;
-    }
+  .tool-count {
+    margin-top: 23px;
+    padding: 7px 8px;
+    font-size: 8px;
+  }
+
+  .tools-grid {
+    gap: 10px;
+  }
+
+  .tool-card {
+    min-height: 205px;
+    padding: 15px 12px 13px;
+    border-radius: 17px;
+  }
+
+  .tool-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 13px;
+    border-radius: 12px;
+    font-size: 20px;
+  }
+
+  .tool-card h3 {
+    font-size: 12px;
+  }
+
+  .tool-card p {
+    margin-bottom: 13px;
+    font-size: 9.5px;
+    line-height: 1.65;
+  }
+
+  .pill {
+    padding: 5px 6px;
+    font-size: 7.5px;
+  }
+
+  .active-label {
+    top: 8px;
+    right: 7px;
+    font-size: 7px;
+  }
+
+  .motivation {
+    gap: 10px;
+    margin-top: 16px;
+    padding: 13px;
+    border-radius: 16px;
+  }
+
+  .motivation-icon {
+    flex-basis: 39px;
+    width: 39px;
+    height: 39px;
+    font-size: 20px;
+  }
+
+  .motivation-copy {
+    min-width: calc(100% - 55px);
+  }
+
+  .motivation-copy strong {
+    font-size: 12px;
+  }
+
+  .motivation-copy p {
+    font-size: 9px;
+  }
+
+  .steps {
+    gap: 5px;
+    padding-top: 11px;
+    border-top: 1px solid #dfe5ff;
+  }
+
+  .step {
+    flex-direction: column;
+    gap: 5px;
+    font-size: 8px;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .step-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .footer {
+    padding-top: 14px;
+    font-size: 8px;
+  }
+
+  .footer strong {
+    font-size: 10px;
+  }
 }
 
 @media (max-width: 360px) {
-    .main {
-        padding: 10px;
-    }
+  .back-button {
+    padding: 9px;
+    font-size: 9px;
+  }
 
-    .welcome {
-        padding: 17px 13px;
-        min-height: 205px;
-    }
+  .student-chip small {
+    display: none;
+  }
 
-    .welcome-content {
-        max-width: 76%;
-    }
+  .welcome h1 {
+    font-size: 29px;
+  }
 
-    .welcome h1 {
-        font-size: 22px;
-    }
+  .tools-grid {
+    gap: 8px;
+  }
 
-    .hero-art {
-        right: -54px;
-        transform: scale(.5);
-    }
+  .tool-card {
+    min-height: 210px;
+    padding: 12px 10px;
+  }
 
-    .tools-grid {
-        gap: 8px;
-    }
+  .tool-card h3 {
+    font-size: 11px;
+  }
 
-    .tool-card {
-        padding: 12px 9px;
-        min-height: 180px;
-    }
+  .tool-card p {
+    font-size: 9px;
+  }
 
-    .tool-card h3 {
-        font-size: 12px;
-    }
+  .btn {
+    padding: 10px 11px;
+  }
 }
 
 /* ACCESSIBILITY */
 
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
-    }
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
 }
 </style>
 </head>
@@ -1276,277 +1271,254 @@ print("Part 1 prepared through the end of the main card styles. Part 2 will cont
 <body>
 <div class="dashboard">
 
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-        <div class="brand">
-            <div class="brand-logo">✦</div>
-            <div class="brand-text">
-                <strong>SmartLearn</strong>
-                <span>AI LEARNING SPACE</span>
-            </div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <a href="{{ url_for('home') }}" class="brand">
+      <div class="brand-logo">✦</div>
+      <div>
+        <div class="brand-name">SmartLearn <span>AI</span></div>
+        <small>LEARN · PRACTICE · GROW</small>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="{{ url_for('home') }}" class="active">
+        <span class="nav-icon">⌂</span> Dashboard
+      </a>
+      <a href="{{ url_for('ai_tutor') }}">
+        <span class="nav-icon">✧</span> AI Tutor
+      </a>
+      <a href="#learning-tools">
+        <span class="nav-icon">▤</span> Study Materials
+      </a>
+      <a href="#learning-tools">
+        <span class="nav-icon">☑</span> Smart Quizzes
+      </a>
+      <a href="#learning-tools">
+        <span class="nav-icon">▥</span> My Progress
+      </a>
+      <a href="{{ url_for('profile') }}">
+        <span class="nav-icon">♙</span> Profile
+      </a>
+    </nav>
+
+    <div class="sidebar-note">
+      <strong>Small steps,<br>extraordinary progress.</strong>
+      <p>Keep showing up. Your future self is cheering for you.</p>
+      <div class="stars">✦ ✦ ✦ ━</div>
+    </div>
+  </aside>
+
+  <!-- MAIN DASHBOARD -->
+  <main class="main">
+
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:9px">
+        <button class="menu-toggle" id="menuToggle"
+                type="button" aria-label="Open navigation"
+                aria-expanded="false">☰</button>
+
+        <a href="{{ url_for('home') }}" class="back-button">
+          ← <span>Back to Home</span>
+        </a>
+      </div>
+
+      <a href="{{ url_for('profile') }}" class="student-chip">
+        <div class="avatar">♙</div>
+        <div>
+          <strong>{{ user['name'] if user else 'Student' }}</strong>
+          <small>Ready to learn ✦</small>
+        </div>
+      </a>
+    </header>
+
+    <!-- DARK LUXURY WELCOME -->
+    <section class="welcome">
+      <div class="welcome-copy">
+        <div class="eyebrow">♛ Your Learning Space</div>
+
+        <h1>
+          Welcome Back,<br>
+          <span class="gradient-text">{{ user['name'] if user else 'Student' }}!</span> 👋
+        </h1>
+
+        <p>
+          Every great achievement starts with a small step.
+          Explore your tools, learn something new, and keep
+          growing with SmartLearn AI.
+        </p>
+
+        <div class="welcome-actions">
+          <a href="{{ url_for('ai_tutor') }}" class="btn btn-primary">
+            ✧ Start Learning <span>→</span>
+          </a>
+
+          <a href="{{ url_for('profile') }}" class="btn btn-outline">
+            ♙ View Profile
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="ring"></div>
+        <div class="ring ring-two"></div>
+        <div class="robot">🤖</div>
+        <div class="sparkle">✦</div>
+        <div class="float-label label-one">✦ AI Powered</div>
+        <div class="float-label label-two">📚 Learn · Grow</div>
+      </div>
+    </section>
+
+    <!-- LEARNING CARDS -->
+    <section id="learning-tools">
+      <div class="section-heading">
+        <div>
+          <span class="section-tag">✦ Quick Access</span>
+          <h2>Your Learning Tools</h2>
+          <p>Everything you need to learn, practice and achieve your goals.</p>
+        </div>
+        <span class="tool-count">▦ &nbsp;5 Tools</span>
+      </div>
+
+      <div class="tools-grid">
+
+        <!-- AI TUTOR: WORKING ROUTE -->
+        <a href="{{ url_for('ai_tutor') }}" class="tool-card active-card">
+          <span class="active-label">● Active</span>
+          <div class="tool-icon">✧</div>
+          <h3>AI Tutor</h3>
+          <p>Get instant answers, clear explanations and personalized study guidance.</p>
+          <div class="card-bottom">
+            <span class="pill">Start Learning ↗</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- STUDY MATERIALS -->
+        <article class="tool-card blue-card">
+          <div class="tool-icon">▤</div>
+          <h3>Study Materials</h3>
+          <p>Keep your notes and topic-wise study resources organized in one place.</p>
+          <div class="card-bottom">
+            <span class="pill">Coming Soon</span>
+            <span class="card-arrow">✦</span>
+          </div>
+        </article>
+
+        <!-- QUIZZES -->
+        <article class="tool-card pink-card">
+          <div class="tool-icon">☑</div>
+          <h3>Smart Quizzes</h3>
+          <p>Practice questions, challenge yourself and build confidence step by step.</p>
+          <div class="card-bottom">
+            <span class="pill">Coming Soon</span>
+            <span class="card-arrow">✦</span>
+          </div>
+        </article>
+
+        <!-- PROGRESS -->
+        <article class="tool-card mint-card">
+          <div class="tool-icon">↗</div>
+          <h3>My Progress</h3>
+          <p>Celebrate your learning milestones and stay motivated as you improve.</p>
+          <div class="card-bottom">
+            <span class="pill">Coming Soon</span>
+            <span class="card-arrow">✦</span>
+          </div>
+        </article>
+
+        <!-- PROFILE: WORKING ROUTE -->
+        <a href="{{ url_for('profile') }}" class="tool-card gold-card">
+          <div class="tool-icon">♙</div>
+          <h3>Student Profile</h3>
+          <p>Manage your account, personal details and education information.</p>
+          <div class="card-bottom">
+            <span class="pill">Open Profile ↗</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- MOTIVATION STRIP -->
+    <section class="motivation">
+      <div class="motivation-icon">🎯</div>
+
+      <div class="motivation-copy">
+        <strong>Keep Going!</strong>
+        <p>Your future self will thank you for the effort you put in today.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-icon">♧</span>
+          <span>Learn<br>New Skills</span>
         </div>
 
-        <div class="sidebar-label">MAIN MENU</div>
-
-        <nav class="nav">
-            <a href="{{ url_for('dashboard') }}" class="nav-link active">
-                <span class="nav-icon">⌂</span>
-                <span>Dashboard</span>
-                <span class="nav-sparkle">✦</span>
-            </a>
-
-            <a href="{{ url_for('ai_tutor') }}" class="nav-link">
-                <span class="nav-icon">✧</span>
-                <span>AI Tutor</span>
-                <span class="nav-sparkle">✦</span>
-            </a>
-
-            <a href="{{ url_for('study_materials') }}" class="nav-link">
-                <span class="nav-icon">▤</span>
-                <span>Study Materials</span>
-                <span class="nav-sparkle">✦</span>
-            </a>
-
-            <a href="{{ url_for('smart_quizzes') }}" class="nav-link">
-                <span class="nav-icon">◇</span>
-                <span>Smart Quizzes</span>
-                <span class="nav-sparkle">✦</span>
-            </a>
-
-            <a href="{{ url_for('my_progress') }}" class="nav-link">
-                <span class="nav-icon">↗</span>
-                <span>My Progress</span>
-                <span class="nav-sparkle">✦</span>
-            </a>
-
-            <a href="{{ url_for('profile') }}" class="nav-link">
-                <span class="nav-icon">♙</span>
-                <span>Profile</span>
-                <span class="nav-sparkle">✦</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-note">
-            <div class="sidebar-note-icon">✧</div>
-            <strong>Keep shining!</strong>
-            <p>Every little step takes you closer to your dreams.</p>
-            <div class="note-stars">✦ · ✧ · ✦</div>
+        <div class="step">
+          <span class="step-icon">◎</span>
+          <span>Practice<br>Build Confidence</span>
         </div>
 
-        <div class="sidebar-bottom">
-            <span class="sidebar-bottom-dot"></span>
-            Your learning journey
+        <div class="step">
+          <span class="step-icon">▥</span>
+          <span>Improve<br>Reach Goals</span>
         </div>
-    </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="main">
+        <div class="step">
+          <span class="step-icon">♕</span>
+          <span>Succeed<br>Keep Growing</span>
+        </div>
+      </div>
+    </section>
 
-        <!-- TOP BAR: PROFILE CHIP REMOVED -->
-        <header class="topbar">
-            <div class="topbar-left">
-                <button
-                    class="menu-toggle"
-                    id="menuToggle"
-                    type="button"
-                    aria-label="Open navigation menu"
-                    aria-expanded="false"
-                >☰</button>
+    <footer class="footer">
+      <strong>✦ SmartLearn AI</strong>
+      <span>Made with ♥ for curious minds</span>
+      <span>© 2026 SmartLearn AI</span>
+    </footer>
 
-                <div class="topbar-title">
-                    <span class="topbar-small">YOUR PERSONAL SPACE</span>
-                    <span class="topbar-heading">Dashboard</span>
-                </div>
-            </div>
-
-            <a href="{{ url_for('index') }}" class="home-link">
-                <span>⌂</span>
-                <span>Back to Home</span>
-            </a>
-        </header>
-
-        <!-- WELCOME HERO: NO START LEARNING OR VIEW PROFILE BUTTONS -->
-        <section class="welcome">
-            <div class="welcome-content">
-                <div class="welcome-eyebrow">
-                    <span>✦</span> YOUR LEARNING SPACE
-                </div>
-
-                <h1>Welcome Back,<br>{{ session.get('name', 'Learner') }}!</h1>
-
-                <p>
-                    Your next big achievement starts with one small step.
-                    Keep exploring, keep learning, and keep shining.
-                </p>
-            </div>
-
-            <div class="hero-art" aria-hidden="true">
-                <div class="hero-orbit hero-orbit-one"></div>
-                <div class="hero-orbit hero-orbit-two"></div>
-                <div class="hero-spark hero-spark-one">✦</div>
-                <div class="hero-spark hero-spark-two">✧</div>
-                <div class="hero-spark hero-spark-three">·</div>
-
-                <div class="hero-planet">
-                    <div class="planet-ring"></div>
-                    <div class="planet-face">
-                        <span class="planet-eye planet-eye-one"></span>
-                        <span class="planet-eye planet-eye-two"></span>
-                        <span class="planet-smile">⌣</span>
-                    </div>
-                </div>
-
-                <div class="hero-floating-book">📚</div>
-                <div class="hero-floating-star">⭐</div>
-            </div>
-        </section>
-
-        <!-- LEARNING TOOLS -->
-        <section class="learning-tools" id="learning-tools">
-            <div class="section-heading">
-                <div>
-                    <span class="section-eyebrow">DISCOVER & GROW</span>
-                    <h2>Your Learning Tools</h2>
-                    <p>Everything you need to make learning wonderful.</p>
-                </div>
-
-                <div class="tool-count">✦ 5 Tools</div>
-            </div>
-
-            <div class="tools-grid">
-
-                <!-- AI TUTOR -->
-                <a href="{{ url_for('ai_tutor') }}" class="tool-card ai-tutor-card">
-                    <div class="tool-icon">🤖</div>
-                    <div class="tool-card-content">
-                        <span class="tool-kicker">YOUR AI COMPANION</span>
-                        <h3>AI Tutor</h3>
-                        <p>Ask questions and explore topics with your personal AI learning assistant.</p>
-                    </div>
-                    <span class="tool-arrow">↗</span>
-                    <span class="active-label">✨ SMART</span>
-                </a>
-
-                <!-- STUDY MATERIALS -->
-                <a href="{{ url_for('study_materials') }}" class="tool-card study-card">
-                    <div class="tool-icon">📚</div>
-                    <div class="tool-card-content">
-                        <span class="tool-kicker">LEARN SOMETHING NEW</span>
-                        <h3>Study Materials</h3>
-                        <p>Keep your notes and learning resources organised in one place.</p>
-                    </div>
-                    <span class="tool-arrow">↗</span>
-                </a>
-
-                <!-- SMART QUIZZES -->
-                <a href="{{ url_for('smart_quizzes') }}" class="tool-card quiz-card">
-                    <div class="tool-icon">🧠</div>
-                    <div class="tool-card-content">
-                        <span class="tool-kicker">TEST YOUR KNOWLEDGE</span>
-                        <h3>Smart Quizzes</h3>
-                        <p>Practice what you learn and discover how much you know.</p>
-                    </div>
-                    <span class="tool-arrow">↗</span>
-                </a>
-
-                <!-- MY PROGRESS -->
-                <a href="{{ url_for('my_progress') }}" class="tool-card progress-card">
-                    <div class="tool-icon">📈</div>
-                    <div class="tool-card-content">
-                        <span class="tool-kicker">CELEBRATE YOUR GROWTH</span>
-                        <h3>My Progress</h3>
-                        <p>Track your learning journey and celebrate every achievement.</p>
-                    </div>
-                    <span class="tool-arrow">↗</span>
-                </a>
-
-                <!-- PROFILE REMAINS IN SIDEBAR AND TOOLS -->
-                <a href="{{ url_for('profile') }}" class="tool-card profile-card">
-                    <div class="tool-icon">👤</div>
-                    <div class="tool-card-content">
-                        <span class="tool-kicker">MAKE IT YOURS</span>
-                        <h3>Student Profile</h3>
-                        <p>View and manage your personal learning information.</p>
-                    </div>
-                    <span class="tool-arrow">↗</span>
-                </a>
-
-            </div>
-        </section>
-
-        <!-- MOTIVATION PANEL -->
-        <section class="motivation">
-            <div>
-                <h3>✨ A little progress every day adds up.</h3>
-                <p>
-                    Stay curious, keep practicing, and be proud of how far you have come.
-                    Your future is full of possibilities.
-                </p>
-            </div>
-            <div class="motivation-badge" aria-hidden="true">🌟</div>
-        </section>
-
-        <footer class="learning-footer">
-            <span>Made for your learning journey <strong>with care ✦</strong></span>
-            <span class="footer-stars">✦ ✧ ✦</span>
-        </footer>
-
-    </main>
+  </main>
 </div>
 
 <script>
-/* MOBILE SIDEBAR MENU */
+(() => {
+  const sidebar = document.getElementById("sidebar");
+  const toggle = document.getElementById("menuToggle");
 
-(function () {
-    const sidebar = document.getElementById("sidebar");
-    const menuToggle = document.getElementById("menuToggle");
+  if (!sidebar || !toggle) return;
 
-    if (!sidebar || !menuToggle) return;
+  function closeMenu() {
+    sidebar.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.textContent = "☰";
+  }
 
-    function closeSidebar() {
-        sidebar.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Open navigation menu");
+  toggle.addEventListener("click", () => {
+    const isOpen = sidebar.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.textContent = isOpen ? "✕" : "☰";
+  });
+
+  sidebar.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  document.addEventListener("click", event => {
+    if (
+      window.innerWidth <= 800 &&
+      sidebar.classList.contains("open") &&
+      !sidebar.contains(event.target) &&
+      !toggle.contains(event.target)
+    ) {
+      closeMenu();
     }
+  });
 
-    function toggleSidebar() {
-        const isOpen = sidebar.classList.toggle("open");
-        menuToggle.setAttribute("aria-expanded", String(isOpen));
-        menuToggle.setAttribute(
-            "aria-label",
-            isOpen ? "Close navigation menu" : "Open navigation menu"
-        );
-    }
-
-    menuToggle.addEventListener("click", function (event) {
-        event.stopPropagation();
-        toggleSidebar();
-    });
-
-    sidebar.querySelectorAll(".nav-link").forEach(function (link) {
-        link.addEventListener("click", function () {
-            if (window.innerWidth <= 800) {
-                closeSidebar();
-            }
-        });
-    });
-
-    document.addEventListener("click", function (event) {
-        if (
-            window.innerWidth <= 800 &&
-            sidebar.classList.contains("open") &&
-            !sidebar.contains(event.target) &&
-            !menuToggle.contains(event.target)
-        ) {
-            closeSidebar();
-        }
-    });
-
-    window.addEventListener("resize", function () {
-        if (window.innerWidth > 800) {
-            closeSidebar();
-        }
-    });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 800) closeMenu();
+  });
 })();
 </script>
 
