@@ -45,12 +45,12 @@ app.config.update(
 )
 
 # --- GEMINI API CONFIGURATION ---
-GEMINI_API_KEY = "AQ.Ab8RN6ITBSQssYrbj_u2_ot_drA1VgIORWzrrkgYLsbLeTSEdQ"
+GEMINI_API_KEY = "AQ.Ab8RN6LGoAl57FxO38zCNrGNRnux-9HYkwDNjV5VF-BTtfkcrQ"
 model = None
 
 if GEMINI_API_KEY:
     try:
-        genai.configure(api_key=GEMINI_API_KEY)
+        genai.configure(api_key="AQ.Ab8RN6LGoAl57FxO38zCNrGNRnux-9HYkwDNjV5VF-BTtfkcrQ")
         SYSTEM_INSTRUCTION = """
         You are 'SmartLearn AI Tutor', a highly intelligent, encouraging, and patient personal tutor for students.
         
