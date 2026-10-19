@@ -274,7 +274,7 @@ def register():
             flash("Too many attempts. Please try again later.")
             return render_template("register.html")
 
-        name = request.form.get("name", "").strip()
+    name = request.form.get("full_name", "").strip())
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         confirm = request.form.get("confirm_password", "")
