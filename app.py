@@ -264,6 +264,7 @@ def home():
     return render_template("index.html")
 
 
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if session.get("user_id"):
@@ -274,33 +275,41 @@ def register():
             flash("Too many attempts. Please try again later.")
             return render_template("register.html")
 
-    @app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        full_name = request.form.get("full_name", "").strip()
+        name = request.form.get("full_name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         confirm_password = request.form.get("confirm_password", "")
 
-        if not name or not email or not password:
+        if not name or not email or not password or not confirm_password:
             flash("Please complete all required fields.")
+
         elif len(password) < 8:
             flash("Password must be at least 8 characters.")
-        elif password != confirm:
+
+        elif password != confirm_password:
             flash("Passwords do not match.")
+
         else:
             try:
                 with get_db() as db:
                     cursor = db.execute(
-                        "INSERT INTO users (name, email, password_hash) "
-                        "VALUES (?, ?, ?)",
-                        (name, email, generate_password_hash(password)),
+                        """
+                        INSERT INTO users (name, email, password_hash)
+                        VALUES (?, ?, ?)
+                        """,
+                        (
+                            name,
+                            email,
+                            generate_password_hash(password),
+                        ),
                     )
                     new_id = cursor.lastrowid
 
                 session.clear()
                 session.permanent = True
                 session["user_id"] = new_id
+
+                flash("Registration successful!")
                 return redirect(url_for("dashboard"))
 
             except sqlite3.IntegrityError:
