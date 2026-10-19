@@ -4,3 +4,4 @@ gunicorn
 Authlib
 requests
 google-genai
+groq
