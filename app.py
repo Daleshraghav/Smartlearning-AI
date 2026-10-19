@@ -271,51 +271,79 @@ def register():
         return redirect(url_for("dashboard"))
 
     if request.method == "POST":
+
+        # Prevent too many registration attempts
         if rate_limited(f"register:{client_ip()}", 10, 3600):
             flash("Too many attempts. Please try again later.")
             return render_template("register.html")
 
+        # Read form values
         name = request.form.get("full_name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         confirm_password = request.form.get("confirm_password", "")
 
-        if not name or not email or not password or not confirm_password:
+        # Temporary diagnostic: never log the actual password
+        app.logger.info(
+            "REGISTER DEBUG: keys=%s | name=%s | email=%s | password=%s | confirm=%s",
+            sorted(request.form.keys()),
+            bool(name),
+            bool(email),
+            bool(password),
+            bool(confirm_password),
+        )
+
+        # Validate required fields
+        if not all([name, email, password, confirm_password]):
             flash("Please complete all required fields.")
+            return render_template("register.html")
 
-        elif len(password) < 8:
+        # Validate password length
+        if len(password) < 8:
             flash("Password must be at least 8 characters.")
+            return render_template("register.html")
 
-        elif password != confirm_password:
+        # Validate password confirmation
+        if password != confirm_password:
             flash("Passwords do not match.")
+            return render_template("register.html")
 
-        else:
-            try:
-                with get_db() as db:
-                    cursor = db.execute(
-                        """
-                        INSERT INTO users (name, email, password_hash)
-                        VALUES (?, ?, ?)
-                        """,
-                        (
-                            name,
-                            email,
-                            generate_password_hash(password),
-                        ),
-                    )
-                    new_id = cursor.lastrowid
+        # Create the account
+        try:
+            with get_db() as db:
+                cursor = db.execute(
+                    """
+                    INSERT INTO users (name, email, password_hash)
+                    VALUES (?, ?, ?)
+                    """,
+                    (
+                        name,
+                        email,
+                        generate_password_hash(password),
+                    ),
+                )
+                new_user_id = cursor.lastrowid
 
-                session.clear()
-                session.permanent = True
-                session["user_id"] = new_id
+            # Log the user in after successful registration
+            session.clear()
+            session.permanent = True
+            session["user_id"] = new_user_id
 
-                flash("Registration successful!")
-                return redirect(url_for("dashboard"))
+            flash("Registration successful!")
+            return redirect(url_for("dashboard"))
 
-            except sqlite3.IntegrityError:
-                flash("This email already has an account. Please log in.")
+        except sqlite3.IntegrityError:
+            # Email already exists in the database
+            flash("This email already has an account. Please log in.")
+            return render_template("register.html")
+
+        except sqlite3.Error:
+            app.logger.exception("Registration database error")
+            flash("Registration could not be completed. Please try again.")
+            return render_template("register.html")
 
     return render_template("register.html")
+
 
 
 @app.route("/login", methods=["GET", "POST"])
