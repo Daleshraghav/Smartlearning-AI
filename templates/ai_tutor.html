@@ -930,10 +930,9 @@ function openSavedConversation(id) {
     currentConversation = Array.isArray(item.messages) ? item.messages.slice() : [];
     const list = document.getElementById("messages-list");
     list.replaceChildren();
-    let lastAiElement = null;
     currentConversation.forEach(message => {
         if (message.role === "user") appendUserMessage(message.text, false);
-        else if (message.role === "assistant") lastAiElement = appendAIMessage(message.text, false);
+        else if (message.role === "assistant") appendAIMessage(message.text, false);
     });
     const hasMessages = currentConversation.length > 0;
     const welcome = document.getElementById("welcome-screen");
@@ -942,9 +941,6 @@ function openSavedConversation(id) {
     list.classList.toggle("hidden", !hasMessages);
     list.style.display = hasMessages ? "block" : "none";
     closeMobileSidebar();
-    if (lastAiElement) {
-        scrollToElementTop(lastAiElement);
-    }
     renderChatHistory();
 }
 
@@ -1134,7 +1130,7 @@ function clearAttachment() {
     document.getElementById("attachment-preview")?.classList.add("hidden");
 }
 
-/* ---------- Chat rendering & Top-of-Answer Scroll ---------- */
+/* ---------- Chat rendering without auto-scroll jumps ---------- */
 
 function appendUserMessage(text, record = true) {
     const list = document.getElementById("messages-list");
@@ -1216,16 +1212,7 @@ function showChat() {
     }
 }
 
-function scrollToElementTop(element) {
-    if (!element) return;
-    const alignTop = () => {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-    alignTop();
-    requestAnimationFrame(alignTop);
-}
-
-/* ---------- Send message (Stops auto-opening mobile keyboard) ---------- */
+/* ---------- Send message (Screen stays stable, no auto-scrolling) ---------- */
 
 async function handleChatSubmit(event) {
     event.preventDefault();
@@ -1254,7 +1241,7 @@ async function handleChatSubmit(event) {
     sendButton.classList.add("opacity-50");
     showChat();
 
-    const userRow = appendUserMessage(message);
+    appendUserMessage(message);
 
     input.value = "";
     updateCharCount();
@@ -1264,9 +1251,7 @@ async function handleChatSubmit(event) {
     input.blur();
 
     typing.classList.remove("hidden");
-    scrollToElementTop(userRow);
-
-    let aiRow = null;
+    // Auto-scroll removed completely to keep screen stable
 
     try {
         const requestMessage = "Be a friendly, clear AI tutor:\n" + message;
@@ -1306,9 +1291,9 @@ async function handleChatSubmit(event) {
             throw new Error("The server response did not contain an answer.");
         }
 
-        aiRow = appendAIMessage(String(answer));
+        appendAIMessage(String(answer));
     } catch (error) {
-        aiRow = appendAIMessage(
+        appendAIMessage(
             "Sorry, I couldn't get a response from the server.\n\n" +
             "Details: " + (error.message || "Network connection failed.") +
             "\n\nPlease check your internet connection and the Flask `/api/chat` route."
@@ -1318,10 +1303,7 @@ async function handleChatSubmit(event) {
         requestInProgress = false;
         sendButton.disabled = false;
         sendButton.classList.remove("opacity-50");
-
-        if (aiRow) {
-            scrollToElementTop(aiRow);
-        }
+        // Screen remains stable where user left it
     }
 }
 
