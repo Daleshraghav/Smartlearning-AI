@@ -763,7 +763,7 @@ def chat_with_tutor():
 
         messages = [{"role": "system", "content": SYSTEM_INSTRUCTION}]
         messages.extend(load_history(user_id))
-
+        
         if image_content:
             messages.append({
                 "role": "user",
@@ -773,39 +773,48 @@ def chat_with_tutor():
                 ],
             })
             model = os.getenv(
-    "GROQ_VISION_MODEL",
-    "qwen/qwen3.8-27b"
-)
+                "GROQ_VISION_MODEL",
+                "qwen/qwen3.8-27b",
+            )
         else:
-            messages.append({"role": "user", "content": user_message})
+            messages.append({
+                "role": "user",
+                "content": user_message,
+            })
             model = GROQ_MODEL
 
-       try:
-        response = client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=0.35,
-            max_tokens=1800,
-        )
-
-        reply = (response.choices[0].message.content or "").strip()
-        if not reply:
-            reply = "I couldn't generate a reply. Please try again."
-
-        # Store text history, not the raw uploaded file.
-        save_message(user_id, "user", user_message)
-        save_message(user_id, "model", reply)
-
-        return jsonify({"response": reply, "status": "success"})
-
-    except Exception:
-        logger.exception("Groq chat or file analysis error")
-        return jsonify({
-            "error": (
-                "Analysis failed. Check the Render logs and confirm that "
-                "the configured Groq model supports the uploaded content."
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=0.35,
+                max_tokens=1800,
             )
-        }), 500
+
+            reply = (
+                response.choices[0].message.content or ""
+            ).strip()
+
+            if not reply:
+                reply = "I couldn't generate a reply. Please try again."
+
+            # Store text history, not the raw uploaded file.
+            save_message(user_id, "user", user_message)
+            save_message(user_id, "model", reply)
+
+            return jsonify({
+                "response": reply,
+                "status": "success",
+            })
+
+        except Exception:
+            logger.exception("Groq chat or file analysis error")
+            return jsonify({
+                "error": (
+                    "Analysis failed. Check the Render logs and confirm that "
+                    "the configured Groq model supports the uploaded content."
+                )
+            }), 500
 
 
 @app.route("/api/chat/history")
