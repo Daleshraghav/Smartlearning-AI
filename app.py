@@ -1,3 +1,12 @@
+import base64
+import io
+
+from pypdf import PdfReader
+from odf.opendocument import load as load_odf
+from odf.text import P
+from odf import teletype
+
+
 import os
 import time
 import sqlite3
@@ -629,58 +638,172 @@ def save_message(user_id, role, content):
         )
 
 
+
 @app.route("/api/chat", methods=["POST"])
 @login_required
 def chat_with_tutor():
     if client is None:
-        return jsonify({"error": "AI tutor is not configured. Add GROQ_API_KEY in Render Environment."}), 503
+        return jsonify({
+            "error": "AI tutor is not configured. Add GROQ_API_KEY in Render Environment."
+        }), 503
 
     user_id = session["user_id"]
 
-    # 20 messages per minute per user
     if rate_limited(f"chat:{user_id}", 20, 60):
-        return jsonify({"error": "You're sending messages too fast. "
-                                 "Please wait a moment."}), 429
+        return jsonify({
+            "error": "You're sending messages too fast. Please wait a moment."
+        }), 429
 
-    data = request.get_json(silent=True) or {}
-    user_message = (data.get("message") or "").strip()
+    attachment = request.files.get("attachment")
 
-    if not user_message:
-        return jsonify({"error": "Message cannot be empty."}), 400
+    # Accept both normal JSON chats and uploaded files.
+    if request.is_json:
+        data = request.get_json(silent=True) or {}
+        user_message = (data.get("message") or "").strip()
+    else:
+        user_message = (request.form.get("message") or "").strip()
+
+    if not user_message and not attachment:
+        return jsonify({"error": "Enter a message or attach a file."}), 400
+
     if len(user_message) > MAX_MESSAGE_CHARS:
         return jsonify({
             "error": f"Message too long (max {MAX_MESSAGE_CHARS} characters)."
         }), 400
 
+    image_content = None
+
     try:
+        if attachment and attachment.filename:
+            filename = secure_filename(attachment.filename)
+            extension = filename.rsplit(".", 1)[-1].lower()
+            file_bytes = attachment.read()
+
+            if not file_bytes:
+                return jsonify({"error": "The uploaded file is empty."}), 400
+
+            # Images: send the actual image to a vision model.
+            if extension in {"png", "jpg", "jpeg", "webp"}:
+                import base64
+
+                mime_type = {
+                    "png": "image/png",
+                    "jpg": "image/jpeg",
+                    "jpeg": "image/jpeg",
+                    "webp": "image/webp",
+                }[extension]
+
+                image_content = {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": (
+                            f"data:{mime_type};base64,"
+                            f"{base64.b64encode(file_bytes).decode('utf-8')}"
+                        )
+                    },
+                }
+
+                if not user_message:
+                    user_message = (
+                        f"Analyze the uploaded image {filename}. "
+                        "Describe its contents and answer any visible questions."
+                    )
+
+            # PDF: extract readable text.
+            elif extension == "pdf":
+                try:
+                    pdf = PdfReader(io.BytesIO(file_bytes))
+                    extracted = "\n".join(
+                        page.extract_text() or "" for page in pdf.pages
+                    ).strip()
+                except Exception:
+                    return jsonify({
+                        "error": "Could not read this PDF. Please upload a valid PDF."
+                    }), 400
+
+                if not extracted:
+                    return jsonify({
+                        "error": "No selectable text found in this PDF. Scanned PDFs need OCR."
+                    }), 400
+
+                user_message = (
+                    f"{user_message}\n\n"
+                    f"Document: {filename}\n"
+                    f"Extracted document text:\n{extracted[:30000]}"
+                ).strip()
+
+            # OpenDocument text files: ODT, ODS and ODP.
+            elif extension in {"odt", "ods", "odp"}:
+                try:
+                    document = load_odf(io.BytesIO(file_bytes))
+                    paragraphs = document.getElementsByType(P)
+                    extracted = "\n".join(
+                        teletype.extractText(p) for p in paragraphs
+                    ).strip()
+                except Exception:
+                    return jsonify({
+                        "error": "Could not read this OpenDocument file."
+                    }), 400
+
+                if not extracted:
+                    return jsonify({
+                        "error": "No readable text found in this document."
+                    }), 400
+
+                user_message = (
+                    f"{user_message}\n\n"
+                    f"Document: {filename}\n"
+                    f"Extracted document text:\n{extracted[:30000]}"
+                ).strip()
+
+            else:
+                return jsonify({
+                    "error": "Supported formats: PNG, JPG, JPEG, WEBP, PDF, ODT, ODS and ODP."
+                }), 400
+
         messages = [{"role": "system", "content": SYSTEM_INSTRUCTION}]
         messages.extend(load_history(user_id))
-        messages.append({"role": "user", "content": user_message})
+
+        if image_content:
+            messages.append({
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": user_message},
+                    image_content,
+                ],
+            })
+            model = os.getenv(
+                "GROQ_VISION_MODEL",
+                "meta-llama/llama-4-scout-17b-16e-instruct",
+            )
+        else:
+            messages.append({"role": "user", "content": user_message})
+            model = GROQ_MODEL
 
         response = client.chat.completions.create(
-            model=GROQ_MODEL,
+            model=model,
             messages=messages,
             temperature=0.35,
             max_tokens=1800,
         )
+
         reply = (response.choices[0].message.content or "").strip()
-
         if not reply:
-            reply = (
-                "I couldn't generate a reply just now. "
-                "Please try asking in a different way."
-            )
+            reply = "I couldn't generate a reply. Please try again."
 
+        # Store text history, not the raw uploaded file.
         save_message(user_id, "user", user_message)
         save_message(user_id, "model", reply)
 
         return jsonify({"response": reply, "status": "success"})
 
     except Exception:
-        logger.exception("Groq chat error")
+        logger.exception("Groq chat or file analysis error")
         return jsonify({
-            "error": "The AI tutor is unavailable right now. "
-                     "Please try again shortly."
+            "error": (
+                "Analysis failed. Check the Render logs and confirm that "
+                "the configured Groq model supports the uploaded content."
+            )
         }), 500
 
 
