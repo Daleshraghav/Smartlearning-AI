@@ -1069,6 +1069,134 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
     #chat-form button[aria-label="Voice input"] { width: 35px !important; min-width: 35px !important; flex-basis: 35px !important; }
 }
 
+
+
+/* ==========================================
+   CHATGPT-LIKE CHAT TYPOGRAPHY — FINAL OVERRIDE
+   Balanced message and answer sizing on desktop/mobile.
+   ========================================== */
+#messages-list > .message-animation > div.rounded-2xl .whitespace-pre-wrap {
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    letter-spacing: 0 !important;
+    font-weight: 400 !important;
+}
+
+#messages-list .ai-answer-content {
+    font-size: 15px !important;
+    line-height: 1.72 !important;
+    letter-spacing: 0 !important;
+    font-weight: 400 !important;
+}
+
+#messages-list .ai-answer-content p {
+    margin: 0 0 12px !important;
+    line-height: inherit !important;
+}
+
+#messages-list .ai-answer-content li {
+    margin: 5px 0 !important;
+    line-height: 1.7 !important;
+}
+
+#messages-list .ai-answer-content h1 { font-size: 21px !important; line-height: 1.35 !important; margin: 18px 0 9px !important; }
+#messages-list .ai-answer-content h2 { font-size: 19px !important; line-height: 1.4 !important; margin: 16px 0 8px !important; }
+#messages-list .ai-answer-content h3 { font-size: 17px !important; line-height: 1.45 !important; margin: 14px 0 7px !important; }
+#messages-list .ai-answer-content ul,
+#messages-list .ai-answer-content ol { margin: 9px 0 13px !important; padding-left: 23px !important; }
+
+@media (max-width: 767px) {
+    #messages-list > .message-animation > div.rounded-2xl .whitespace-pre-wrap {
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+    }
+    #messages-list .ai-answer-content {
+        font-size: 14px !important;
+        line-height: 1.68 !important;
+    }
+    #messages-list .ai-answer-content h1 { font-size: 20px !important; }
+    #messages-list .ai-answer-content h2 { font-size: 18px !important; }
+    #messages-list .ai-answer-content h3 { font-size: 16px !important; }
+}
+
+
+
+/* FINAL LUXURY COMPOSER: plus, voice, prompt and send on one line */
+#welcome-screen.hidden { display: none !important; }
+#welcome-screen:not(.hidden) { display: flex; }
+#chat-form {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 8px 10px !important;
+    gap: 8px !important;
+    border: 1px solid rgba(168, 142, 255, .24) !important;
+    border-radius: 24px !important;
+    background: linear-gradient(145deg, #1d2029 0%, #171a21 100%) !important;
+    box-shadow: 0 8px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+#chat-form .composer-inline-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+#chat-form .composer-attach-wrap { position: relative; flex: 0 0 auto; display: flex; align-items: center; }
+#chat-form .composer-icon-button {
+    display: inline-flex !important; align-items: center !important; justify-content: center !important;
+    flex: 0 0 38px !important; width: 38px !important; min-width: 38px !important; height: 38px !important;
+    border-radius: 50% !important; color: #e5e7eb !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    background: linear-gradient(145deg, #303442, #232631) !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06) !important;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease !important;
+}
+#chat-form .composer-icon-button i { font-size: 15px !important; }
+#chat-form .composer-plus-button { color: #e9ddff !important; border-color: rgba(167,139,250,.28) !important; }
+#chat-form .composer-plus-button i { font-size: 18px !important; font-weight: 900 !important; }
+#chat-form .composer-voice-button { color: #d7c6ff !important; }
+#chat-form .composer-icon-button:hover { transform: translateY(-1px); border-color: rgba(167,139,250,.55) !important; background: linear-gradient(145deg, #3b3650, #282b38) !important; }
+#chat-form .composer-textarea {
+    display: block !important; flex: 1 1 auto !important; width: 0 !important; min-width: 0 !important;
+    min-height: 40px !important; max-height: 120px !important; height: auto !important;
+    margin: 0 !important; padding: 10px 3px !important; resize: none !important;
+    border: 0 !important; outline: none !important; box-shadow: none !important;
+    color: #f3f4f6 !important; background: transparent !important;
+    font-size: 15px !important; line-height: 1.4 !important; overflow-y: auto !important;
+}
+#chat-form .composer-textarea::placeholder { color: #9298a7 !important; opacity: 1; }
+#chat-form #send-button.composer-send-button {
+    display: inline-flex !important; align-items: center !important; justify-content: center !important;
+    flex: 0 0 40px !important; width: 40px !important; min-width: 40px !important; height: 40px !important;
+    border: 1px solid rgba(255,255,255,.18) !important; border-radius: 50% !important;
+    color: #fff !important; background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 48%, #4f46e5 100%) !important;
+    box-shadow: 0 5px 16px rgba(124,58,237,.3), inset 0 1px 0 rgba(255,255,255,.22) !important;
+    transition: transform .18s ease, filter .18s ease !important;
+}
+#chat-form #send-button.composer-send-button i { font-size: 16px !important; }
+#chat-form #send-button.composer-send-button:hover { filter: brightness(1.12); transform: translateY(-1px); }
+#chat-form #send-button.composer-send-button:active { transform: scale(.95); }
+#chat-form #char-count { display: none !important; }
+#chat-form .attachment-menu { bottom: calc(100% + 12px) !important; }
+@media (max-width: 767px) {
+    #chat-form { padding: 6px 7px !important; gap: 5px !important; border-radius: 21px !important; }
+    #chat-form .composer-inline-row { gap: 5px !important; }
+    #chat-form .composer-icon-button { flex-basis: 34px !important; width: 34px !important; min-width: 34px !important; height: 34px !important; }
+    #chat-form .composer-plus-button i { font-size: 17px !important; }
+    #chat-form .composer-textarea { min-height: 38px !important; padding: 8px 1px !important; font-size: 15px !important; }
+    #chat-form #send-button.composer-send-button { flex-basis: 37px !important; width: 37px !important; min-width: 37px !important; height: 37px !important; }
+}
+@media (max-width: 360px) {
+    #chat-form { padding: 5px !important; }
+    #chat-form .composer-inline-row { gap: 4px !important; }
+    #chat-form .composer-icon-button { flex-basis: 31px !important; width: 31px !important; min-width: 31px !important; height: 31px !important; }
+    #chat-form .composer-textarea { font-size: 14px !important; }
+    #chat-form #send-button.composer-send-button { flex-basis: 35px !important; width: 35px !important; min-width: 35px !important; height: 35px !important; }
+}
 </style>
 </head>
 
@@ -1388,42 +1516,25 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
 
                 <!-- Input panel -->
                 <form id="chat-form" class="glass-panel rounded-2xl p-2 md:p-3 shadow-lg shadow-black/20" onsubmit="handleChatSubmit(event)">
-                    <textarea
-                        id="chat-input"
-                        rows="1"
-                        maxlength="12000"
-                        placeholder="Ask your question..."
-                        aria-label="Ask your question"
-                        class="w-full resize-none bg-transparent text-sm text-gray-100 placeholder-gray-500 outline-none px-2 py-2 max-h-36 overflow-y-auto"
-                    ></textarea>
-
-                    <div class="flex items-center justify-between gap-2 mt-1">
-                        <div class="flex items-center gap-1 min-w-0">
+                    <div class="composer-inline-row">
+                        <div class="composer-attach-wrap">
                             <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
                             <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
                             <input type="file" id="video-input" class="hidden" accept="video/*" onchange="handleFileSelect(event,'video')">
-                            <div class="relative">
-                                <button type="button" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center shrink-0" aria-label="Attach image, file or short video" title="Attach image, file or short video"><i class="fa-solid fa-plus"></i></button>
-                                <div id="attachment-menu" class="attachment-menu hidden">
-                                    <button type="button" class="attachment-option" onclick="chooseAttachment('image')"><i class="fa-regular fa-image text-purple-300 text-lg w-6 text-center"></i><span><strong>Image</strong><small>Choose from gallery or photos</small></span></button>
-                                    <button type="button" class="attachment-option" onclick="chooseAttachment('file')"><i class="fa-regular fa-file-lines text-blue-300 text-lg w-6 text-center"></i><span><strong>Files</strong><small>PDF and supported documents</small></span></button>
-                                    <button type="button" class="attachment-option" onclick="chooseAttachment('video')"><i class="fa-solid fa-film text-emerald-300 text-lg w-6 text-center"></i><span><strong>Short Video</strong><small>Select a short clip for summarization</small></span></button>
-                                </div>
+                            <button type="button" onclick="toggleAttachmentMenu()" class="composer-icon-button composer-plus-button" aria-label="Attach image, file or short video" title="Attach image, file or short video"><i class="fa-solid fa-plus"></i></button>
+                            <div id="attachment-menu" class="attachment-menu hidden">
+                                <button type="button" class="attachment-option" onclick="chooseAttachment('image')"><i class="fa-regular fa-image text-purple-300 text-lg w-6 text-center"></i><span><strong>Image</strong><small>Choose from gallery or photos</small></span></button>
+                                <button type="button" class="attachment-option" onclick="chooseAttachment('file')"><i class="fa-regular fa-file-lines text-blue-300 text-lg w-6 text-center"></i><span><strong>Files</strong><small>PDF and supported documents</small></span></button>
+                                <button type="button" class="attachment-option" onclick="chooseAttachment('video')"><i class="fa-solid fa-film text-emerald-300 text-lg w-6 text-center"></i><span><strong>Short Video</strong><small>Select a short clip for summarization</small></span></button>
                             </div>
-
-                            <button type="button" onclick="startVoiceInput()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center shrink-0" aria-label="Voice input" title="Speak your question">
-                                <i class="fa-solid fa-microphone"></i>
-                            </button>
-
                         </div>
 
-                        <div class="flex items-center gap-2">
-                            <span id="char-count" class="hidden sm:inline text-[10px] text-gray-600">0/12000</span>
+                        <button type="button" onclick="startVoiceInput()" class="composer-icon-button composer-voice-button" aria-label="Voice input" title="Speak your question"><i class="fa-solid fa-microphone"></i></button>
 
-                            <button type="submit" id="send-button" class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-purple-900/30 hover:brightness-110 active:scale-95 transition shrink-0" aria-label="Send message">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </button>
-                        </div>
+                        <textarea id="chat-input" rows="1" maxlength="12000" placeholder="Ask your questions..." aria-label="Ask your questions" class="composer-textarea"></textarea>
+
+                        <span id="char-count" class="hidden">0/12000</span>
+                        <button type="submit" id="send-button" class="composer-send-button" aria-label="Send message" title="Send message"><i class="fa-solid fa-arrow-up"></i></button>
                     </div>
                 </form>
 
@@ -1589,6 +1700,7 @@ function openSavedConversation(id) {
     });
     const hasMessages = currentConversation.length > 0;
     document.getElementById("welcome-screen")?.classList.toggle("hidden", hasMessages);
+    document.getElementById("welcome-screen")?.style.setProperty("display", hasMessages ? "none" : "flex", "important");
     list.classList.toggle("hidden", !hasMessages);
     closeMobileSidebar();
     scrollToBottom();
@@ -1625,6 +1737,7 @@ currentConversationId = String(Date.now());
     document.getElementById("messages-list")?.replaceChildren();
     document.getElementById("messages-list")?.classList.add("hidden");
     document.getElementById("welcome-screen")?.classList.remove("hidden");
+    document.getElementById("welcome-screen")?.style.removeProperty("display");
     document.getElementById("chat-container").scrollTop = 0;
     clearAttachment();
     clearStudyMode();
@@ -1638,6 +1751,7 @@ function clearAllHistory() {
     document.getElementById("messages-list")?.replaceChildren();
     document.getElementById("messages-list")?.classList.add("hidden");
     document.getElementById("welcome-screen")?.classList.remove("hidden");
+    document.getElementById("welcome-screen")?.style.removeProperty("display");
     renderChatHistory();
     showToast("Chat history cleared from this browser.");
 }
@@ -1879,8 +1993,12 @@ function appendAIMessage(text, record = true) {
 
 
 function showChat() {
-    document.getElementById("welcome-screen")?.classList.add("hidden");
-    document.getElementById("messages-list")?.classList.remove("hidden");
+    const welcome = document.getElementById("welcome-screen");
+    const messages = document.getElementById("messages-list");
+    welcome?.classList.add("hidden");
+    if (welcome) welcome.style.setProperty("display", "none", "important");
+    messages?.classList.remove("hidden");
+    if (messages) messages.style.removeProperty("display");
 }
 
 function scrollToBottom() {
