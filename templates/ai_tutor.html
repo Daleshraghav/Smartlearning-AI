@@ -33,12 +33,9 @@
 /* ==========================================
    BASE & DARK NIGHT VIEW THEME
    ========================================== */
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body {
+html, body {
     width: 100%;
     height: 100%;
     margin: 0;
@@ -52,17 +49,8 @@ body {
     transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-button,
-input,
-textarea,
-select {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-}
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
 /* Deep Dark Night View for Left Sidebar in Dark Mode */
 #sidebar-drawer {
@@ -93,14 +81,8 @@ button {
    SIDEBAR CATEGORIES: COMPACT, BOLD & ANIMATED
    ========================================== */
 @keyframes dropdownReveal {
-    0% {
-        opacity: 0;
-        transform: translateY(-6px) scale(0.98);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    0% { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .sidebar-dropdown-content {
@@ -109,638 +91,237 @@ button {
 }
 
 .sidebar-category-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 7px 8px;
-    border-radius: 10px;
-    font-size: 11.5px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #cbd5e1;
-    background: transparent;
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 8px; border-radius: 10px; font-size: 11.5px; font-weight: 800;
+    letter-spacing: 0.06em; text-transform: uppercase; color: #cbd5e1; background: transparent;
     transition: background-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
 }
 
-.sidebar-category-btn:hover {
-    color: #ffffff;
-    background: rgba(139, 92, 246, 0.12);
-}
-
-.sidebar-category-btn:active {
-    transform: scale(0.97);
-}
+.sidebar-category-btn:hover { color: #ffffff; background: rgba(139, 92, 246, 0.12); }
+.sidebar-category-btn:active { transform: scale(0.97); }
 
 .sidebar-sub-item {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 6px 9px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #e2e8f0;
-    text-align: left;
-    background: transparent;
+    width: 100%; display: flex; align-items: center; gap: 9px; padding: 6px 9px;
+    border-radius: 10px; font-size: 13px; font-weight: 600; color: #e2e8f0; text-align: left; background: transparent;
     transition: background-color 0.16s ease, color 0.16s ease, transform 0.12s ease;
 }
 
-.sidebar-sub-item:hover {
-    color: #ffffff;
-    background: rgba(139, 92, 246, 0.16);
-    transform: translateX(3px);
-}
-
-.sidebar-sub-item:active {
-    transform: scale(0.96);
-}
+.sidebar-sub-item:hover { color: #ffffff; background: rgba(139, 92, 246, 0.16); transform: translateX(3px); }
+.sidebar-sub-item:active { transform: scale(0.96); }
 
 .history-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    text-align: left;
-    padding: 6px 9px;
-    border-radius: 9px;
-    color: #e2e8f0;
-    font-size: 12.5px;
-    font-weight: 600;
-    border: 1px solid transparent;
-    background: transparent;
+    display: flex; align-items: center; gap: 8px; width: 100%; text-align: left;
+    padding: 6px 9px; border-radius: 9px; color: #e2e8f0; font-size: 12.5px; font-weight: 600;
+    border: 1px solid transparent; background: transparent;
     transition: background-color 0.16s ease, transform 0.12s ease, border-color 0.16s ease;
 }
 
-.history-item:hover,
-.history-item.active {
-    background: rgba(139, 92, 246, 0.18);
-    border-color: rgba(139, 92, 246, 0.35);
-    color: #ffffff;
-    transform: translateX(2px);
+.history-item:hover, .history-item.active {
+    background: rgba(139, 92, 246, 0.18); border-color: rgba(139, 92, 246, 0.35); color: #ffffff; transform: translateX(2px);
 }
+.history-item:active { transform: scale(0.96); }
+.history-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
 
-.history-item:active {
-    transform: scale(0.96);
-}
-
-.history-item span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-width: 0;
-    flex: 1;
-}
-
-/* ==========================================
-   100% TRANSPARENT SIDEBAR BOTTOM ITEMS
-   ========================================== */
 .sidebar-transparent-item {
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    background: transparent !important; border: 1px solid transparent !important;
+    box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
     transition: transform 0.14s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
-
-.sidebar-transparent-item:hover {
-    background: transparent !important;
-    border-color: rgba(168, 85, 247, 0.3) !important;
-    transform: translateY(-1px);
-}
-
-.sidebar-transparent-item:active {
-    transform: scale(0.96);
-}
+.sidebar-transparent-item:hover { border-color: rgba(168, 85, 247, 0.3) !important; transform: translateY(-1px); }
+.sidebar-transparent-item:active { transform: scale(0.96); }
 
 /* ==========================================
    3 WHITE DOTS LOADER
    ========================================== */
 @keyframes dotFourStepRotate {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.45;
-    }
-    25% {
-        transform: translate(0, -3px) scale(1.18);
-        opacity: 1;
-    }
-    50% {
-        transform: translate(2px, 0) scale(0.95);
-        opacity: 0.8;
-    }
-    75% {
-        transform: translate(0, 2px) scale(1.1);
-        opacity: 1;
-    }
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.45; }
+    25% { transform: translate(0, -3px) scale(1.18); opacity: 1; }
+    50% { transform: translate(2px, 0) scale(0.95); opacity: 0.8; }
+    75% { transform: translate(0, 2px) scale(1.1); opacity: 1; }
 }
 
 .three-white-dots {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 2px 0;
+    display: inline-flex; align-items: center; gap: 5px;
+    background: transparent !important; border: none !important; box-shadow: none !important; padding: 2px 0;
 }
 
 .three-white-dots span {
-    display: inline-block;
-    color: #ffffff;
-    font-weight: 900;
-    font-size: 16px;
-    line-height: 1;
+    display: inline-block; color: #ffffff; font-weight: 900; font-size: 16px; line-height: 1;
     animation: dotFourStepRotate 0.9s infinite ease-in-out;
 }
-
-.three-white-dots span:nth-child(2) {
-    animation-delay: 0.18s;
-}
-
-.three-white-dots span:nth-child(3) {
-    animation-delay: 0.36s;
-}
+.three-white-dots span:nth-child(2) { animation-delay: 0.18s; }
+.three-white-dots span:nth-child(3) { animation-delay: 0.36s; }
 
 /* ==========================================
    FULL LIGHT MODE — ALL WORDS SOLID BLACK & CLEAR
    ========================================== */
-body.light-mode {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-}
+body.light-mode { background-color: #ffffff !important; color: #000000 !important; }
+body.light-mode #sidebar-drawer { background: #f8fafc !important; border-right: 1px solid #cbd5e1 !important; }
+body.light-mode main { background-color: #ffffff !important; }
+body.light-mode header.glass-panel { background: #ffffff !important; border-bottom: 1px solid #cbd5e1 !important; }
+body.light-mode footer { background: #ffffff !important; border-top: 1px solid #cbd5e1 !important; }
 
-body.light-mode #sidebar-drawer {
-    background: #f8fafc !important;
-    border-right: 1px solid #cbd5e1 !important;
-}
+body.light-mode h1, body.light-mode h2, body.light-mode h3, body.light-mode p,
+body.light-mode span:not(.luxury-gradient-text), body.light-mode div, body.light-mode button,
+body.light-mode textarea, body.light-mode input, body.light-mode a,
+body.light-mode .text-white, body.light-mode .text-gray-100, body.light-mode .text-gray-200,
+body.light-mode .text-gray-300, body.light-mode .text-gray-400, body.light-mode .text-gray-500,
+body.light-mode .text-gray-600, body.light-mode .text-purple-200, body.light-mode .text-purple-300,
+body.light-mode .text-purple-400, body.light-mode .sidebar-category-btn,
+body.light-mode .sidebar-sub-item, body.light-mode .history-item { color: #000000 !important; }
 
-body.light-mode main {
-    background-color: #ffffff !important;
-}
-
-body.light-mode header.glass-panel {
-    background: #ffffff !important;
-    border-bottom: 1px solid #cbd5e1 !important;
-}
-
-body.light-mode footer {
-    background: #ffffff !important;
-    border-top: 1px solid #cbd5e1 !important;
-}
-
-body.light-mode .glass-panel {
-    background: #ffffff !important;
-    border: 1px solid #cbd5e1 !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
-}
-
-body.light-mode .glass-card {
-    background: #f8fafc !important;
-    border: 1px solid #cbd5e1 !important;
-}
-
-body.light-mode .glass-card:hover {
-    background: #f1f5f9 !important;
-    border-color: #7c3aed !important;
-}
-
-body.light-mode h1,
-body.light-mode h2,
-body.light-mode h3,
-body.light-mode p,
-body.light-mode span:not(.luxury-gradient-text),
-body.light-mode div,
-body.light-mode button,
-body.light-mode textarea,
-body.light-mode input,
-body.light-mode a,
-body.light-mode .text-white,
-body.light-mode .text-gray-100,
-body.light-mode .text-gray-200,
-body.light-mode .text-gray-300,
-body.light-mode .text-gray-400,
-body.light-mode .text-gray-500,
-body.light-mode .text-gray-600,
-body.light-mode .text-purple-200,
-body.light-mode .text-purple-300,
-body.light-mode .text-purple-400,
-body.light-mode .sidebar-category-btn,
-body.light-mode .sidebar-sub-item,
-body.light-mode .history-item {
-    color: #000000 !important;
-}
-
-body.light-mode #send-button,
-body.light-mode #send-button i,
-body.light-mode .from-purple-600 i,
-body.light-mode .from-purple-600 {
-    color: #ffffff !important;
-}
-
-body.light-mode .text-emerald-400 {
-    color: #047857 !important;
-    font-weight: 700 !important;
-}
-
-body.light-mode .history-item:hover,
-body.light-mode .history-item.active {
-    background: #ede9fe !important;
-    border-color: #8b5cf6 !important;
-    color: #000000 !important;
-    font-weight: 700 !important;
-}
-
-body.light-mode .sidebar-category-btn:hover,
-body.light-mode .sidebar-sub-item:hover {
-    background: #f1f5f9 !important;
-    color: #000000 !important;
-}
-
-body.light-mode .user-message-bubble {
-    background: #ede9fe !important;
-    border: 1px solid #c4b5fd !important;
-    color: #000000 !important;
-    font-weight: 600 !important;
-}
-
-body.light-mode .ai-answer-content,
-body.light-mode .ai-answer-content p,
-body.light-mode .ai-answer-content li,
-body.light-mode .ai-answer-content h1,
-body.light-mode .ai-answer-content h2,
-body.light-mode .ai-answer-content h3,
-body.light-mode .ai-answer-content strong {
-    color: #000000 !important;
-}
-
-body.light-mode .answer-actions button {
-    color: #000000 !important;
-    border-color: #94a3b8 !important;
-    font-weight: 600 !important;
-}
-
-body.light-mode .answer-actions button:hover {
-    background: #ede9fe !important;
-    border-color: #7c3aed !important;
-}
-
-body.light-mode #chat-input::placeholder {
-    color: #475569 !important;
-}
-
-body.light-mode .three-white-dots span {
-    color: #000000 !important;
-}
-
-body.light-mode .study-modal {
-    background: #ffffff !important;
-    border-color: #cbd5e1 !important;
-}
-
-body.light-mode .study-item {
-    background: #f8fafc !important;
-    border-color: #cbd5e1 !important;
-}
-
-body.light-mode #note-title,
-body.light-mode #note-content {
-    background: #f8fafc !important;
-    border-color: #94a3b8 !important;
-    color: #000000 !important;
-}
+body.light-mode #send-button, body.light-mode #send-button i { color: #ffffff !important; }
+body.light-mode .text-emerald-400 { color: #047857 !important; font-weight: 700 !important; }
+body.light-mode .history-item:hover, body.light-mode .history-item.active { background: #ede9fe !important; border-color: #8b5cf6 !important; color: #000000 !important; font-weight: 700 !important; }
+body.light-mode .sidebar-category-btn:hover, body.light-mode .sidebar-sub-item:hover { background: #f1f5f9 !important; color: #000000 !important; }
+body.light-mode .user-message-bubble { background: #ede9fe !important; border: 1px solid #c4b5fd !important; color: #000000 !important; font-weight: 600 !important; }
+body.light-mode .ai-answer-content, body.light-mode .ai-answer-content p, body.light-mode .ai-answer-content li,
+body.light-mode .ai-answer-content h1, body.light-mode .ai-answer-content h2, body.light-mode .ai-answer-content h3,
+body.light-mode .ai-answer-content strong { color: #000000 !important; }
+body.light-mode .answer-actions button { color: #000000 !important; border-color: #94a3b8 !important; font-weight: 600 !important; }
+body.light-mode .answer-actions button:hover { background: #ede9fe !important; border-color: #7c3aed !important; }
+body.light-mode #chat-input::placeholder { color: #475569 !important; }
+body.light-mode .three-white-dots span { color: #000000 !important; }
 
 /* ==========================================
    MODALS & GENERAL ANIMATIONS
    ========================================== */
 .study-modal-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 90;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    overflow-y: auto;
-    background: rgba(0, 0, 0, 0.78);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center;
+    padding: 16px; overflow-y: auto; background: rgba(0, 0, 0, 0.78); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
 }
 
 .study-modal {
-    width: min(100%, 560px);
-    max-height: min(90vh, 760px);
-    max-height: min(90dvh, 760px);
-    overflow-y: auto;
-    padding: 22px;
-    border: 1px solid rgba(148, 163, 184, 0.22);
-    border-radius: 24px;
+    width: min(100%, 560px); max-height: min(90vh, 760px); max-height: min(90dvh, 760px);
+    overflow-y: auto; padding: 22px; border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 24px;
     background: linear-gradient(145deg, rgba(17, 24, 39, 0.99), rgba(9, 12, 20, 0.99));
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
 }
 
 .study-item {
-    margin-top: 10px;
-    padding: 14px;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    border-radius: 14px;
-    background: rgba(30, 41, 59, 0.45);
-    overflow-wrap: anywhere;
+    margin-top: 10px; padding: 14px; border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 14px; background: rgba(30, 41, 59, 0.45); overflow-wrap: anywhere;
 }
 
-.study-item p {
-    margin-top: 8px;
-    color: #cbd5e1;
-    font-size: 13px;
-    line-height: 1.65;
-    white-space: pre-wrap;
+.study-item p { margin-top: 8px; color: #cbd5e1; font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
+
+#note-title, #note-content {
+    display: block; width: 100%; min-width: 0; padding: 11px 12px; color: #f9fafb;
+    background: rgba(31, 41, 55, 0.7); border: 1px solid rgba(148, 163, 184, 0.25); border-radius: 12px; outline: none;
 }
-
-#note-title,
-#note-content {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    padding: 11px 12px;
-    color: #f9fafb;
-    background: rgba(31, 41, 55, 0.7);
-    border: 1px solid rgba(148, 163, 184, 0.25);
-    border-radius: 12px;
-    outline: none;
-}
-
-#note-title:focus,
-#note-content:focus { border-color: #8b5cf6; }
-
+#note-title:focus, #note-content:focus { border-color: #8b5cf6; }
 #note-content { resize: vertical; }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.message-animation {
-    animation: slideUp .35s cubic-bezier(.16, 1, .3, 1) forwards;
-}
+.message-animation { animation: slideUp .35s cubic-bezier(.16, 1, .3, 1) forwards; }
 
 @keyframes orbPulse {
-    0%, 100% {
-        transform: scale(.95);
-        box-shadow: 0 0 20px rgba(168, 85, 247, .4),
-                    0 0 60px rgba(99, 102, 241, .2);
-    }
-    50% {
-        transform: scale(1.1);
-        box-shadow: 0 0 40px rgba(168, 85, 247, .8),
-                    0 0 100px rgba(99, 102, 241, .5);
-    }
+    0%, 100% { transform: scale(.95); box-shadow: 0 0 20px rgba(168, 85, 247, .4), 0 0 60px rgba(99, 102, 241, .2); }
+    50% { transform: scale(1.1); box-shadow: 0 0 40px rgba(168, 85, 247, .8), 0 0 100px rgba(99, 102, 241, .5); }
 }
+.ai-voice-orb { animation: orbPulse 3s infinite ease-in-out; }
 
-.ai-voice-orb {
-    animation: orbPulse 3s infinite ease-in-out;
-}
-
-::-webkit-scrollbar {
-    width: 4px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #374151;
-    border-radius: 4px;
-}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
 
 .luxury-gradient-text {
     background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
 /* Clear, transparent AI answers */
 .ai-answer-content {
-    background: transparent !important;
-    color: #f1f5f9;
-    font-size: 16px !important;
-    line-height: 1.9 !important;
-    letter-spacing: 0.15px;
-    font-weight: 500;
-    overflow-wrap: anywhere;
-    word-break: normal;
-    min-width: 0;
-    padding: 0 !important;
+    background: transparent !important; color: #f1f5f9; font-size: 16px !important;
+    line-height: 1.9 !important; letter-spacing: 0.15px; font-weight: 500;
+    overflow-wrap: anywhere; word-break: normal; min-width: 0; padding: 0 !important;
 }
-
-.ai-answer-content p {
-    margin: 0 0 16px !important;
+.ai-answer-content p { margin: 0 0 16px !important; }
+.ai-answer-content h1, .ai-answer-content h2, .ai-answer-content h3 {
+    color: #ffffff; font-weight: 750; line-height: 1.5 !important; margin: 22px 0 10px !important;
 }
-
-.ai-answer-content h1,
-.ai-answer-content h2,
-.ai-answer-content h3 {
-    color: #ffffff;
-    font-weight: 750;
-    line-height: 1.5 !important;
-    margin: 22px 0 10px !important;
-}
-
 .ai-answer-content h1 { font-size: 24px !important; }
 .ai-answer-content h2 { font-size: 20px !important; }
 .ai-answer-content h3 { font-size: 18px !important; }
-
-.ai-answer-content ul,
-.ai-answer-content ol {
-    padding-left: 26px !important;
-    margin: 12px 0 18px !important;
-}
-
-.ai-answer-content li {
-    padding-left: 4px;
-    margin: 8px 0 !important;
-    line-height: 1.8 !important;
-}
-
-.ai-answer-content strong {
-    color: #ffffff;
-    font-weight: 750;
-}
-
-.ai-answer-content blockquote {
-    background: transparent !important;
-    border-left: 3px solid #a78bfa;
-    padding: 8px 14px;
-    margin: 16px 0;
-}
-
-.ai-answer-content pre {
-    max-width: 100%;
-    overflow-x: auto;
-    padding: 14px !important;
-    line-height: 1.7;
-    border-radius: 10px;
-    background: rgba(15, 23, 42, 0.35) !important;
-}
-
-.ai-answer-content table {
-    max-width: 100%;
-    overflow-x: auto;
-}
+.ai-answer-content ul, .ai-answer-content ol { padding-left: 26px !important; margin: 12px 0 18px !important; }
+.ai-answer-content li { padding-left: 4px; margin: 8px 0 !important; line-height: 1.8 !important; }
+.ai-answer-content strong { color: #ffffff; font-weight: 750; }
+.ai-answer-content blockquote { background: transparent !important; border-left: 3px solid #a78bfa; padding: 8px 14px; margin: 16px 0; }
+.ai-answer-content pre { max-width: 100%; overflow-x: auto; padding: 14px !important; line-height: 1.7; border-radius: 10px; background: rgba(15, 23, 42, 0.35) !important; }
+.ai-answer-content table { max-width: 100%; overflow-x: auto; }
 
 .header-chat-action { white-space: nowrap; min-height: 30px; }
 
-.answer-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
-}
-
+.answer-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
 .answer-actions button {
-    min-width: 29px !important;
-    min-height: 29px !important;
-    padding: 5px 9px !important;
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    border: 1px solid rgba(148, 163, 184, 0.25) !important;
-    border-radius: 8px !important;
-    background: transparent !important;
-    color: #cbd5e1;
+    min-width: 29px !important; min-height: 29px !important; padding: 5px 9px !important;
+    font-size: 11px !important; font-weight: 600 !important; border: 1px solid rgba(148, 163, 184, 0.25) !important;
+    border-radius: 8px !important; background: transparent !important; color: #cbd5e1;
 }
+.answer-actions button i { font-size: 11px; }
+.answer-actions button:hover { color: #ffffff; border-color: #a78bfa !important; background: rgba(139, 92, 246, 0.12) !important; }
 
-.answer-actions button i {
-    font-size: 11px;
-}
-
-.answer-actions button:hover {
-    color: #ffffff;
-    border-color: #a78bfa !important;
-    background: rgba(139, 92, 246, 0.12) !important;
-}
-
-.attachment-menu{position:absolute;left:0;bottom:calc(100% + 10px);width:min(270px,calc(100vw - 32px));z-index:60;padding:8px;border-radius:16px;background:#111827;border:1px solid rgba(148,163,184,.22);box-shadow:0 18px 50px rgba(0,0,0,.45)}
-.attachment-option{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:12px;text-align:left;color:#e5e7eb}
-.attachment-option:hover{background:rgba(139,92,246,.14)}
-.attachment-option small{display:block;color:#9ca3af;margin-top:3px}
-.message-user-label{display:none!important}
+.attachment-menu { position: absolute; left: 0; bottom: calc(100% + 10px); width: min(270px, calc(100vw - 32px)); z-index: 60; padding: 8px; border-radius: 16px; background: #111827; border: 1px solid rgba(148,163,184,.22); box-shadow: 0 18px 50px rgba(0,0,0,.45); }
+.attachment-option { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; border-radius: 12px; text-align: left; color: #e5e7eb; }
+.attachment-option:hover { background: rgba(139, 92, 246, .14); }
+.attachment-option small { display: block; color: #9ca3af; margin-top: 3px; }
+.message-user-label { display: none !important; }
 
 /* ==========================================
-   PERFECT MOBILE LAYOUT: STICKY HEADER, CHATGPT COMPACT BAR & NO KEYBOARD GAP
+   PERFECT MOBILE LAYOUT: STICKY HEADER & CHATGPT STYLE PILL INPUT BOX
    ========================================== */
 @media screen and (max-width: 767px) {
     #sidebar-drawer {
-        position: fixed !important;
-        top: 0 !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        height: 100vh !important;
-        height: 100dvh !important;
-        z-index: 100 !important;
-        width: min(84vw, 290px) !important;
+        position: fixed !important; top: 0 !important; bottom: 0 !important; left: 0 !important;
+        height: 100vh !important; height: 100dvh !important; z-index: 100 !important; width: min(84vw, 290px) !important;
     }
+    #sidebar-backdrop { z-index: 95 !important; }
 
-    #sidebar-backdrop {
-        z-index: 95 !important;
-    }
+    main.flex-1 { position: relative !important; height: 100dvh !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }
 
-    main.flex-1 {
-        position: relative !important;
-        height: 100dvh !important;
-        display: flex !important;
-        flex-direction: column !important;
-        overflow: hidden !important;
-    }
-
-    /* Sticky Top Header - Never scrolls away */
+    /* Sticky Top Header - Never hides on scroll */
     main > header {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        z-index: 60 !important;
-        flex: 0 0 56px !important;
-        height: 56px !important;
-        background: rgba(10, 14, 24, 0.96) !important;
+        position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important;
+        z-index: 60 !important; flex: 0 0 56px !important; height: 56px !important; background: rgba(10, 14, 24, 0.98) !important;
     }
-
-    body.light-mode main > header {
-        background: #ffffff !important;
-    }
+    body.light-mode main > header { background: #ffffff !important; }
 
     /* Chat container padding so header and footer don't overlap messages */
     #chat-container {
-        flex: 1 1 auto !important;
-        height: 0 !important;
-        overflow-y: auto !important;
-        padding: 68px 12px 90px !important;
-        -webkit-overflow-scrolling: touch !important;
+        flex: 1 1 auto !important; height: 0 !important; overflow-y: auto !important;
+        padding: 64px 12px 84px !important; -webkit-overflow-scrolling: touch !important;
     }
 
-    /* 2x2 grid for welcome suggestions */
-    #welcome-screen .grid {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 8px !important;
-    }
+    #welcome-screen .grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
+    #welcome-screen .grid > button { min-height: 75px !important; padding: 10px !important; }
 
-    #welcome-screen .grid > button {
-        min-h-[75px] !important;
-        padding: 10px !important;
-    }
-
-    /* ChatGPT Style Compact Typing Section at the Bottom (Zero extra gap above keyboard) */
+    /* ChatGPT Style Compact Footer at Bottom */
     main > footer {
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        z-index: 50 !important;
-        padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px)) !important;
-        background: rgba(5, 7, 14, 0.98) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+        z-index: 50 !important; padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+        background: rgba(5, 7, 14, 0.99) !important; border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
+    body.light-mode > main > footer { background: #ffffff !important; border-top: 1px solid #cbd5e1 !important; }
 
-    body.light-mode > main > footer {
-        background: #ffffff !important;
-        border-top: 1px solid #cbd5e1 !important;
-    }
-
-    /* ChatGPT Dark Charcoal Box Color (#181b22) */
+    /* ChatGPT Pill-shaped Input Box Style (#181b22) with Plus, Mic & Send */
     #chat-form {
-        background: #181b22 !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 20px !important;
-        padding: 4px 6px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+        background: #181b22 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 9999px !important; padding: 4px 8px !important; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+        display: flex !important; align-items: center !important; gap: 8px !important;
     }
-
-    body.light-mode #chat-form {
-        background: #f1f5f9 !important;
-        border: 1px solid #cbd5e1 !important;
-    }
+    body.light-mode #chat-form { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; }
 
     #chat-input {
-        font-size: 15px !important;
-        padding: 6px 4px !important;
-        max-height: 70px !important;
-        color: inherit !important;
+        font-size: 15px !important; padding: 6px 4px !important; max-height: 70px !important; color: inherit !important;
+        flex: 1 1 auto !important;
     }
 }
 
-#welcome-screen.hidden,
-#messages-list.hidden {
-    display: none !important;
-}
+#welcome-screen.hidden, #messages-list.hidden { display: none !important; }
     </style>
 </head>
 
@@ -825,7 +406,7 @@ body.light-mode #note-content {
                 </div>
             </div>
 
-            <!-- Category 2: AI CAPABILITIES (8 compact bold items, hidden until clicked) -->
+            <!-- Category 2: AI CAPABILITIES (8 compact bold items, hidden until clicked)[cite: 1] -->
             <div>
                 <button
                     type="button"
@@ -1099,7 +680,7 @@ body.light-mode #note-content {
             </div>
         </div>
 
-        <!-- Chat input section (ChatGPT style compact bar, Search icon removed, Send button on right) -->
+        <!-- Chat input section (ChatGPT style pill input box with Plus, Mic & Send) -->
         <footer class="shrink-0 w-full border-t border-gray-800/70 bg-[#090c14]/95 px-3 pt-2 pb-2 md:px-6 md:pt-4 md:pb-4">
             <div class="max-w-4xl mx-auto">
                 <!-- Attachment preview -->
@@ -1122,44 +703,39 @@ body.light-mode #note-content {
                     </button>
                 </div>
 
-                <!-- Input panel -->
-                <form id="chat-form" class="glass-panel rounded-2xl p-2 md:p-3 shadow-lg shadow-black/20" onsubmit="handleChatSubmit(event)">
+                <!-- Input panel (ChatGPT Pill style) -->
+                <form id="chat-form" class="flex items-center gap-2 px-3 py-2 rounded-full bg-[#181b22] border border-white/10 shadow-2xl" onsubmit="handleChatSubmit(event)">
+                    <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
+                    <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
+                    <input type="file" id="video-input" class="hidden" accept="video/*" onchange="handleFileSelect(event,'video')">
+                    
+                    <div class="relative">
+                        <button type="button" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center shrink-0 border border-white/10 transition" title="Attach file">
+                            <i class="fa-solid fa-plus text-sm"></i>
+                        </button>
+                        <div id="attachment-menu" class="attachment-menu hidden">
+                            <button type="button" class="attachment-option" onclick="chooseAttachment('image')"><i class="fa-regular fa-image text-purple-400 text-lg w-6 text-center"></i><span><strong>Image</strong><small>Choose from gallery or photos</small></span></button>
+                            <button type="button" class="attachment-option" onclick="chooseAttachment('file')"><i class="fa-regular fa-file-lines text-blue-400 text-lg w-6 text-center"></i><span><strong>Files</strong><small>PDF and supported documents</small></span></button>
+                            <button type="button" class="attachment-option" onclick="chooseAttachment('video')"><i class="fa-solid fa-film text-emerald-400 text-lg w-6 text-center"></i><span><strong>Short Video</strong><small>Select a short clip for summarization</small></span></button>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="startVoiceInput()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center shrink-0 border border-white/10 transition" title="Voice input">
+                        <i class="fa-solid fa-microphone text-sm"></i>
+                    </button>
+
                     <textarea
                         id="chat-input"
                         rows="1"
                         maxlength="12000"
-                        placeholder="Ask your question..."
-                        aria-label="Ask your question"
-                        class="w-full resize-none bg-transparent text-sm font-medium text-gray-100 placeholder-gray-500 outline-none px-2 py-2 max-h-36 overflow-y-auto"
+                        placeholder="Ask your questions..."
+                        aria-label="Ask your questions"
+                        class="flex-1 resize-none bg-transparent text-sm font-medium text-gray-100 placeholder-gray-400 outline-none px-2 py-1.5 max-h-36 overflow-y-auto"
                     ></textarea>
 
-                    <div class="flex items-center justify-between gap-2 mt-1">
-                        <div class="flex items-center gap-1 min-w-0">
-                            <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
-                            <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
-                            <input type="file" id="video-input" class="hidden" accept="video/*" onchange="handleFileSelect(event,'video')">
-                            <div class="relative">
-                                <button type="button" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 flex items-center justify-center shrink-0" aria-label="Attach image, file or short video" title="Attach image, file or short video"><i class="fa-solid fa-paperclip"></i></button>
-                                <div id="attachment-menu" class="attachment-menu hidden">
-                                    <button type="button" class="attachment-option" onclick="chooseAttachment('image')"><i class="fa-regular fa-image text-purple-400 text-lg w-6 text-center"></i><span><strong>Image</strong><small>Choose from gallery or photos</small></span></button>
-                                    <button type="button" class="attachment-option" onclick="chooseAttachment('file')"><i class="fa-regular fa-file-lines text-blue-400 text-lg w-6 text-center"></i><span><strong>Files</strong><small>PDF and supported documents</small></span></button>
-                                    <button type="button" class="attachment-option" onclick="chooseAttachment('video')"><i class="fa-solid fa-film text-emerald-400 text-lg w-6 text-center"></i><span><strong>Short Video</strong><small>Select a short clip for summarization</small></span></button>
-                                </div>
-                            </div>
-
-                            <button type="button" onclick="startVoiceInput()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 flex items-center justify-center shrink-0" aria-label="Voice input" title="Speak your question">
-                                <i class="fa-solid fa-microphone"></i>
-                            </button>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <span id="char-count" class="hidden sm:inline text-[10px] font-semibold text-gray-500">0/12000</span>
-
-                            <button type="submit" id="send-button" class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-purple-900/30 hover:brightness-110 active:scale-95 transition shrink-0" aria-label="Send message">
-                                <i class="fa-solid fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <button type="submit" id="send-button" class="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center shadow-lg hover:brightness-110 active:scale-95 transition shrink-0" aria-label="Send message">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
                 </form>
             </div>
         </footer>
