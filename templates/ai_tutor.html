@@ -518,6 +518,116 @@
        
 @media(max-width:767px){ #sidebar-drawer{width:min(86vw,330px)}#chat-container{padding-left:12px;padding-right:12px}.ai-answer-content table{display:block;overflow-x:auto}}
 
+
+/* ===== MOBILE UI FIX ===== */
+@media screen and (max-width: 767px) {
+
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Compact top header */
+    header,
+    .app-header,
+    .topbar,
+    .chat-header {
+        max-width: 100%;
+    }
+
+    /* Keep content within phone width */
+    main,
+    .main-content,
+    .chat-container,
+    #chat-container {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    /* Compact welcome section */
+    #welcome-screen,
+    .welcome-screen,
+    .welcome-container {
+        padding: 18px 12px !important;
+        margin: 0 auto !important;
+    }
+
+    #welcome-screen h1,
+    .welcome-screen h1,
+    .welcome-container h1 {
+        font-size: clamp(23px, 6vw, 30px) !important;
+        line-height: 1.3 !important;
+        margin: 12px 0 !important;
+    }
+
+    #welcome-screen p,
+    .welcome-screen p,
+    .welcome-container p {
+        font-size: 14px !important;
+        line-height: 1.55 !important;
+    }
+
+    /* Compact learning cards */
+    #welcome-screen .feature-card,
+    #welcome-screen .suggestion-card,
+    .welcome-screen .feature-card,
+    .welcome-screen .suggestion-card {
+        padding: 12px !important;
+        min-width: 0 !important;
+    }
+
+    /* Study mode buttons */
+    .study-modes,
+    .study-mode-container,
+    .mode-buttons {
+        gap: 8px !important;
+        padding: 8px !important;
+    }
+
+    .study-modes button,
+    .study-mode-container button,
+    .mode-buttons button {
+        padding: 9px 12px !important;
+        font-size: 13px !important;
+    }
+
+    /* Chat composer stays within screen */
+    .chat-input-container,
+    .input-container,
+    .composer,
+    .chat-composer {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 10px 12px !important;
+    }
+
+    textarea,
+    #message-input,
+    #chat-input {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        font-size: 16px !important;
+    }
+
+    /* Prevent elements from causing horizontal overflow */
+    img,
+    button,
+    textarea {
+        max-width: 100%;
+    }
+}
+
+        
     </style>
 </head>
 
