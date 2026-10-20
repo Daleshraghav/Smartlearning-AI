@@ -776,7 +776,6 @@ def chat_with_tutor():
     "GROQ_VISION_MODEL",
     "qwen/qwen3.8-27b"
 )
-            )
         else:
             messages.append({"role": "user", "content": user_message})
             model = GROQ_MODEL
