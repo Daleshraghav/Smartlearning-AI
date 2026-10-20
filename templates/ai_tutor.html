@@ -1202,303 +1202,251 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
 
 <body class="h-screen overflow-hidden flex relative">
 
-    <!-- Mobile sidebar background -->
+  <!-- Mobile sidebar background -->
     <div
         id="sidebar-backdrop"
         onclick="closeMobileSidebar()"
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden transition-opacity">
     </div>
 
-  <!-- Left Sidebar -->
-<aside
-    id="sidebar-drawer"
-    class="fixed md:static inset-y-0 left-0 w-80 flex flex-col justify-between z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <!-- Responsive sidebar -->
+    <aside
+        id="sidebar-drawer"
+        class="fixed md:static inset-y-0 left-0 w-80 flex flex-col justify-between z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
 
-    <!-- Sidebar Top Brand Header -->
-    <div class="p-4 border-b border-gray-800/60 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
-                <i class="fa-solid fa-brain text-white text-lg"></i>
-            </div>
-
-            <div>
-                <h1 class="font-extrabold text-base tracking-wide text-white">
-                    SmartLearn <span class="luxury-gradient-text">AI</span>
-                </h1>
-                <p class="text-xs text-emerald-400 font-semibold flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Online & Ready
-                </p>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-1">
-            <a
-                href="{{ url_for('dashboard') }}"
-                class="text-gray-400 hover:text-white transition p-2 rounded-lg hover:bg-gray-800/50"
-                title="Back to Dashboard">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
-
-            <button
-                onclick="closeMobileSidebar()"
-                class="md:hidden text-gray-400 hover:text-white p-2"
-                aria-label="Close menu">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- 3 Compact, Bold & Animated Categories: Chat History, AI Capabilities, Expert Modes -->
-    <div class="flex-1 overflow-y-auto px-3 py-3 space-y-1.5">
-
-        <!-- Category 1: CHAT HISTORY (Hidden until clicked) -->
-        <div>
-            <div class="flex items-center justify-between">
-                <button
-                    type="button"
-                    onclick="toggleSidebarSection('chat-history-menu', 'history-chevron')"
-                    class="sidebar-category-btn flex-1">
-                    <span class="flex items-center gap-2">
-                        <i class="fa-regular fa-clock text-purple-400 text-xs"></i>
-                        <span>Chat History</span>
-                    </span>
-                    <i id="history-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
-                </button>
-                <button
-                    type="button"
-                    onclick="clearAllHistory()"
-                    class="text-[11px] font-bold text-gray-400 hover:text-red-400 px-2 py-1 rounded transition"
-                    title="Clear all history">
-                    Clear
-                </button>
-            </div>
-
-            <div id="chat-history-menu" class="hidden sidebar-dropdown-content mt-1 pl-1">
-                <div id="chat-history-list" class="space-y-1 max-h-40 overflow-y-auto pr-1">
-                    <p class="px-2 py-1.5 text-xs font-medium text-gray-500">Your conversations will appear here.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Category 2: AI CAPABILITIES (8 compact bold items, hidden until clicked) -->
-        <div>
-            <button
-                type="button"
-                onclick="toggleSidebarSection('capabilities-menu', 'capabilities-chevron')"
-                class="sidebar-category-btn">
-                <span class="flex items-center gap-2">
-                    <i class="fa-solid fa-wand-magic-sparkles text-indigo-400 text-xs"></i>
-                    <span>AI Capabilities</span>
-                </span>
-                <i id="capabilities-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
-            </button>
-
-            <div id="capabilities-menu" class="hidden sidebar-dropdown-content space-y-1 mt-1 pl-1">
-                <button onclick="setPrompt('Explain this concept using a real-world analogy:'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-lightbulb text-[11px]"></i>
-                    </span>
-                    <span>Real-world Analogy</span>
-                </button>
-
-                <button onclick="setPrompt('Generate a quick 5-question practice quiz on:'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-clipboard-question text-[11px]"></i>
-                    </span>
-                    <span>Interactive Quiz</span>
-                </button>
-
-                <button onclick="setPrompt('Summarize this topic into simple bullet points:'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-file-lines text-[11px]"></i>
-                    </span>
-                    <span>Smart Summary</span>
-                </button>
-
-                <button onclick="setPrompt('Solve step-by-step and explain the math/logic behind:'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-square-root-variable text-[11px]"></i>
-                    </span>
-                    <span>Step-by-Step Solver</span>
-                </button>
-
-                <button onclick="setPrompt('Give me a complete concept deep-dive with core principles and examples on:'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-yellow-500/15 text-yellow-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-brain text-[11px]"></i>
-                    </span>
-                    <span>Concept Deep-Dive</span>
-                </button>
-
-                <button onclick="setPrompt('Clear my doubt in the easiest way possible with examples:'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-magnifying-glass-chart text-[11px]"></i>
-                    </span>
-                    <span>Doubt Cracker</span>
-                </button>
-
-                <button onclick="setPrompt('Help me practice communication, grammar, and fluency in:'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-comments text-[11px]"></i>
-                    </span>
-                    <span>Language Practice</span>
-                </button>
-
-                <button onclick="setPrompt('Give me important exam-level questions with model answers for:'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-pink-500/15 text-pink-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-list-check text-[11px]"></i>
-                    </span>
-                    <span>Exam Practice</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Category 3: EXPERT MODES (Compact bold items, hidden until clicked) -->
-        <div>
-            <button
-                type="button"
-                onclick="toggleSidebarSection('expert-modes-menu', 'expert-chevron')"
-                class="sidebar-category-btn">
-                <span class="flex items-center gap-2">
-                    <i class="fa-solid fa-graduation-cap text-emerald-400 text-xs"></i>
-                    <span>Expert Modes</span>
-                </span>
-                <i id="expert-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
-            </button>
-
-            <div id="expert-modes-menu" class="hidden sidebar-dropdown-content space-y-1 mt-1 pl-1">
-                <button onclick="setSubject('Physics & Science'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-atom text-[11px]"></i>
-                    </span>
-                    <span>Physics & Science</span>
-                </button>
-
-                <button onclick="setSubject('Mathematics'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-calculator text-[11px]"></i>
-                    </span>
-                    <span>Mathematics</span>
-                </button>
-
-                <button onclick="setSubject('Computer Science & Coding'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-code text-[11px]"></i>
-                    </span>
-                    <span>Computer Science</span>
-                </button>
-
-                <button onclick="setSubject('General Studies & History'); closeMobileSidebar();" class="sidebar-sub-item">
-                    <span class="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-book-open text-[11px]"></i>
-                    </span>
-                    <span>General Studies</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Left Section: Saved Messages (Left) & Study Notes (Right) on ONE LINE + Student Profile below -->
-    <div class="px-3 pb-3 pt-2 border-t border-gray-800/50 space-y-1.5 bg-transparent">
-        <div class="grid grid-cols-2 gap-1.5">
-            <button
-                type="button"
-                onclick="openStudyLibrary('saved'); closeMobileSidebar();"
-                class="sidebar-transparent-item rounded-xl p-2 text-left flex items-center gap-2 min-w-0">
-                <span class="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0">
-                    <i class="fa-solid fa-bookmark text-xs"></i>
-                </span>
-                <span class="min-w-0 flex-1">
-                    <span class="block text-xs font-bold text-white truncate">Saved</span>
-                    <span class="block text-[10px] text-gray-400 truncate">Messages</span>
-                </span>
-            </button>
-
-            <button
-                type="button"
-                onclick="openStudyLibrary('notes'); closeMobileSidebar();"
-                class="sidebar-transparent-item rounded-xl p-2 text-left flex items-center gap-2 min-w-0">
-                <span class="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center shrink-0">
-                    <i class="fa-regular fa-note-sticky text-xs"></i>
-                </span>
-                <span class="min-w-0 flex-1">
-                    <span class="block text-xs font-bold text-white truncate">Study</span>
-                    <span class="block text-[10px] text-gray-400 truncate">Notes</span>
-                </span>
-            </button>
-        </div>
-
-        <div class="w-full sidebar-transparent-item rounded-xl p-2 flex items-center justify-between">
-            <div class="flex items-center space-x-2.5 min-w-0">
-                {% if user and user.profile_photo %}
-                    <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="Profile" class="w-9 h-9 rounded-xl object-cover border border-purple-500/40 shadow-sm shrink-0">
-                {% else %}
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md shrink-0">
-                        {{ user.name[0] if user and user.name else 'U' }}
-                    </div>
-                {% endif %}
-
-                <div class="overflow-hidden">
-                    <p class="text-sm font-bold text-white truncate">{{ user.name if user else 'Student' }}</p>
-                    <p class="text-xs font-medium text-gray-400 truncate">{{ user.email if user else 'Active Learner' }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</aside>
-
-        <!-- User profile and saved items -->
-        <div class="p-4 border-t border-gray-800/60 flex items-center justify-between">
+        <!-- Sidebar Top Brand Header -->
+        <div class="p-4 border-b border-gray-800/60 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                {% if user and user.profile_photo %}
-                    <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="Profile" class="w-9 h-9 rounded-xl object-cover border border-purple-500/40 shadow-sm">
-                {% else %}
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md">
-                        {{ user.name[0] if user and user.name else 'U' }}
-                    </div>
-                {% endif %}
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <i class="fa-solid fa-brain text-white text-lg"></i>
+                </div>
 
-                <div class="overflow-hidden">
-                    <p class="text-sm font-medium text-white truncate">{{ user.name if user else 'Student' }}</p>
-                    <p class="text-xs text-gray-400 truncate">{{ user.email if user else 'Active Learner' }}</p>
+                <div>
+                    <h1 class="font-extrabold text-base tracking-wide text-white">
+                        SmartLearn <span class="luxury-gradient-text">AI</span>
+                    </h1>
+                    <p class="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Online & Ready
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-1">
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="text-gray-400 hover:text-white transition p-2 rounded-lg hover:bg-gray-800/50"
+                    title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+
+                <button
+                    onclick="closeMobileSidebar()"
+                    class="md:hidden text-gray-400 hover:text-white p-2"
+                    aria-label="Close menu">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3 Compact, Bold & Animated Categories: Chat History, AI Capabilities, Expert Modes -->
+        <div class="flex-1 overflow-y-auto px-3 py-3 space-y-1.5">
+
+            <!-- Category 1: CHAT HISTORY (Hidden until clicked) -->
+            <div>
+                <div class="flex items-center justify-between">
+                    <button
+                        type="button"
+                        onclick="toggleSidebarSection('chat-history-menu', 'history-chevron')"
+                        class="sidebar-category-btn flex-1">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-regular fa-clock text-purple-400 text-xs"></i>
+                            <span>Chat History</span>
+                        </span>
+                        <i id="history-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                    </button>
+                    <button
+                        type="button"
+                        onclick="clearAllHistory()"
+                        class="text-[11px] font-bold text-gray-400 hover:text-red-400 px-2 py-1 rounded transition"
+                        title="Clear all history">
+                        Clear
+                    </button>
+                </div>
+
+                <div id="chat-history-menu" class="hidden sidebar-dropdown-content mt-1 pl-1">
+                    <div id="chat-history-list" class="space-y-1 max-h-40 overflow-y-auto pr-1">
+                        <p class="px-2 py-1.5 text-xs font-medium text-gray-500">Your conversations will appear here.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2: AI CAPABILITIES (8 compact bold items, hidden until clicked)[cite: 1] -->
+            <div>
+                <button
+                    type="button"
+                    onclick="toggleSidebarSection('capabilities-menu', 'capabilities-chevron')"
+                    class="sidebar-category-btn">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-indigo-400 text-xs"></i>
+                        <span>AI Capabilities</span>
+                    </span>
+                    <i id="capabilities-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                </button>
+
+                <div id="capabilities-menu" class="hidden sidebar-dropdown-content space-y-1 mt-1 pl-1">
+                    <button onclick="setPrompt('Explain this concept using a real-world analogy:'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-lightbulb text-[11px]"></i>
+                        </span>
+                        <span>Real-world Analogy</span>
+                    </button>
+
+                    <button onclick="setPrompt('Generate a quick 5-question practice quiz on:'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-clipboard-question text-[11px]"></i>
+                        </span>
+                        <span>Interactive Quiz</span>
+                    </button>
+
+                    <button onclick="setPrompt('Summarize this topic into simple bullet points:'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-file-lines text-[11px]"></i>
+                        </span>
+                        <span>Smart Summary</span>
+                    </button>
+
+                    <button onclick="setPrompt('Solve step-by-step and explain the math/logic behind:'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-square-root-variable text-[11px]"></i>
+                        </span>
+                        <span>Step-by-Step Solver</span>
+                    </button>
+
+                    <button onclick="setPrompt('Give me a complete concept deep-dive with core principles and examples on:'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-yellow-500/15 text-yellow-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-brain text-[11px]"></i>
+                        </span>
+                        <span>Concept Deep-Dive</span>
+                    </button>
+
+                    <button onclick="setPrompt('Clear my doubt in the easiest way possible with examples:'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-magnifying-glass-chart text-[11px]"></i>
+                        </span>
+                        <span>Doubt Cracker</span>
+                    </button>
+
+                    <button onclick="setPrompt('Help me practice communication, grammar, and fluency in:'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-comments text-[11px]"></i>
+                        </span>
+                        <span>Language Practice</span>
+                    </button>
+
+                    <button onclick="setPrompt('Give me important exam-level questions with model answers for:'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-pink-500/15 text-pink-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-list-check text-[11px]"></i>
+                        </span>
+                        <span>Exam Practice</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Category 3: EXPERT MODES (Compact bold items, hidden until clicked) -->
+            <div>
+                <button
+                    type="button"
+                    onclick="toggleSidebarSection('expert-modes-menu', 'expert-chevron')"
+                    class="sidebar-category-btn">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-emerald-400 text-xs"></i>
+                        <span>Expert Modes</span>
+                    </span>
+                    <i id="expert-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                </button>
+
+                <div id="expert-modes-menu" class="hidden sidebar-dropdown-content space-y-1 mt-1 pl-1">
+                    <button onclick="setSubject('Physics & Science'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-atom text-[11px]"></i>
+                        </span>
+                        <span>Physics & Science</span>
+                    </button>
+
+                    <button onclick="setSubject('Mathematics'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-calculator text-[11px]"></i>
+                        </span>
+                        <span>Mathematics</span>
+                    </button>
+
+                    <button onclick="setSubject('Computer Science & Coding'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-code text-[11px]"></i>
+                        </span>
+                        <span>Computer Science</span>
+                    </button>
+
+                    <button onclick="setSubject('General Studies & History'); closeMobileSidebar();" class="sidebar-sub-item">
+                        <span class="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-book-open text-[11px]"></i>
+                        </span>
+                        <span>General Studies</span>
+                    </button>
                 </div>
             </div>
         </div>
 
-      
-<div class="px-4 pb-4 space-y-2">
-    <button
-        type="button"
-        onclick="openStudyLibrary('saved'); closeMobileSidebar();"
-        class="w-full glass-card rounded-xl p-3 text-left text-sm text-gray-200 flex items-center gap-3">
-        <span class="w-9 h-9 rounded-lg bg-purple-500/15 text-purple-300 flex items-center justify-center">
-            <i class="fa-solid fa-bookmark"></i>
-        </span>
-        <span class="flex-1">
-            <span class="block font-semibold">Saved Messages</span>
-            <span class="block text-xs text-gray-400 mt-1">View all saved answers</span>
-        </span>
-        <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-    </button>
+        <!-- Bottom Left Section: Saved Messages (Left) & Study Notes (Right) on ONE LINE + Student Profile below -->
+        <div class="px-3 pb-3 pt-2 border-t border-gray-800/50 space-y-1.5 bg-transparent">
+            <div class="grid grid-cols-2 gap-1.5">
+                <button
+                    type="button"
+                    onclick="openStudyLibrary('saved'); closeMobileSidebar();"
+                    class="sidebar-transparent-item rounded-xl p-2 text-left flex items-center gap-2 min-w-0">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-bookmark text-xs"></i>
+                    </span>
+                    <span class="min-w-0 flex-1">
+                        <span class="block text-xs font-bold text-white truncate">Saved</span>
+                        <span class="block text-[10px] text-gray-400 truncate">Messages</span>
+                    </span>
+                </button>
 
-    <button
-        type="button"
-        onclick="openStudyLibrary('notes'); closeMobileSidebar();"
-        class="w-full glass-card rounded-xl p-3 text-left text-sm text-gray-200 flex items-center gap-3">
-        <span class="w-9 h-9 rounded-lg bg-cyan-500/15 text-cyan-300 flex items-center justify-center">
-            <i class="fa-regular fa-note-sticky"></i>
-        </span>
-        <span class="flex-1">
-            <span class="block font-semibold">Study Notes</span>
-            <span class="block text-xs text-gray-400 mt-1">View your personal notes</span>
-        </span>
-        <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-    </button>
-</div>
+                <button
+                    type="button"
+                    onclick="openStudyLibrary('notes'); closeMobileSidebar();"
+                    class="sidebar-transparent-item rounded-xl p-2 text-left flex items-center gap-2 min-w-0">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center shrink-0">
+                        <i class="fa-regular fa-note-sticky text-xs"></i>
+                    </span>
+                    <span class="min-w-0 flex-1">
+                        <span class="block text-xs font-bold text-white truncate">Study</span>
+                        <span class="block text-[10px] text-gray-400 truncate">Notes</span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="w-full sidebar-transparent-item rounded-xl p-2 flex items-center justify-between">
+                <div class="flex items-center space-x-2.5 min-w-0">
+                    {% if user and user.profile_photo %}
+                        <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="Profile" class="w-9 h-9 rounded-xl object-cover border border-purple-500/40 shadow-sm shrink-0">
+                    {% else %}
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md shrink-0">
+                            {{ user.name[0] if user and user.name else 'U' }}
+                        </div>
+                    {% endif %}
+
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-bold text-white truncate">{{ user.name if user else 'Student' }}</p>
+                        <p class="text-xs font-medium text-gray-400 truncate">{{ user.email if user else 'Active Learner' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </aside>
-
     <!-- Main chat area -->
     <main class="flex-1 flex flex-col h-full min-w-0 bg-[#07090e] relative overflow-hidden">
         <header class="h-16 shrink-0 glass-panel border-b border-gray-800/80 flex items-center justify-between px-3 md:px-6 z-10">
@@ -2596,3 +2544,4 @@ updateCharCount();
 </script>
 </body>
 </html>
+
