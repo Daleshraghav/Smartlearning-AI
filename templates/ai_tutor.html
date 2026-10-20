@@ -298,11 +298,10 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
     }
     body.light-mode main > header { background: #ffffff !important; }
 
-    /* Chat container padding so header and footer don't overlap messages & stays locked */
+    /* Chat container padding so header and footer don't overlap messages & starts right below header */
     #chat-container {
-        flex: 1 1 auto !important; height: 100% !important; overflow-y: auto !important;
+        flex: 1 1 auto !important; height: 0 !important; overflow-y: auto !important;
         padding: 62px 12px 84px !important; -webkit-overflow-scrolling: touch !important;
-        overflow-anchor: none !important;
     }
 
     #welcome-screen .grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
@@ -1252,6 +1251,7 @@ async function handleChatSubmit(event) {
     input.blur();
 
     typing.classList.remove("hidden");
+    // Auto-scroll removed completely to keep screen stable
 
     try {
         const requestMessage = "Be a friendly, clear AI tutor:\n" + message;
@@ -1303,6 +1303,7 @@ async function handleChatSubmit(event) {
         requestInProgress = false;
         sendButton.disabled = false;
         sendButton.classList.remove("opacity-50");
+        // Screen remains stable where user left it
     }
 }
 
