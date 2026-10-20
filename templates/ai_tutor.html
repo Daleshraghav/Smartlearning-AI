@@ -934,6 +934,12 @@
     }
 }
 
+/* Keep welcome suggestions visible only before the first message. */
+#welcome-screen.hidden,
+#messages-list.hidden {
+    display: none !important;
+}
+
 </style>
 </head>
 
@@ -1457,8 +1463,11 @@ function openSavedConversation(id) {
         else if (message.role === "assistant") appendAIMessage(message.text, false);
     });
     const hasMessages = currentConversation.length > 0;
-    document.getElementById("welcome-screen")?.classList.toggle("hidden", hasMessages);
+    const welcome = document.getElementById("welcome-screen");
+    welcome?.classList.toggle("hidden", hasMessages);
+    if (welcome) welcome.style.display = hasMessages ? "none" : "";
     list.classList.toggle("hidden", !hasMessages);
+    list.style.display = hasMessages ? "block" : "none";
     closeMobileSidebar();
     scrollToBottom();
     renderChatHistory();
@@ -1468,8 +1477,12 @@ function startNewChat() {
     currentConversationId = String(Date.now());
     currentConversation = [];
     document.getElementById("messages-list")?.replaceChildren();
-    document.getElementById("messages-list")?.classList.add("hidden");
-    document.getElementById("welcome-screen")?.classList.remove("hidden");
+    const messages = document.getElementById("messages-list");
+    const welcome = document.getElementById("welcome-screen");
+    messages?.classList.add("hidden");
+    if (messages) messages.style.display = "none";
+    welcome?.classList.remove("hidden");
+    if (welcome) welcome.style.display = "";
     document.getElementById("chat-container").scrollTop = 0;
     clearAttachment();
     clearStudyMode();
@@ -1481,8 +1494,12 @@ function clearAllHistory() {
     currentConversationId = String(Date.now());
     currentConversation = [];
     document.getElementById("messages-list")?.replaceChildren();
-    document.getElementById("messages-list")?.classList.add("hidden");
-    document.getElementById("welcome-screen")?.classList.remove("hidden");
+    const messages = document.getElementById("messages-list");
+    const welcome = document.getElementById("welcome-screen");
+    messages?.classList.add("hidden");
+    if (messages) messages.style.display = "none";
+    welcome?.classList.remove("hidden");
+    if (welcome) welcome.style.display = "";
     renderChatHistory();
     showToast("Chat history cleared from this browser.");
 }
@@ -1724,8 +1741,16 @@ function appendAIMessage(text, record = true) {
 
 
 function showChat() {
-    document.getElementById("welcome-screen")?.classList.add("hidden");
-    document.getElementById("messages-list")?.classList.remove("hidden");
+    const welcome = document.getElementById("welcome-screen");
+    const messages = document.getElementById("messages-list");
+    if (welcome) {
+        welcome.classList.add("hidden");
+        welcome.style.display = "none";
+    }
+    if (messages) {
+        messages.classList.remove("hidden");
+        messages.style.display = "block";
+    }
 }
 
 function scrollToBottom() {
@@ -1784,12 +1809,16 @@ async function handleChatSubmit(event) {
     scrollToBottom();
 
     try {
+        // Ask the tutor to sound warm and conversational without changing the text shown in chat.
+        const tutorStyleInstruction = "Reply like a friendly, patient AI tutor. Use a warm, natural conversational tone, explain clearly, and occasionally add a relevant emoji when it feels natural (do not overuse emojis). Keep the answer focused on the student's question.\n\nStudent's message: ";
+        const requestMessage = tutorStyleInstruction + message;
+
         // Keep the same /api/chat endpoint. Text-only chats keep the existing JSON contract;
         // attachments use multipart/form-data so the backend can read the actual file bytes.
         let requestOptions;
         if (attachmentToSend) {
             const formData = new FormData();
-            formData.append("message", message);
+            formData.append("message", requestMessage);
             formData.append("attachment", attachmentToSend, attachmentToSend.name);
             formData.append("attachment_kind", attachmentKindToSend || "file");
             requestOptions = { method: "POST", body: formData };
@@ -1797,7 +1826,7 @@ async function handleChatSubmit(event) {
             requestOptions = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ message: requestMessage })
             };
         }
         const response = await fetch("/api/chat", requestOptions);
