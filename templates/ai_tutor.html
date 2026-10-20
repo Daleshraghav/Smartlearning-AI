@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SmartLearn AI - Luxury Tutor</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -42,6 +42,7 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
+    overflow: hidden;
 }
 
 body {
@@ -168,7 +169,6 @@ button {
     transform: scale(0.96);
 }
 
-/* Compact Chat History items with bold text & click animation */
 .history-item {
     display: flex;
     align-items: center;
@@ -228,7 +228,7 @@ button {
 }
 
 /* ==========================================
-   3 WHITE DOTS LOADER (SMALL, BOLD, 4-STEP ROTATION)
+   3 WHITE DOTS LOADER
    ========================================== */
 @keyframes dotFourStepRotate {
     0%, 100% {
@@ -319,7 +319,6 @@ body.light-mode .glass-card:hover {
     border-color: #7c3aed !important;
 }
 
-/* Force all text elements to sharp black in Light Mode */
 body.light-mode h1,
 body.light-mode h2,
 body.light-mode h3,
@@ -346,7 +345,6 @@ body.light-mode .history-item {
     color: #000000 !important;
 }
 
-/* Keep icons inside colored badges & purple gradient buttons readable */
 body.light-mode #send-button,
 body.light-mode #send-button i,
 body.light-mode .from-purple-600 i,
@@ -648,43 +646,69 @@ body.light-mode #note-content {
 .message-user-label{display:none!important}
 
 /* ==========================================
-   MOBILE RESPONSIVE OVERRIDES
+   MOBILE SIDEBAR OVERLAP FIX (Sidebar takes full height & z-index 100)
    ========================================== */
 @media screen and (max-width: 767px) {
-    #sidebar-drawer { width: min(86vw, 320px); }
-
-    body > main {
-        position: relative;
+    #sidebar-drawer {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        height: 100vh !important;
         height: 100dvh !important;
-        max-height: 100dvh !important;
-        min-height: 0 !important;
-        overflow: hidden !important;
+        z-index: 100 !important;
+        width: min(84vw, 290px) !important;
+    }
+
+    #sidebar-backdrop {
+        z-index: 95 !important;
+    }
+
+    main.flex-1 {
+        position: relative !important;
+        height: 100dvh !important;
         display: flex !important;
         flex-direction: column !important;
+        overflow: hidden !important;
     }
 
-    body > main > header {
-        flex: 0 0 58px !important;
+    main > header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 40 !important;
+        flex: 0 0 56px !important;
+        height: 56px !important;
     }
 
-    body > main > #chat-container {
+    #chat-container {
         flex: 1 1 auto !important;
-        height: auto !important;
-        min-height: 0 !important;
-        padding: 12px 12px 190px !important;
+        height: 0 !important;
         overflow-y: auto !important;
+        padding: 12px 12px 130px !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
-    body > main > footer {
+    /* 2x2 grid for welcome suggestions on mobile */
+    #welcome-screen .grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    #welcome-screen .grid > button {
+        min-h-[75px] !important;
+        padding: 10px !important;
+    }
+
+    main > footer {
         position: absolute !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
         z-index: 50 !important;
-        width: 100% !important;
-        padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-        background: #090c14 !important;
-        border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
+        padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+        background: rgba(9, 12, 20, 0.98) !important;
+        border-top: 1px solid rgba(148, 163, 184, 0.2) !important;
     }
 
     body.light-mode > main > footer {
@@ -693,20 +717,12 @@ body.light-mode #note-content {
     }
 
     #chat-form {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 5px !important;
-        width: 100% !important;
-        padding: 7px !important;
+        padding: 6px !important;
     }
 
     #chat-input {
-        width: 100% !important;
-        height: 42px !important;
-        min-height: 42px !important;
-        max-height: 76px !important;
-        padding: 9px 10px !important;
         font-size: 16px !important;
+        color: inherit !important;
     }
 }
 
@@ -726,7 +742,7 @@ body.light-mode #note-content {
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden transition-opacity">
     </div>
 
-    <!-- Left Sidebar (Dark Night View in Dark Mode / Clean White in Light Mode) -->
+    <!-- Left Sidebar -->
     <aside
         id="sidebar-drawer"
         class="fixed md:static inset-y-0 left-0 w-80 flex flex-col justify-between z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
@@ -915,11 +931,8 @@ body.light-mode #note-content {
             </div>
         </div>
 
-        <!-- Bottom Left Section:
-             Row 1: Saved Messages (Left) & Study Notes (Right) in ONE LINE (100% Transparent)
-             Row 2: Student Login Profile below them (100% Transparent) -->
+        <!-- Bottom Left Section: Saved Messages (Left) & Study Notes (Right) on ONE LINE + Student Profile below -->
         <div class="px-3 pb-3 pt-2 border-t border-gray-800/50 space-y-1.5 bg-transparent">
-            <!-- Saved Messages (Left) & Study Notes (Right) on the same line -->
             <div class="grid grid-cols-2 gap-1.5">
                 <button
                     type="button"
@@ -948,7 +961,6 @@ body.light-mode #note-content {
                 </button>
             </div>
 
-            <!-- Student Login / Profile Section (Transparent & Below Saved/Notes) -->
             <div class="w-full sidebar-transparent-item rounded-xl p-2 flex items-center justify-between">
                 <div class="flex items-center space-x-2.5 min-w-0">
                     {% if user and user.profile_photo %}
@@ -1003,8 +1015,8 @@ body.light-mode #note-content {
 
         <div id="chat-container" class="flex-1 min-h-0 overflow-y-auto p-3 md:p-6 relative">
             <!-- Welcome screen -->
-            <section id="welcome-screen" class="min-h-full flex flex-col items-center justify-center py-8 md:py-12 px-1">
-                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-xl shadow-purple-900/30 mb-5 ai-voice-orb">
+            <section id="welcome-screen" class="min-h-full flex flex-col items-center justify-center py-6 md:py-12 px-1">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-xl shadow-purple-900/30 mb-4 ai-voice-orb">
                     <i class="fa-solid fa-brain text-white text-2xl"></i>
                 </div>
 
@@ -1013,49 +1025,49 @@ body.light-mode #note-content {
                     <span class="luxury-gradient-text">{{ user.name if user and user.name else 'Student' }}</span>?
                 </h1>
 
-                <p class="mt-3 text-xs md:text-sm text-gray-400 font-medium text-center max-w-lg leading-relaxed px-2">
+                <p class="mt-2 text-xs md:text-sm text-gray-400 font-medium text-center max-w-lg leading-relaxed px-2">
                     Your personal AI tutor is ready! Ask a question, use voice, or upload a photo to get started.
                 </p>
 
                 <!-- Prompt suggestions -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-7 md:mt-9 w-full max-w-3xl">
-                    <button onclick="setPrompt('Explain an important Physics concept with formulas and examples:')" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
-                        <span class="w-10 h-10 shrink-0 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 md:mt-9 w-full max-w-3xl">
+                    <button onclick="setPrompt('Explain an important Physics concept with formulas and examples:')" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
                             <i class="fa-solid fa-atom"></i>
                         </span>
                         <span class="min-w-0">
-                            <span class="block text-sm font-bold text-gray-100">Physics Revision</span>
-                            <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Formulas and step-by-step solutions.</span>
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Physics Revision</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Formulas & solutions.</span>
                         </span>
                     </button>
 
-                    <button onclick="setPrompt('Teach me a programming concept step by step with simple examples:')" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
-                        <span class="w-10 h-10 shrink-0 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                    <button onclick="setPrompt('Teach me a programming concept step by step with simple examples:')" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
                             <i class="fa-solid fa-code"></i>
                         </span>
                         <span class="min-w-0">
-                            <span class="block text-sm font-bold text-gray-100">Coding Concepts</span>
-                            <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Learn Python, C++, and web development.</span>
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Coding Concepts</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Python, C++, Web.</span>
                         </span>
                     </button>
 
-                    <button onclick="openAttachmentMenu()" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
-                        <span class="w-10 h-10 shrink-0 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center">
+                    <button onclick="openAttachmentMenu()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center">
                             <i class="fa-solid fa-camera"></i>
                         </span>
                         <span class="min-w-0">
-                            <span class="block text-sm font-bold text-gray-100">Photo & File Doubt</span>
-                            <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Attach a supported file or photo with your question.</span>
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Photo & File Doubt</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Attach a file or photo.</span>
                         </span>
                     </button>
 
-                    <button onclick="openVoiceAssistant()" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
-                        <span class="w-10 h-10 shrink-0 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                    <button onclick="openVoiceAssistant()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
                             <i class="fa-solid fa-microphone"></i>
                         </span>
                         <span class="min-w-0">
-                            <span class="block text-sm font-bold text-gray-100">Voice Assistant</span>
-                            <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Ask your questions using your voice.</span>
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Voice Assistant</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Speak your question.</span>
                         </span>
                     </button>
                 </div>
@@ -1064,7 +1076,7 @@ body.light-mode #note-content {
             <!-- Messages are inserted here by JavaScript -->
             <section id="messages-list" class="hidden w-full max-w-4xl mx-auto space-y-6 pb-5" aria-live="polite"></section>
 
-            <!-- Loading indicator: Only 3 Bold Dots (Text-sized, Transparent, 4-Step Rotation) -->
+            <!-- Loading indicator: Only 3 Bold Dots -->
             <div id="typing-indicator" class="hidden w-full max-w-4xl mx-auto py-2">
                 <div class="flex items-center gap-3 bg-transparent">
                     <div class="three-white-dots" aria-label="AI is replying">
@@ -1077,7 +1089,7 @@ body.light-mode #note-content {
         </div>
 
         <!-- Chat input section -->
-        <footer class="shrink-0 w-full border-t border-gray-800/70 bg-[#090c14]/95 px-3 pt-3 pb-3 md:px-6 md:pt-4 md:pb-4">
+        <footer class="shrink-0 w-full border-t border-gray-800/70 bg-[#090c14]/95 px-3 pt-2.5 pb-2.5 md:px-6 md:pt-4 md:pb-4">
             <div class="max-w-4xl mx-auto">
                 <!-- Attachment preview -->
                 <div id="attachment-preview" class="hidden mb-2 p-2 rounded-xl bg-gray-800/60 border border-gray-700 flex items-center justify-between gap-3">
@@ -1143,10 +1155,6 @@ body.light-mode #note-content {
                         </div>
                     </div>
                 </form>
-
-                <p class="text-[10px] md:text-[11px] font-medium text-gray-500 text-center mt-2">
-                    SmartLearn AI can make mistakes. Verify important learning concepts.
-                </p>
             </div>
         </footer>
     </main>
@@ -1242,7 +1250,7 @@ let currentConversation = [];
 let selectedAttachmentKind = "";
 const MAX_HISTORY_ITEMS = 50;
 
-/* ---------- Theme Toggle (Dark Night Mode / Full Clear Light Mode) ---------- */
+/* ---------- Theme Toggle ---------- */
 function applySavedTheme() {
     const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
     document.body.classList.toggle("light-mode", savedTheme === "light");
@@ -1256,7 +1264,7 @@ function toggleTheme() {
     showToast(isLight ? "Light mode enabled" : "Dark mode enabled");
 }
 
-/* ---------- Collapsible Sidebar Menus with Smooth Animation ---------- */
+/* ---------- Collapsible Sidebar Menus ---------- */
 function toggleSidebarSection(menuId, chevronId) {
     const menu = document.getElementById(menuId);
     const chevron = document.getElementById(chevronId);
@@ -1265,7 +1273,7 @@ function toggleSidebarSection(menuId, chevronId) {
     const isHidden = menu.classList.toggle("hidden");
     if (!isHidden) {
         menu.classList.remove("sidebar-dropdown-content");
-        void menu.offsetWidth; // trigger reflow for fresh click animation
+        void menu.offsetWidth;
         menu.classList.add("sidebar-dropdown-content");
     }
     if (chevron) {
@@ -1635,7 +1643,6 @@ function showChat() {
     }
 }
 
-/* Scroll so the new AI answer starts right at the top of the viewport */
 function scrollToElementTop(element) {
     if (!element) return;
     const alignTop = () => {
@@ -1645,7 +1652,7 @@ function scrollToElementTop(element) {
     requestAnimationFrame(alignTop);
 }
 
-/* ---------- Send message (Fast Response & Top-Scroll) ---------- */
+/* ---------- Send message (Stops auto-opening mobile keyboard) ---------- */
 
 async function handleChatSubmit(event) {
     event.preventDefault();
@@ -1684,6 +1691,9 @@ async function handleChatSubmit(event) {
     updateCharCount();
     clearAttachment();
     closeMobileSidebar();
+
+    // Blur input immediately so mobile keyboard closes automatically on send
+    input.blur();
 
     typing.classList.remove("hidden");
     scrollToElementTop(userRow);
@@ -1744,7 +1754,6 @@ async function handleChatSubmit(event) {
         if (aiRow) {
             scrollToElementTop(aiRow);
         }
-        input.focus({ preventScroll: true });
     }
 }
 
