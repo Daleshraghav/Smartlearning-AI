@@ -234,35 +234,43 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
-/* Clear, transparent AI answers */
+/* ==========================================
+   REDUCED TEXT SIZE FOR MESSAGES & AI ANSWERS
+   ========================================== */
 .ai-answer-content {
-    background: transparent !important; color: #f1f5f9; font-size: 16px !important;
-    line-height: 1.9 !important; letter-spacing: 0.15px; font-weight: 500;
+    background: transparent !important; color: #f1f5f9; font-size: 13.5px !important;
+    line-height: 1.7 !important; letter-spacing: 0.1px; font-weight: 450;
     overflow-wrap: anywhere; word-break: normal; min-width: 0; padding: 0 !important;
 }
-.ai-answer-content p { margin: 0 0 16px !important; }
+.ai-answer-content p { margin: 0 0 12px !important; }
 .ai-answer-content h1, .ai-answer-content h2, .ai-answer-content h3 {
-    color: #ffffff; font-weight: 750; line-height: 1.5 !important; margin: 22px 0 10px !important;
+    color: #ffffff; font-weight: 700; line-height: 1.4 !important; margin: 16px 0 8px !important;
 }
-.ai-answer-content h1 { font-size: 24px !important; }
-.ai-answer-content h2 { font-size: 20px !important; }
-.ai-answer-content h3 { font-size: 18px !important; }
-.ai-answer-content ul, .ai-answer-content ol { padding-left: 26px !important; margin: 12px 0 18px !important; }
-.ai-answer-content li { padding-left: 4px; margin: 8px 0 !important; line-height: 1.8 !important; }
-.ai-answer-content strong { color: #ffffff; font-weight: 750; }
-.ai-answer-content blockquote { background: transparent !important; border-left: 3px solid #a78bfa; padding: 8px 14px; margin: 16px 0; }
-.ai-answer-content pre { max-width: 100%; overflow-x: auto; padding: 14px !important; line-height: 1.7; border-radius: 10px; background: rgba(15, 23, 42, 0.35) !important; }
+.ai-answer-content h1 { font-size: 18px !important; }
+.ai-answer-content h2 { font-size: 16px !important; }
+.ai-answer-content h3 { font-size: 14px !important; }
+.ai-answer-content ul, .ai-answer-content ol { padding-left: 20px !important; margin: 8px 0 12px !important; }
+.ai-answer-content li { padding-left: 2px; margin: 4px 0 !important; line-height: 1.6 !important; }
+.ai-answer-content strong { color: #ffffff; font-weight: 700; }
+.ai-answer-content blockquote { background: transparent !important; border-left: 3px solid #a78bfa; padding: 6px 12px; margin: 12px 0; }
+.ai-answer-content pre { max-width: 100%; overflow-x: auto; padding: 10px !important; line-height: 1.6; border-radius: 8px; background: rgba(15, 23, 42, 0.35) !important; font-size: 12.5px !important; }
 .ai-answer-content table { max-width: 100%; overflow-x: auto; }
+
+/* User Message Bubble Smaller Text */
+.user-message-bubble .text-sm {
+    font-size: 13.5px !important;
+    line-height: 1.5 !important;
+}
 
 .header-chat-action { white-space: nowrap; min-height: 30px; }
 
-.answer-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.answer-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .answer-actions button {
-    min-width: 29px !important; min-height: 29px !important; padding: 5px 9px !important;
-    font-size: 11px !important; font-weight: 600 !important; border: 1px solid rgba(148, 163, 184, 0.25) !important;
-    border-radius: 8px !important; background: transparent !important; color: #cbd5e1;
+    min-width: 27px !important; min-height: 27px !important; padding: 4px 8px !important;
+    font-size: 10.5px !important; font-weight: 600 !important; border: 1px solid rgba(148, 163, 184, 0.25) !important;
+    border-radius: 7px !important; background: transparent !important; color: #cbd5e1;
 }
-.answer-actions button i { font-size: 11px; }
+.answer-actions button i { font-size: 10.5px; }
 .answer-actions button:hover { color: #ffffff; border-color: #a78bfa !important; background: rgba(139, 92, 246, 0.12) !important; }
 
 .attachment-menu { position: absolute; left: 0; bottom: calc(100% + 10px); width: min(270px, calc(100vw - 32px)); z-index: 60; padding: 8px; border-radius: 16px; background: #111827; border: 1px solid rgba(148,163,184,.22); box-shadow: 0 18px 50px rgba(0,0,0,.45); }
@@ -290,10 +298,10 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
     }
     body.light-mode main > header { background: #ffffff !important; }
 
-    /* Chat container padding so header and footer don't overlap messages */
+    /* Chat container padding so header and footer don't overlap messages & starts right below header */
     #chat-container {
         flex: 1 1 auto !important; height: 0 !important; overflow-y: auto !important;
-        padding: 64px 12px 84px !important; -webkit-overflow-scrolling: touch !important;
+        padding: 62px 12px 84px !important; -webkit-overflow-scrolling: touch !important;
     }
 
     #welcome-screen .grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
@@ -316,7 +324,7 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
     body.light-mode #chat-form { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; }
 
     #chat-input {
-        font-size: 15px !important; padding: 6px 4px !important; max-height: 70px !important; color: inherit !important;
+        font-size: 14.5px !important; padding: 6px 4px !important; max-height: 70px !important; color: inherit !important;
         flex: 1 1 auto !important;
     }
 }
@@ -406,7 +414,7 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
                 </div>
             </div>
 
-            <!-- Category 2: AI CAPABILITIES (8 compact bold items, hidden until clicked)[cite: 1] -->
+            <!-- Category 2: AI CAPABILITIES (8 compact bold items, hidden until clicked) -->
             <div>
                 <button
                     type="button"
@@ -1134,7 +1142,7 @@ function appendUserMessage(text, record = true) {
 
     row.className = "flex justify-end message-animation";
     row.innerHTML = `
-        <div class="user-message-bubble max-w-[92%] sm:max-w-[85%] rounded-2xl border border-purple-500/30 bg-purple-900/20 p-3 md:p-4">
+        <div class="user-message-bubble max-w-[92%] sm:max-w-[85%] rounded-2xl border border-purple-500/30 bg-purple-900/20 p-3 md:p-3.5">
             <p class="message-user-label">You</p>
             <div class="text-sm font-medium text-gray-100 whitespace-pre-wrap break-words"></div>
         </div>
@@ -1159,7 +1167,7 @@ function appendAIMessage(text, record = true) {
         </div>
 
         <div class="min-w-0 flex-1 bg-transparent border-0 shadow-none p-0">
-            <p class="text-xs font-bold text-purple-400 mb-2">
+            <p class="text-xs font-bold text-purple-400 mb-1.5">
                 SmartLearn AI Tutor
             </p>
 
