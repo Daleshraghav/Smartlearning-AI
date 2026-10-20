@@ -5,3 +5,7 @@ Authlib
 requests
 google-genai
 groq
+
+Pillow
+pypdf
+odfpy
