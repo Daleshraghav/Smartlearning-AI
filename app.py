@@ -780,12 +780,12 @@ def chat_with_tutor():
             messages.append({"role": "user", "content": user_message})
             model = GROQ_MODEL
 
-        response = client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=0.35,
-            max_tokens=1800,
-        )
+     response = client.chat.completions.create(
+    model=model,
+    messages=messages,
+    temperature=1.0 if image_content else 0.35,
+    max_tokens=1800,
+)
 
         reply = (response.choices[0].message.content or "").strip()
         if not reply:
