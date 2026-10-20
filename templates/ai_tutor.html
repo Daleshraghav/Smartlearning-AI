@@ -17,7 +17,7 @@
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                displayMath: [['$$', '$$'], ['[', ']']]
             },
             options: {
                 skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -30,8 +30,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-
-
 /* ==========================================
    MOBILE LAYOUT FIX — SmartLearn AI Tutor
    ========================================== */
@@ -53,7 +51,6 @@
         overscroll-behavior: none;
     }
 
-    /* The main panel fills the space beside the off-canvas sidebar. */
     main.flex-1.flex.flex-col {
         flex: 1 1 0%;
         width: 0;
@@ -82,7 +79,6 @@
         font-size: 10px;
     }
 
-    /* Keep scrolling inside the conversation, never on the whole page. */
     #chat-container {
         flex: 1 1 0%;
         min-width: 0;
@@ -224,7 +220,6 @@
     .ai-answer-content table { display: block; max-width: 100%; overflow-x: auto; }
 }
 
-/* Extra-small phones */
 @media screen and (max-width: 380px) {
     main > header p {
         max-width: 115px;
@@ -243,181 +238,301 @@
     }
 }
 
-        
-        * {
-            box-sizing: border-box;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-        }
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0b0f19;
-            color: #f3f4f6;
-        }
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0b0f19;
+    color: #f3f4f6;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
 
-        button,
-        input,
-        textarea,
-        select {
-            font: inherit;
-        }
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
 
-        button {
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-        }
+button {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        /* Accessible, responsive modal styling for voice and study library. */
-        .study-modal-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 90;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.78);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
+/* Accessible, responsive modal styling for voice and study library. */
+.study-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.78);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
 
-        .study-modal {
-            width: min(100%, 560px);
-            max-height: min(90vh, 760px);
-            max-height: min(90dvh, 760px);
-            overflow-y: auto;
-            padding: 22px;
-            border: 1px solid rgba(148, 163, 184, 0.22);
-            border-radius: 24px;
-            background: linear-gradient(145deg, rgba(17, 24, 39, 0.99), rgba(9, 12, 20, 0.99));
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-        }
+.study-modal {
+    width: min(100%, 560px);
+    max-height: min(90vh, 760px);
+    max-height: min(90dvh, 760px);
+    overflow-y: auto;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(17, 24, 39, 0.99), rgba(9, 12, 20, 0.99));
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
 
-        .study-item {
-            margin-top: 10px;
-            padding: 14px;
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            border-radius: 14px;
-            background: rgba(30, 41, 59, 0.45);
-            overflow-wrap: anywhere;
-        }
+.study-item {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 14px;
+    background: rgba(30, 41, 59, 0.45);
+    overflow-wrap: anywhere;
+}
 
-        .study-item p {
-            margin-top: 8px;
-            color: #cbd5e1;
-            font-size: 13px;
-            line-height: 1.65;
-            white-space: pre-wrap;
-        }
+.study-item p {
+    margin-top: 8px;
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+}
 
-        #note-title,
-        #note-content {
-            display: block;
-            width: 100%;
-            min-width: 0;
-            padding: 11px 12px;
-            color: #f9fafb;
-            background: rgba(31, 41, 55, 0.7);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            border-radius: 12px;
-            outline: none;
-        }
+#note-title,
+#note-content {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 11px 12px;
+    color: #f9fafb;
+    background: rgba(31, 41, 55, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 12px;
+    outline: none;
+}
 
-        #note-title:focus,
-        #note-content:focus { border-color: #8b5cf6; }
+#note-title:focus,
+#note-content:focus { border-color: #8b5cf6; }
 
-        #note-content { resize: vertical; }
+#note-content { resize: vertical; }
 
-        .glass-panel {
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+.glass-panel {
+    background: rgba(17, 24, 39, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
 
-        .glass-card {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: border-color .2s ease, transform .2s ease;
-        }
+.glass-card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: border-color .2s ease, transform .2s ease;
+}
 
-        .glass-card:hover {
-            border-color: rgba(168, 85, 247, 0.4);
-            transform: translateY(-2px);
-        }
+.glass-card:hover {
+    border-color: rgba(168, 85, 247, 0.4);
+    transform: translateY(-2px);
+}
 
-        .glass-input {
-            background: rgba(31, 41, 55, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            outline: none;
-        }
+.glass-input {
+    background: rgba(31, 41, 55, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+}
 
-        .glass-input:focus {
-            border-color: #8b5cf6;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
-        }
+.glass-input:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+}
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+/* ==========================================
+   100% TRANSPARENT SIDEBAR BOTTOM ITEMS
+   ========================================== */
+.sidebar-transparent-item {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
 
-        .message-animation {
-            animation: slideUp .35s cubic-bezier(.16, 1, .3, 1) forwards;
-        }
+.sidebar-transparent-item:hover {
+    background: transparent !important;
+    border-color: rgba(168, 85, 247, 0.25) !important;
+}
 
-        @keyframes orbPulse {
-            0%, 100% {
-                transform: scale(.95);
-                box-shadow: 0 0 20px rgba(168, 85, 247, .4),
-                            0 0 60px rgba(99, 102, 241, .2);
-            }
-            50% {
-                transform: scale(1.1);
-                box-shadow: 0 0 40px rgba(168, 85, 247, .8),
-                            0 0 100px rgba(99, 102, 241, .5);
-            }
-        }
+/* ==========================================
+   3 WHITE DOTS LOADER (SMALL, BOLD, 4-STEP ROTATION)
+   ========================================== */
+@keyframes dotFourStepRotate {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.45;
+    }
+    25% {
+        transform: translate(0, -3px) scale(1.18);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(2px, 0) scale(0.95);
+        opacity: 0.8;
+    }
+    75% {
+        transform: translate(0, 2px) scale(1.1);
+        opacity: 1;
+    }
+}
 
-        .ai-voice-orb {
-            animation: orbPulse 3s infinite ease-in-out;
-        }
+.three-white-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 2px 0;
+}
 
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
+.three-white-dots span {
+    display: inline-block;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 1;
+    animation: dotFourStepRotate 0.9s infinite ease-in-out;
+}
 
-        ::-webkit-scrollbar-track {
-            background: #0b0f19;
-        }
+.three-white-dots span:nth-child(2) {
+    animation-delay: 0.18s;
+}
 
-        ::-webkit-scrollbar-thumb {
-            background: #374151;
-            border-radius: 4px;
-        }
+.three-white-dots span:nth-child(3) {
+    animation-delay: 0.36s;
+}
 
-        .luxury-gradient-text {
-            background: linear-gradient(135deg, #c084fc 0%, #60a5fa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+/* ==========================================
+   LIGHT MODE THEME OVERRIDES
+   ========================================== */
+body.light-mode {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
 
-        /* AI answer formatting */
-     
+body.light-mode main {
+    background-color: #f1f5f9 !important;
+}
+
+body.light-mode .glass-panel {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+body.light-mode .glass-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(203, 213, 225, 0.85) !important;
+}
+
+body.light-mode .glass-input {
+    background: rgba(241, 245, 249, 0.9) !important;
+    border-color: rgba(203, 213, 225, 0.9) !important;
+    color: #0f172a !important;
+}
+
+body.light-mode footer {
+    background: rgba(248, 250, 252, 0.96) !important;
+    border-top-color: rgba(203, 213, 225, 0.85) !important;
+}
+
+body.light-mode .text-white,
+body.light-mode .text-gray-100,
+body.light-mode .text-gray-200 {
+    color: #0f172a !important;
+}
+
+body.light-mode .text-gray-300,
+body.light-mode .text-gray-400 {
+    color: #475569 !important;
+}
+
+body.light-mode .ai-answer-content,
+body.light-mode .ai-answer-content h1,
+body.light-mode .ai-answer-content h2,
+body.light-mode .ai-answer-content h3,
+body.light-mode .ai-answer-content strong {
+    color: #0f172a !important;
+}
+
+body.light-mode .three-white-dots span {
+    color: #1e293b !important;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-animation {
+    animation: slideUp .35s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+@keyframes orbPulse {
+    0%, 100% {
+        transform: scale(.95);
+        box-shadow: 0 0 20px rgba(168, 85, 247, .4),
+                    0 0 60px rgba(99, 102, 241, .2);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 40px rgba(168, 85, 247, .8),
+                    0 0 100px rgba(99, 102, 241, .5);
+    }
+}
+
+.ai-voice-orb {
+    animation: orbPulse 3s infinite ease-in-out;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0b0f19;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 4px;
+}
+
+.luxury-gradient-text {
+    background: linear-gradient(135deg, #c084fc 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 /* Clear, transparent AI answers */
 .ai-answer-content {
     background: transparent !important;
@@ -479,6 +594,7 @@
     padding: 14px !important;
     line-height: 1.7;
     border-radius: 10px;
+    background: rgba(15, 23, 42, 0.35) !important;
 }
 
 .ai-answer-content table {
@@ -538,25 +654,19 @@
     background: rgba(139, 92, 246, 0.10) !important;
 }
 
-        .history-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 11px;border-radius:10px;color:#cbd5e1;font-size:12px;border:1px solid transparent;background:transparent}
-        .history-item:hover,.history-item.active{background:rgba(139,92,246,.14);border-color:rgba(139,92,246,.28);color:#fff}
-        .history-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
-        .attachment-menu{position:absolute;left:0;bottom:calc(100% + 10px);width:min(270px,calc(100vw - 32px));z-index:60;padding:8px;border-radius:16px;background:#111827;border:1px solid rgba(148,163,184,.22);box-shadow:0 18px 50px rgba(0,0,0,.45)}
-        .attachment-option{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:12px;text-align:left;color:#e5e7eb}
-        .attachment-option:hover{background:rgba(139,92,246,.14)}
-        .attachment-option small{display:block;color:#9ca3af;margin-top:3px}
-        .message-user-label{display:none!important}
-       
+.history-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 11px;border-radius:10px;color:#cbd5e1;font-size:12px;border:1px solid transparent;background:transparent}
+.history-item:hover,.history-item.active{background:rgba(139,92,246,.14);border-color:rgba(139,92,246,.28);color:#fff}
+.history-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+.attachment-menu{position:absolute;left:0;bottom:calc(100% + 10px);width:min(270px,calc(100vw - 32px));z-index:60;padding:8px;border-radius:16px;background:#111827;border:1px solid rgba(148,163,184,.22);box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.attachment-option{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:12px;text-align:left;color:#e5e7eb}
+.attachment-option:hover{background:rgba(139,92,246,.14)}
+.attachment-option small{display:block;color:#9ca3af;margin-top:3px}
+.message-user-label{display:none!important}
+
 @media(max-width:767px){ #sidebar-drawer{width:min(86vw,330px)}#chat-container{padding-left:12px;padding-right:12px}.ai-answer-content table{display:block;overflow-x:auto}}
-
-
-        
-    
 
 /* ==========================================
    FINAL MOBILE CHAT PANEL OVERRIDES
-   Keeps the conversation scrollable while the
-   composer stays visible above the phone keyboard.
    ========================================== */
 @media screen and (max-width: 767px) {
     html, body {
@@ -658,18 +768,7 @@
         width: 100%;
         max-width: 100%;
         min-width: 0;
-        padding: 10px 0 14px;
-    }
-
-    #typing-indicator > div {
-        align-items: flex-start;
-        min-width: 0;
-    }
-
-    #typing-indicator .glass-card {
-        min-width: 0;
-        max-width: calc(100% - 48px);
-        flex-wrap: wrap;
+        padding: 6px 0 10px;
     }
 
     body > main > footer {
@@ -789,9 +888,7 @@
     #chat-form #research-toggle { padding-left: 5px; padding-right: 5px; }
 }
 
-
-
-/* FINAL MOBILE COMPOSER FIX: keep the entire input toolbar above the phone edge */
+/* FINAL MOBILE COMPOSER FIX */
 @media screen and (max-width: 767px) {
     body > main {
         position: relative;
@@ -829,6 +926,10 @@
         padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
         background: #090c14 !important;
         border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
+    }
+
+    body.light-mode > main > footer {
+        background: #f8fafc !important;
     }
 
     body > main > footer > div {
@@ -934,13 +1035,11 @@
     }
 }
 
-/* Keep welcome suggestions visible only before the first message. */
 #welcome-screen.hidden,
 #messages-list.hidden {
     display: none !important;
 }
-
-</style>
+    </style>
 </head>
 
 <body class="h-screen overflow-hidden flex relative">
@@ -997,130 +1096,177 @@
                     <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Chat History</p>
                     <button type="button" onclick="clearAllHistory()" class="text-[10px] text-gray-500 hover:text-red-300">Clear</button>
                 </div>
-                <div id="chat-history-list" class="space-y-1 max-h-48 overflow-y-auto"><p class="px-2 py-2 text-xs text-gray-500">Your conversations will appear here.</p></div>
+                <div id="chat-history-list" class="space-y-1 max-h-40 overflow-y-auto">
+                    <p class="px-2 py-2 text-xs text-gray-500">Your conversations will appear here.</p>
+                </div>
             </div>
         </div>
-        <!-- Sidebar features -->
-        <div class="flex-1 overflow-y-auto p-4 space-y-6">
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 px-2">
-                    AI Capabilities
-                </p>
 
-                <div class="space-y-1.5">
-                    <button onclick="setPrompt('Explain this concept using a real-world analogy:'); closeMobileSidebar();" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+        <!-- Sidebar features (Collapsible AI Capabilities & Expert Modes) -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4">
+            <!-- AI Capabilities Dropdown (8 features hidden inside until clicked) -->
+            <div>
+                <button
+                    type="button"
+                    onclick="toggleSidebarSection('capabilities-menu', 'capabilities-chevron')"
+                    class="w-full flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-white py-2 px-2 rounded-lg transition">
+                    <span>AI Capabilities</span>
+                    <i id="capabilities-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                </button>
+
+                <div id="capabilities-menu" class="hidden space-y-1.5 mt-2">
+                    <!-- 4 Existing Capabilities -->
+                    <button onclick="setPrompt('Explain this concept using a real-world analogy:'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
                         <span class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
                             <i class="fa-solid fa-lightbulb text-xs"></i>
                         </span>
                         <span>Real-world Analogy</span>
                     </button>
 
-                    <button onclick="setPrompt('Generate a quick 5-question practice quiz on:'); closeMobileSidebar();" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                    <button onclick="setPrompt('Generate a quick 5-question practice quiz on:'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
                         <span class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
                             <i class="fa-solid fa-clipboard-question text-xs"></i>
                         </span>
                         <span>Interactive Quiz</span>
                     </button>
 
-                    <button onclick="setPrompt('Summarize this topic into simple bullet points:'); closeMobileSidebar();" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                    <button onclick="setPrompt('Summarize this topic into simple bullet points:'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
                         <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                             <i class="fa-solid fa-file-lines text-xs"></i>
                         </span>
                         <span>Smart Summary</span>
                     </button>
 
-                    <button onclick="setPrompt('Solve step-by-step and explain the math/logic behind:'); closeMobileSidebar();" class="w-full text-left px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                    <button onclick="setPrompt('Solve step-by-step and explain the math/logic behind:'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
                         <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
                             <i class="fa-solid fa-square-root-variable text-xs"></i>
                         </span>
                         <span>Step-by-Step Solver</span>
                     </button>
+
+                    <!-- 4 Added Capabilities -->
+                    <button onclick="setPrompt('Give me a complete concept deep-dive with core principles and examples on:'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                        <span class="w-7 h-7 rounded-lg bg-yellow-500/10 text-yellow-400 flex items-center justify-center">
+                            <i class="fa-solid fa-brain text-xs"></i>
+                        </span>
+                        <span>Concept Deep-Dive</span>
+                    </button>
+
+                    <button onclick="setPrompt('Clear my doubt in the easiest way possible with examples:'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                        <span class="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center">
+                            <i class="fa-solid fa-magnifying-glass-chart text-xs"></i>
+                        </span>
+                        <span>Doubt Cracker</span>
+                    </button>
+
+                    <button onclick="setPrompt('Help me practice communication, grammar, and fluency in:'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                        <span class="w-7 h-7 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center">
+                            <i class="fa-solid fa-comments text-xs"></i>
+                        </span>
+                        <span>Language Practice</span>
+                    </button>
+
+                    <button onclick="setPrompt('Give me important exam-level questions with model answers for:'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3 group">
+                        <span class="w-7 h-7 rounded-lg bg-pink-500/10 text-pink-400 flex items-center justify-center">
+                            <i class="fa-solid fa-list-check text-xs"></i>
+                        </span>
+                        <span>Exam Practice</span>
+                    </button>
                 </div>
             </div>
 
+            <!-- Expert Modes Dropdown (Hidden inside until clicked) -->
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 px-2">
-                    Expert Modes
-                </p>
+                <button
+                    type="button"
+                    onclick="toggleSidebarSection('expert-modes-menu', 'expert-chevron')"
+                    class="w-full flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-white py-2 px-2 rounded-lg transition">
+                    <span>Expert Modes</span>
+                    <i id="expert-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                </button>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setSubject('Physics & Science'); closeMobileSidebar();" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white transition text-center">
-                        <i class="fa-solid fa-atom text-purple-400 mb-1 block"></i>Physics
+                <div id="expert-modes-menu" class="hidden space-y-1.5 mt-2">
+                    <button onclick="setSubject('Physics & Science'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                            <i class="fa-solid fa-atom text-xs"></i>
+                        </span>
+                        <span>Physics & Science</span>
                     </button>
 
-                    <button onclick="setSubject('Mathematics'); closeMobileSidebar();" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white transition text-center">
-                        <i class="fa-solid fa-calculator text-blue-400 mb-1 block"></i>Math
+                    <button onclick="setSubject('Mathematics'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                            <i class="fa-solid fa-calculator text-xs"></i>
+                        </span>
+                        <span>Mathematics</span>
                     </button>
 
-                    <button onclick="setSubject('Computer Science & Coding'); closeMobileSidebar();" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white transition text-center">
-                        <i class="fa-solid fa-code text-emerald-400 mb-1 block"></i>Coding
+                    <button onclick="setSubject('Computer Science & Coding'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                            <i class="fa-solid fa-code text-xs"></i>
+                        </span>
+                        <span>Computer Science & Coding</span>
                     </button>
 
-                    <button onclick="setSubject('General Studies & History'); closeMobileSidebar();" class="p-2.5 rounded-xl glass-input text-xs text-gray-300 hover:text-white transition text-center">
-                        <i class="fa-solid fa-book-open text-amber-400 mb-1 block"></i>General
+                    <button onclick="setSubject('General Studies & History'); closeMobileSidebar();" class="w-full text-left px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
+                            <i class="fa-solid fa-book-open text-xs"></i>
+                        </span>
+                        <span>General Studies & History</span>
                     </button>
                 </div>
-            </div>
-
-            <div class="p-3.5 rounded-2xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-purple-500/20">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-semibold text-purple-300">AI Engine</span>
-                    <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">Groq</span>
-                </div>
-                <p class="text-xs text-gray-400">
-                    Ask questions in English, Hindi, or Hinglish seamlessly!
-                </p>
             </div>
         </div>
 
-        <!-- User profile and saved items -->
-        <div class="p-4 border-t border-gray-800/60 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                {% if user and user.profile_photo %}
-                    <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="Profile" class="w-9 h-9 rounded-xl object-cover border border-purple-500/40 shadow-sm">
-                {% else %}
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md">
-                        {{ user.name[0] if user and user.name else 'U' }}
+        <!-- Bottom Left Section: 100% Transparent & Ordered Sequence (Saved Messages -> Study Notes -> Student Login) -->
+        <div class="px-4 pb-4 pt-2 border-t border-gray-800/40 space-y-1.5 bg-transparent">
+            <!-- 1. Saved Messages (Transparent) -->
+            <button
+                type="button"
+                onclick="openStudyLibrary('saved'); closeMobileSidebar();"
+                class="w-full sidebar-transparent-item rounded-xl p-2.5 text-left text-sm text-gray-200 flex items-center gap-3">
+                <span class="w-9 h-9 rounded-lg bg-purple-500/15 text-purple-300 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-bookmark"></i>
+                </span>
+                <span class="flex-1 min-w-0">
+                    <span class="block font-semibold truncate">Saved Messages</span>
+                    <span class="block text-xs text-gray-400 mt-0.5 truncate">View all saved answers</span>
+                </span>
+                <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
+            </button>
+
+            <!-- 2. Study Notes (Transparent) -->
+            <button
+                type="button"
+                onclick="openStudyLibrary('notes'); closeMobileSidebar();"
+                class="w-full sidebar-transparent-item rounded-xl p-2.5 text-left text-sm text-gray-200 flex items-center gap-3">
+                <span class="w-9 h-9 rounded-lg bg-cyan-500/15 text-cyan-300 flex items-center justify-center shrink-0">
+                    <i class="fa-regular fa-note-sticky"></i>
+                </span>
+                <span class="flex-1 min-w-0">
+                    <span class="block font-semibold truncate">Study Notes</span>
+                    <span class="block text-xs text-gray-400 mt-0.5 truncate">View your personal notes</span>
+                </span>
+                <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
+            </button>
+
+            <!-- 3. Student Login / Profile Section (Transparent & Below Notes) -->
+            <div class="w-full sidebar-transparent-item rounded-xl p-2.5 flex items-center justify-between">
+                <div class="flex items-center space-x-3 min-w-0">
+                    {% if user and user.profile_photo %}
+                        <img src="{{ url_for('static', filename=user.profile_photo) }}" alt="Profile" class="w-9 h-9 rounded-xl object-cover border border-purple-500/40 shadow-sm shrink-0">
+                    {% else %}
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md shrink-0">
+                            {{ user.name[0] if user and user.name else 'U' }}
+                        </div>
+                    {% endif %}
+
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-medium text-white truncate">{{ user.name if user else 'Student' }}</p>
+                        <p class="text-xs text-gray-400 truncate">{{ user.email if user else 'Active Learner' }}</p>
                     </div>
-                {% endif %}
-
-                <div class="overflow-hidden">
-                    <p class="text-sm font-medium text-white truncate">{{ user.name if user else 'Student' }}</p>
-                    <p class="text-xs text-gray-400 truncate">{{ user.email if user else 'Active Learner' }}</p>
                 </div>
             </div>
         </div>
-
-      
-<div class="px-4 pb-4 space-y-2">
-    <button
-        type="button"
-        onclick="openStudyLibrary('saved'); closeMobileSidebar();"
-        class="w-full glass-card rounded-xl p-3 text-left text-sm text-gray-200 flex items-center gap-3">
-        <span class="w-9 h-9 rounded-lg bg-purple-500/15 text-purple-300 flex items-center justify-center">
-            <i class="fa-solid fa-bookmark"></i>
-        </span>
-        <span class="flex-1">
-            <span class="block font-semibold">Saved Messages</span>
-            <span class="block text-xs text-gray-400 mt-1">View all saved answers</span>
-        </span>
-        <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-    </button>
-
-    <button
-        type="button"
-        onclick="openStudyLibrary('notes'); closeMobileSidebar();"
-        class="w-full glass-card rounded-xl p-3 text-left text-sm text-gray-200 flex items-center gap-3">
-        <span class="w-9 h-9 rounded-lg bg-cyan-500/15 text-cyan-300 flex items-center justify-center">
-            <i class="fa-regular fa-note-sticky"></i>
-        </span>
-        <span class="flex-1">
-            <span class="block font-semibold">Study Notes</span>
-            <span class="block text-xs text-gray-400 mt-1">View your personal notes</span>
-        </span>
-        <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-    </button>
-</div>
 
     </aside>
 
@@ -1141,22 +1287,23 @@
                 </div>
             </div>
 
+            <!-- Top Right Controls: New Chat + Dark/Light Mode Toggle (Replaced Reset) -->
             <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
                 <button type="button" onclick="startNewChat()" title="Start a new chat" aria-label="Start a new chat"
-                    class="header-chat-action rounded-lg border border-purple-500/40 bg-purple-500/10 px-2 py-1.5 text-[11px] sm:text-xs font-semibold text-purple-200 hover:bg-purple-500/20 transition inline-flex items-center gap-1.5">
+                    class="header-chat-action rounded-lg border border-purple-500/40 bg-purple-500/10 px-2.5 py-1.5 text-[11px] sm:text-xs font-semibold text-purple-200 hover:bg-purple-500/20 transition inline-flex items-center gap-1.5">
                     <i class="fa-solid fa-plus"></i><span>New Chat</span>
                 </button>
-                <button type="button" onclick="clearChat()" title="Reset current chat" aria-label="Reset current chat"
-                    class="header-chat-action rounded-lg border border-gray-700 px-2 py-1.5 text-[11px] sm:text-xs font-medium text-gray-300 hover:text-white hover:bg-gray-800/70 transition inline-flex items-center gap-1.5">
-                    <i class="fa-solid fa-rotate-left text-red-400"></i><span>Reset</span>
+
+                <button type="button" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch Dark / Light Mode" aria-label="Switch Dark or Light Mode"
+                    class="header-chat-action rounded-full border border-gray-700 bg-gray-800/50 px-2.5 py-1.5 text-xs font-medium text-gray-300 hover:text-white hover:border-purple-500/40 transition inline-flex items-center gap-2">
+                    <i id="theme-sun-icon" class="fa-solid fa-sun text-amber-400"></i>
+                    <i id="theme-moon-icon" class="fa-solid fa-moon text-indigo-300"></i>
                 </button>
             </div>
         </header>
 
         <div id="chat-container" class="flex-1 min-h-0 overflow-y-auto p-3 md:p-6 relative">
-            <!-- Welcome screen and remaining chat UI continue in Part 2 -->
-
-                        <!-- Welcome screen -->
+            <!-- Welcome screen -->
             <section id="welcome-screen" class="min-h-full flex flex-col items-center justify-center py-8 md:py-12 px-1">
                 <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-xl shadow-purple-900/30 mb-5 ai-voice-orb">
                     <i class="fa-solid fa-brain text-white text-2xl"></i>
@@ -1218,17 +1365,13 @@
             <!-- Messages are inserted here by JavaScript -->
             <section id="messages-list" class="hidden w-full max-w-4xl mx-auto space-y-6 pb-5" aria-live="polite"></section>
 
-            <!-- Loading indicator -->
-            <div id="typing-indicator" class="hidden w-full max-w-4xl mx-auto py-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-brain text-white text-sm"></i>
-                    </div>
-                    <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2">
-                        <span class="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></span>
-                        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
-                        <span class="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:300ms]"></span>
-                        <span class="text-xs text-gray-400 ml-1" id="typing-text">Thinking...</span>
+            <!-- Loading indicator: Only 3 Bold White Dots (Text-sized, Transparent, 4-Step Rotation) -->
+            <div id="typing-indicator" class="hidden w-full max-w-4xl mx-auto py-2">
+                <div class="flex items-center gap-3 bg-transparent">
+                    <div class="three-white-dots" aria-label="AI is replying">
+                        <span>&bull;</span>
+                        <span>&bull;</span>
+                        <span>&bull;</span>
                     </div>
                 </div>
             </div>
@@ -1379,14 +1522,10 @@
     <!-- Confirmation / notification -->
     <div id="toast-message" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[100] hidden max-w-[90vw] rounded-xl border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white shadow-xl" role="status" aria-live="polite"></div>
 
-    <!-- Part 3 JavaScript goes below this line -->
-
     <script>
 /* ==========================================
-   SMARTLEARN AI — PART 3: JAVASCRIPT
-   Mobile controls, chat, Markdown, saving,
-   study modes and voice input
-========================================== */
+   SMARTLEARN AI — JAVASCRIPT
+   ========================================== */
 
 let selectedFile = null;
 let selectedStudyMode = "";
@@ -1398,17 +1537,45 @@ let voiceRequestInProgress = false;
 const SAVED_KEY = "smartlearn_saved_answers_v1";
 const NOTES_KEY = "smartlearn_study_notes_v1";
 const HISTORY_KEY = "smartlearn_chat_history_v1";
+const THEME_KEY = "smartlearn_theme_v1";
 let currentConversationId = null;
 let currentConversation = [];
 let selectedAttachmentKind = "";
 const MAX_HISTORY_ITEMS = 50;
 
+/* ---------- Theme Toggle (Dark / Light Mode) ---------- */
+function applySavedTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    document.body.classList.toggle("light-mode", savedTheme === "light");
+}
+
+function toggleTheme() {
+    const isLight = document.body.classList.toggle("light-mode");
+    try {
+        localStorage.setItem(THEME_KEY, isLight ? "light" : "dark");
+    } catch (_) {}
+    showToast(isLight ? "Light mode enabled" : "Dark mode enabled");
+}
+
+/* ---------- Collapsible Sidebar Menus ---------- */
+function toggleSidebarSection(menuId, chevronId) {
+    const menu = document.getElementById(menuId);
+    const chevron = document.getElementById(chevronId);
+    if (!menu) return;
+    const isHidden = menu.classList.toggle("hidden");
+    if (chevron) {
+        chevron.style.transform = isHidden ? "rotate(0deg)" : "rotate(180deg)";
+    }
+}
+
+/* ---------- Chat History ---------- */
 function loadChatHistory() {
     try {
         const value = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
         return Array.isArray(value) ? value : [];
     } catch (_) { return []; }
 }
+
 function saveCurrentConversation() {
     if (!currentConversation.length) return;
     const history = loadChatHistory();
@@ -1424,6 +1591,7 @@ function saveCurrentConversation() {
     currentConversationId = id;
     renderChatHistory();
 }
+
 function renderChatHistory() {
     const container = document.getElementById("chat-history-list");
     if (!container) return;
@@ -1450,6 +1618,7 @@ function renderChatHistory() {
         container.appendChild(button);
     });
 }
+
 function openSavedConversation(id) {
     saveCurrentConversation();
     const item = loadChatHistory().find(entry => entry.id === id);
@@ -1458,9 +1627,10 @@ function openSavedConversation(id) {
     currentConversation = Array.isArray(item.messages) ? item.messages.slice() : [];
     const list = document.getElementById("messages-list");
     list.replaceChildren();
+    let lastAiElement = null;
     currentConversation.forEach(message => {
         if (message.role === "user") appendUserMessage(message.text, false);
-        else if (message.role === "assistant") appendAIMessage(message.text, false);
+        else if (message.role === "assistant") lastAiElement = appendAIMessage(message.text, false);
     });
     const hasMessages = currentConversation.length > 0;
     const welcome = document.getElementById("welcome-screen");
@@ -1469,9 +1639,12 @@ function openSavedConversation(id) {
     list.classList.toggle("hidden", !hasMessages);
     list.style.display = hasMessages ? "block" : "none";
     closeMobileSidebar();
-    scrollToBottom();
+    if (lastAiElement) {
+        scrollToElementTop(lastAiElement);
+    }
     renderChatHistory();
 }
+
 function startNewChat() {
     saveCurrentConversation();
     currentConversationId = String(Date.now());
@@ -1488,6 +1661,7 @@ function startNewChat() {
     clearStudyMode();
     renderChatHistory();
 }
+
 function clearAllHistory() {
     if (!confirm("Delete all locally saved chat history? This cannot be undone.")) return;
     try { localStorage.removeItem(HISTORY_KEY); } catch (_) {}
@@ -1503,6 +1677,7 @@ function clearAllHistory() {
     renderChatHistory();
     showToast("Chat history cleared from this browser.");
 }
+
 function rememberMessage(role, text) {
     currentConversation.push({ role, text: String(text || ""), createdAt: new Date().toISOString() });
     saveCurrentConversation();
@@ -1566,7 +1741,7 @@ function toggleResearchMode() {
 
     showToast(
         researchEnabled
-            ? "Research mode enabled. Backend web-search support may be required."
+            ? "Research mode enabled."
             : "Research mode disabled."
     );
 }
@@ -1673,7 +1848,7 @@ function clearAttachment() {
     document.getElementById("attachment-preview")?.classList.add("hidden");
 }
 
-/* ---------- Chat rendering ---------- */
+/* ---------- Chat rendering & Top-of-Answer Scroll ---------- */
 
 function appendUserMessage(text, record = true) {
     const list = document.getElementById("messages-list");
@@ -1690,14 +1865,14 @@ function appendUserMessage(text, record = true) {
     row.querySelector(".whitespace-pre-wrap").textContent = text;
     list.appendChild(row);
     if (record) rememberMessage("user", text);
+    return row;
 }
-
 
 function appendAIMessage(text, record = true) {
     const list = document.getElementById("messages-list");
     const row = document.createElement("div");
 
-    row.className = "flex items-start gap-3 message-animation";
+    row.className = "flex items-start gap-3 message-animation bg-transparent";
     row.setAttribute("data-answer-card", "");
 
     row.innerHTML = `
@@ -1733,12 +1908,15 @@ function appendAIMessage(text, record = true) {
 
     list.appendChild(row);
 
+    // Non-blocking MathJax rendering for instant UI response
     if (window.MathJax?.typesetPromise) {
-        MathJax.typesetPromise([content]).catch(() => {});
+        requestAnimationFrame(() => {
+            MathJax.typesetPromise([content]).catch(() => {});
+        });
     }
     if (record) rememberMessage("assistant", text);
+    return row;
 }
-
 
 function showChat() {
     const welcome = document.getElementById("welcome-screen");
@@ -1753,18 +1931,17 @@ function showChat() {
     }
 }
 
-function scrollToBottom() {
-    const container = document.getElementById("chat-container");
-    if (!container) return;
-    const moveToBottom = () => {
-        container.scrollTop = container.scrollHeight;
+/* Scroll so the new AI answer starts right at the top of the viewport */
+function scrollToElementTop(element) {
+    if (!element) return;
+    const alignTop = () => {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
     };
-    moveToBottom();
-    requestAnimationFrame(moveToBottom);
-    setTimeout(moveToBottom, 80);
+    alignTop();
+    requestAnimationFrame(alignTop);
 }
 
-/* ---------- Send message ---------- */
+/* ---------- Send message (Optimized for Fast Response & Top-Scroll) ---------- */
 
 async function handleChatSubmit(event) {
     event.preventDefault();
@@ -1781,11 +1958,11 @@ async function handleChatSubmit(event) {
 
     if (!message && !attachmentToSend) return;
     if (!message && attachmentToSend) {
-        message = `Please analyze the attached ${attachmentKindToSend || "file"} named "${attachmentToSend.name}" and explain its contents.`;
+        message = `Analyze the attached ${attachmentKindToSend || "file"} "${attachmentToSend.name}" and explain clearly.`;
     }
 
     if (selectedStudyMode) {
-        message = "Study mode: " + selectedStudyMode + "\n\n" + message;
+        message = "Mode: " + selectedStudyMode + "\n" + message;
     }
 
     if (researchEnabled) {
@@ -1797,7 +1974,7 @@ async function handleChatSubmit(event) {
     sendButton.classList.add("opacity-50");
     showChat();
 
-    appendUserMessage(message);
+    const userRow = appendUserMessage(message);
 
     input.value = "";
     updateCharCount();
@@ -1805,30 +1982,30 @@ async function handleChatSubmit(event) {
     closeMobileSidebar();
 
     typing.classList.remove("hidden");
-    document.getElementById("typing-text").textContent = "Thinking...";
-    scrollToBottom();
+    scrollToElementTop(userRow);
+
+    let aiRow = null;
 
     try {
-        // Ask the tutor to sound warm and conversational without changing the text shown in chat.
-        const tutorStyleInstruction = "Reply like a friendly, patient AI tutor. Use a warm, natural conversational tone, explain clearly, and occasionally add a relevant emoji when it feels natural (do not overuse emojis). Keep the answer focused on the student's question.\n\nStudent's message: ";
-        const requestMessage = tutorStyleInstruction + message;
+        // Concise system instruction for faster token processing
+        const requestMessage = "Be a friendly, clear AI tutor:\n" + message;
 
-        // Keep the same /api/chat endpoint. Text-only chats keep the existing JSON contract;
-        // attachments use multipart/form-data so the backend can read the actual file bytes.
         let requestOptions;
         if (attachmentToSend) {
             const formData = new FormData();
             formData.append("message", requestMessage);
             formData.append("attachment", attachmentToSend, attachmentToSend.name);
             formData.append("attachment_kind", attachmentKindToSend || "file");
-            requestOptions = { method: "POST", body: formData };
+            requestOptions = { method: "POST", body: formData, priority: "high" };
         } else {
             requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: requestMessage })
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                body: JSON.stringify({ message: requestMessage }),
+                priority: "high"
             };
         }
+
         const response = await fetch("/api/chat", requestOptions);
 
         let data = {};
@@ -1848,9 +2025,9 @@ async function handleChatSubmit(event) {
             throw new Error("The server response did not contain an answer.");
         }
 
-        appendAIMessage(String(answer));
+        aiRow = appendAIMessage(String(answer));
     } catch (error) {
-        appendAIMessage(
+        aiRow = appendAIMessage(
             "Sorry, I couldn't get a response from the server.\n\n" +
             "Details: " + (error.message || "Network connection failed.") +
             "\n\nPlease check your internet connection and the Flask `/api/chat` route."
@@ -1860,17 +2037,13 @@ async function handleChatSubmit(event) {
         requestInProgress = false;
         sendButton.disabled = false;
         sendButton.classList.remove("opacity-50");
-        scrollToBottom();
-        input.focus();
+
+        // Keep the start of the AI's reply at the top instead of scrolling to the bottom
+        if (aiRow) {
+            scrollToElementTop(aiRow);
+        }
+        input.focus({ preventScroll: true });
     }
-}
-
-/* ---------- Reset visible chat ---------- */
-
-function clearChat() {
-    if (!confirm("Start a new chat? The current conversation will remain in Chat History.")) return;
-    startNewChat();
-    showToast("New chat started. Your previous conversation is in Chat History.");
 }
 
 /* ---------- Copy and save answers ---------- */
@@ -1920,7 +2093,6 @@ function writeItems(key, items) {
     }
 }
 
-
 const saveTapTimes = new WeakMap();
 
 function saveAnswer(button) {
@@ -1936,7 +2108,6 @@ function saveAnswer(button) {
     let items = readItems(SAVED_KEY);
     const existing = items.find(item => item.content === content);
 
-    // Double tap within 350ms removes the saved answer.
     if (now - previousTap < 350) {
         if (existing) {
             items = items.filter(item => item.content !== content);
@@ -1953,7 +2124,6 @@ function saveAnswer(button) {
         return;
     }
 
-    // First tap saves the answer if it isn't already saved.
     if (existing) {
         button.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
         showToast("Already saved. Double-tap to unsave.");
@@ -1972,7 +2142,6 @@ function saveAnswer(button) {
         showToast("Answer saved!");
     }
 }
-
 
 function speakAnswer(button) {
     const text = button.closest("[data-answer-card]")?.querySelector(".ai-answer-content")?.innerText;
@@ -1999,7 +2168,7 @@ let libraryMode = "saved";
 function openStudyLibrary(mode = "saved") {
     libraryMode = mode;
     document.getElementById("study-library-modal").classList.remove("hidden");
-    renderLibrary();
+    switchLibraryTab(mode);
 }
 
 function closeStudyLibrary() {
@@ -2228,9 +2397,10 @@ document.getElementById("voice-modal")?.addEventListener("click", event => {
     }
 });
 
+applySavedTheme();
 currentConversationId = String(Date.now());
 renderChatHistory();
 updateCharCount();
-</script>
+    </script>
 </body>
 </html>
