@@ -89,17 +89,6 @@ button {
     transform: translateY(-2px);
 }
 
-.glass-input {
-    background: rgba(31, 41, 55, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    outline: none;
-}
-
-.glass-input:focus {
-    border-color: #8b5cf6;
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
-}
-
 /* ==========================================
    SIDEBAR CATEGORIES: COMPACT, BOLD & ANIMATED
    ========================================== */
@@ -646,7 +635,7 @@ body.light-mode #note-content {
 .message-user-label{display:none!important}
 
 /* ==========================================
-   CHATGPT STYLE COMPACT TYPING BAR & STICKY HEADER FIX
+   PERFECT MOBILE LAYOUT: STICKY HEADER, CHATGPT COMPACT BAR & NO KEYBOARD GAP
    ========================================== */
 @media screen and (max-width: 767px) {
     #sidebar-drawer {
@@ -678,22 +667,22 @@ body.light-mode #note-content {
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 50 !important;
+        z-index: 60 !important;
         flex: 0 0 56px !important;
         height: 56px !important;
-        background: rgba(10, 14, 24, 0.95) !important;
+        background: rgba(10, 14, 24, 0.96) !important;
     }
 
     body.light-mode main > header {
         background: #ffffff !important;
     }
 
-    /* Chat container padding so header doesn't overlap top messages */
+    /* Chat container padding so header and footer don't overlap messages */
     #chat-container {
         flex: 1 1 auto !important;
         height: 0 !important;
         overflow-y: auto !important;
-        padding: 70px 12px 110px !important;
+        padding: 68px 12px 90px !important;
         -webkit-overflow-scrolling: touch !important;
     }
 
@@ -709,14 +698,14 @@ body.light-mode #note-content {
         padding: 10px !important;
     }
 
-    /* ChatGPT Style Compact Typing Section at the Bottom */
+    /* ChatGPT Style Compact Typing Section at the Bottom (Zero extra gap above keyboard) */
     main > footer {
         position: fixed !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
         z-index: 50 !important;
-        padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px)) !important;
         background: rgba(5, 7, 14, 0.98) !important;
         border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
@@ -730,8 +719,8 @@ body.light-mode #note-content {
     #chat-form {
         background: #181b22 !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 22px !important;
-        padding: 4px 8px !important;
+        border-radius: 20px !important;
+        padding: 4px 6px !important;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
     }
 
@@ -743,7 +732,7 @@ body.light-mode #note-content {
     #chat-input {
         font-size: 15px !important;
         padding: 6px 4px !important;
-        max-height: 80px !important;
+        max-height: 70px !important;
         color: inherit !important;
     }
 }
@@ -1110,8 +1099,8 @@ body.light-mode #note-content {
             </div>
         </div>
 
-        <!-- Chat input section (ChatGPT style compact bar, no disclaimer text) -->
-        <footer class="shrink-0 w-full border-t border-gray-800/70 bg-[#090c14]/95 px-3 pt-2.5 pb-2.5 md:px-6 md:pt-4 md:pb-4">
+        <!-- Chat input section (ChatGPT style compact bar, Search icon removed, Send button on right) -->
+        <footer class="shrink-0 w-full border-t border-gray-800/70 bg-[#090c14]/95 px-3 pt-2 pb-2 md:px-6 md:pt-4 md:pb-4">
             <div class="max-w-4xl mx-auto">
                 <!-- Attachment preview -->
                 <div id="attachment-preview" class="hidden mb-2 p-2 rounded-xl bg-gray-800/60 border border-gray-700 flex items-center justify-between gap-3">
@@ -1160,11 +1149,6 @@ body.light-mode #note-content {
 
                             <button type="button" onclick="startVoiceInput()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 flex items-center justify-center shrink-0" aria-label="Voice input" title="Speak your question">
                                 <i class="fa-solid fa-microphone"></i>
-                            </button>
-
-                            <button type="button" onclick="toggleResearchMode()" id="research-toggle" class="h-9 px-2.5 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-800/40 flex items-center gap-1.5 shrink-0" title="Toggle research mode">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <span class="hidden sm:inline">Research</span>
                             </button>
                         </div>
 
@@ -1464,23 +1448,6 @@ function clearStudyMode() {
     document.getElementById("current-mode").textContent = "Ready to guide you step-by-step";
 }
 
-function toggleResearchMode() {
-    researchEnabled = !researchEnabled;
-
-    const button = document.getElementById("research-toggle");
-    if (!button) return;
-
-    button.classList.toggle("text-purple-400", researchEnabled);
-    button.classList.toggle("border-purple-500", researchEnabled);
-    button.classList.toggle("bg-purple-500/10", researchEnabled);
-
-    showToast(
-        researchEnabled
-            ? "Research mode enabled."
-            : "Research mode disabled."
-    );
-}
-
 /* ---------- Safe HTML helpers ---------- */
 
 function escapeHtml(value) {
@@ -1696,10 +1663,6 @@ async function handleChatSubmit(event) {
 
     if (selectedStudyMode) {
         message = "Mode: " + selectedStudyMode + "\n" + message;
-    }
-
-    if (researchEnabled) {
-        message = "Deep Research: " + message;
     }
 
     requestInProgress = true;
