@@ -210,6 +210,12 @@
     overflow-x: auto;
 }
 
+/* Compact header controls on laptop and mobile */
+.header-chat-action { white-space: nowrap; min-height: 30px; }
+@media (max-width: 380px) {
+    .header-chat-action { padding: 6px 7px !important; gap: 4px !important; font-size: 10px !important; }
+}
+
 @media (max-width: 640px) {
     .ai-answer-content {
         font-size: 15px !important;
@@ -254,7 +260,15 @@
     background: rgba(139, 92, 246, 0.10) !important;
 }
 
-        }
+        .history-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 11px;border-radius:10px;color:#cbd5e1;font-size:12px;border:1px solid transparent;background:transparent}
+        .history-item:hover,.history-item.active{background:rgba(139,92,246,.14);border-color:rgba(139,92,246,.28);color:#fff}
+        .history-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+        .attachment-menu{position:absolute;left:0;bottom:calc(100% + 10px);width:min(270px,calc(100vw - 32px));z-index:60;padding:8px;border-radius:16px;background:#111827;border:1px solid rgba(148,163,184,.22);box-shadow:0 18px 50px rgba(0,0,0,.45)}
+        .attachment-option{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:12px;text-align:left;color:#e5e7eb}
+        .attachment-option:hover{background:rgba(139,92,246,.14)}
+        .attachment-option small{display:block;color:#9ca3af;margin-top:3px}
+        .message-user-label{display:none!important}
+        @media(max-width:767px){#sidebar-drawer{width:min(86vw,330px)}#chat-container{padding-left:12px;padding-right:12px}.ai-answer-content table{display:block;overflow-x:auto}}
     </style>
 </head>
 
@@ -306,6 +320,15 @@
             </div>
         </div>
 
+        <div class="px-4 pt-4 space-y-3">
+            <div>
+                <div class="flex items-center justify-between px-2 mb-2">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Chat History</p>
+                    <button type="button" onclick="clearAllHistory()" class="text-[10px] text-gray-500 hover:text-red-300">Clear</button>
+                </div>
+                <div id="chat-history-list" class="space-y-1 max-h-48 overflow-y-auto"><p class="px-2 py-2 text-xs text-gray-500">Your conversations will appear here.</p></div>
+            </div>
+        </div>
         <!-- Sidebar features -->
         <div class="flex-1 overflow-y-auto p-4 space-y-6">
             <div>
@@ -447,10 +470,16 @@
                 </div>
             </div>
 
-            <button onclick="clearChat()" class="shrink-0 px-2.5 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white transition flex items-center gap-1.5 border border-gray-800">
-                <i class="fa-solid fa-trash-can text-red-400"></i>
-                <span class="hidden sm:inline">Reset</span>
-            </button>
+            <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+                <button type="button" onclick="startNewChat()" title="Start a new chat" aria-label="Start a new chat"
+                    class="header-chat-action rounded-lg border border-purple-500/40 bg-purple-500/10 px-2 py-1.5 text-[11px] sm:text-xs font-semibold text-purple-200 hover:bg-purple-500/20 transition inline-flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus"></i><span>New Chat</span>
+                </button>
+                <button type="button" onclick="clearChat()" title="Reset current chat" aria-label="Reset current chat"
+                    class="header-chat-action rounded-lg border border-gray-700 px-2 py-1.5 text-[11px] sm:text-xs font-medium text-gray-300 hover:text-white hover:bg-gray-800/70 transition inline-flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-left text-red-400"></i><span>Reset</span>
+                </button>
+            </div>
         </header>
 
         <div id="chat-container" class="flex-1 min-h-0 overflow-y-auto p-3 md:p-6 relative">
@@ -493,7 +522,7 @@
                         </span>
                     </button>
 
-                    <button onclick="document.getElementById('file-input').click()" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
+                    <button onclick="openAttachmentMenu()" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
                         <span class="w-10 h-10 shrink-0 rounded-xl bg-blue-500/15 text-blue-300 flex items-center justify-center">
                             <i class="fa-solid fa-camera"></i>
                         </span>
@@ -582,11 +611,17 @@
 
                     <div class="flex items-center justify-between gap-2 mt-1">
                         <div class="flex items-center gap-1 min-w-0">
-                            <input type="file" id="file-input" class="hidden" accept="image/*,.pdf,.txt,.doc,.docx" onchange="handleFileSelect(event)">
-
-                            <button type="button" onclick="document.getElementById('file-input').click()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center shrink-0" aria-label="Attach file" title="Attach a file">
-                                <i class="fa-solid fa-paperclip"></i>
-                            </button>
+                            <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
+                            <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
+                            <input type="file" id="video-input" class="hidden" accept="video/*" onchange="handleFileSelect(event,'video')">
+                            <div class="relative">
+                                <button type="button" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center shrink-0" aria-label="Attach image, file or short video" title="Attach image, file or short video"><i class="fa-solid fa-paperclip"></i></button>
+                                <div id="attachment-menu" class="attachment-menu hidden">
+                                    <button type="button" class="attachment-option" onclick="chooseAttachment('image')"><i class="fa-regular fa-image text-purple-300 text-lg w-6 text-center"></i><span><strong>Image</strong><small>Choose from gallery or photos</small></span></button>
+                                    <button type="button" class="attachment-option" onclick="chooseAttachment('file')"><i class="fa-regular fa-file-lines text-blue-300 text-lg w-6 text-center"></i><span><strong>Files</strong><small>PDF and supported documents</small></span></button>
+                                    <button type="button" class="attachment-option" onclick="chooseAttachment('video')"><i class="fa-solid fa-film text-emerald-300 text-lg w-6 text-center"></i><span><strong>Short Video</strong><small>Select a short clip for summarization</small></span></button>
+                                </div>
+                            </div>
 
                             <button type="button" onclick="startVoiceInput()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center shrink-0" aria-label="Voice input" title="Speak your question">
                                 <i class="fa-solid fa-microphone"></i>
@@ -703,6 +738,105 @@ let voiceRequestInProgress = false;
 
 const SAVED_KEY = "smartlearn_saved_answers_v1";
 const NOTES_KEY = "smartlearn_study_notes_v1";
+const HISTORY_KEY = "smartlearn_chat_history_v1";
+let currentConversationId = null;
+let currentConversation = [];
+let selectedAttachmentKind = "";
+const MAX_HISTORY_ITEMS = 50;
+
+function loadChatHistory() {
+    try {
+        const value = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+        return Array.isArray(value) ? value : [];
+    } catch (_) { return []; }
+}
+function saveCurrentConversation() {
+    if (!currentConversation.length) return;
+    const history = loadChatHistory();
+    const id = currentConversationId || String(Date.now());
+    const firstUser = currentConversation.find(item => item.role === "user");
+    const title = (firstUser?.text || "New conversation").replace(/\s+/g, " ").slice(0, 58);
+    const entry = { id, title, updatedAt: new Date().toISOString(), messages: currentConversation };
+    const index = history.findIndex(item => item.id === id);
+    if (index >= 0) history.splice(index, 1);
+    history.unshift(entry);
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY_ITEMS))); }
+    catch (_) { showToast("Chat history could not be saved; browser storage may be full."); }
+    currentConversationId = id;
+    renderChatHistory();
+}
+function renderChatHistory() {
+    const container = document.getElementById("chat-history-list");
+    if (!container) return;
+    container.replaceChildren();
+    const history = loadChatHistory();
+    if (!history.length) {
+        const empty = document.createElement("p");
+        empty.className = "px-2 py-2 text-xs text-gray-500";
+        empty.textContent = "Your conversations will appear here.";
+        container.appendChild(empty);
+        return;
+    }
+    history.forEach(item => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "history-item" + (item.id === currentConversationId ? " active" : "");
+        button.title = item.title || "Conversation";
+        const icon = document.createElement("i");
+        icon.className = "fa-regular fa-message";
+        const label = document.createElement("span");
+        label.textContent = item.title || "Conversation";
+        button.append(icon, label);
+        button.onclick = () => openSavedConversation(item.id);
+        container.appendChild(button);
+    });
+}
+function openSavedConversation(id) {
+    saveCurrentConversation();
+    const item = loadChatHistory().find(entry => entry.id === id);
+    if (!item) { showToast("This conversation is no longer available."); return; }
+    currentConversationId = item.id;
+    currentConversation = Array.isArray(item.messages) ? item.messages.slice() : [];
+    const list = document.getElementById("messages-list");
+    list.replaceChildren();
+    currentConversation.forEach(message => {
+        if (message.role === "user") appendUserMessage(message.text, false);
+        else if (message.role === "assistant") appendAIMessage(message.text, false);
+    });
+    const hasMessages = currentConversation.length > 0;
+    document.getElementById("welcome-screen")?.classList.toggle("hidden", hasMessages);
+    list.classList.toggle("hidden", !hasMessages);
+    closeMobileSidebar();
+    scrollToBottom();
+    renderChatHistory();
+}
+function startNewChat() {
+    saveCurrentConversation();
+    currentConversationId = String(Date.now());
+    currentConversation = [];
+    document.getElementById("messages-list")?.replaceChildren();
+    document.getElementById("messages-list")?.classList.add("hidden");
+    document.getElementById("welcome-screen")?.classList.remove("hidden");
+    document.getElementById("chat-container").scrollTop = 0;
+    clearAttachment();
+    clearStudyMode();
+    renderChatHistory();
+}
+function clearAllHistory() {
+    if (!confirm("Delete all locally saved chat history? This cannot be undone.")) return;
+    try { localStorage.removeItem(HISTORY_KEY); } catch (_) {}
+    currentConversationId = String(Date.now());
+    currentConversation = [];
+    document.getElementById("messages-list")?.replaceChildren();
+    document.getElementById("messages-list")?.classList.add("hidden");
+    document.getElementById("welcome-screen")?.classList.remove("hidden");
+    renderChatHistory();
+    showToast("Chat history cleared from this browser.");
+}
+function rememberMessage(role, text) {
+    currentConversation.push({ role, text: String(text || ""), createdAt: new Date().toISOString() });
+    saveCurrentConversation();
+}
 
 /* ---------- Mobile sidebar ---------- */
 
@@ -822,55 +956,74 @@ function updateCharCount() {
     }
 }
 
-function handleFileSelect(event) {
+function openAttachmentMenu() { toggleAttachmentMenu(true); }
+function toggleAttachmentMenu(forceOpen) {
+    const menu = document.getElementById("attachment-menu");
+    if (!menu) return;
+    const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : menu.classList.contains("hidden");
+    menu.classList.toggle("hidden", !shouldOpen);
+}
+function chooseAttachment(kind) {
+    toggleAttachmentMenu(false);
+    const ids = { image: "image-input", file: "document-input", video: "video-input" };
+    document.getElementById(ids[kind])?.click();
+}
+function handleFileSelect(event, kind = "file") {
     const file = event.target.files?.[0];
     if (!file) return;
-
-    const allowedExtensions = /\.(png|jpe?g|gif|webp|pdf|txt|doc|docx)$/i;
-
-    if (!allowedExtensions.test(file.name)) {
-        showToast("This file type is not supported.");
+    const maxSize = kind === "video" ? 30 * 1024 * 1024 : 15 * 1024 * 1024;
+    if (file.size > maxSize) {
+        showToast(kind === "video" ? "Video must be 30 MB or smaller." : "File must be 15 MB or smaller.");
         event.target.value = "";
         return;
     }
-
+    if (kind === "image" && !file.type.startsWith("image/")) {
+        showToast("Please choose an image."); event.target.value = ""; return;
+    }
+    if (kind === "video" && !file.type.startsWith("video/")) {
+        showToast("Please choose a video."); event.target.value = ""; return;
+    }
+    if (kind === "file" && !/\.(pdf|txt|md|csv|doc|docx|ppt|pptx|xls|xlsx)$/i.test(file.name)) {
+        showToast("Choose a supported document (PDF, TXT, DOCX, etc.)."); event.target.value = ""; return;
+    }
     selectedFile = file;
-
-    document.getElementById("attachment-name").textContent = file.name;
-    document.getElementById("attachment-preview").classList.remove("hidden");
-
-    showToast("File selected. Note: the current chat API sends text only.");
+    selectedAttachmentKind = kind;
+    const name = document.getElementById("attachment-name");
+    if (name) name.textContent = `${kind === "image" ? "Image" : kind === "video" ? "Short video" : "File"}: ${file.name}`;
+    document.getElementById("attachment-preview")?.classList.remove("hidden");
+    showToast("Attachment ready. Ask a question, then press Send to analyze it.");
 }
-
 function clearAttachment() {
     selectedFile = null;
-
-    const input = document.getElementById("file-input");
-    if (input) input.value = "";
-
+    selectedAttachmentKind = "";
+    ["image-input", "document-input", "video-input"].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) input.value = "";
+    });
     document.getElementById("attachment-preview")?.classList.add("hidden");
 }
 
 /* ---------- Chat rendering ---------- */
 
-function appendUserMessage(text) {
+function appendUserMessage(text, record = true) {
     const list = document.getElementById("messages-list");
     const row = document.createElement("div");
 
     row.className = "flex justify-end message-animation";
     row.innerHTML = `
         <div class="max-w-[92%] sm:max-w-[85%] rounded-2xl border border-purple-500/30 bg-purple-900/20 p-3 md:p-4">
-            <p class="text-xs font-semibold text-purple-300 mb-2">You</p>
+            <p class="message-user-label">You</p>
             <div class="text-sm text-gray-100 whitespace-pre-wrap break-words"></div>
         </div>
     `;
 
     row.querySelector(".whitespace-pre-wrap").textContent = text;
     list.appendChild(row);
+    if (record) rememberMessage("user", text);
 }
 
 
-function appendAIMessage(text) {
+function appendAIMessage(text, record = true) {
     const list = document.getElementById("messages-list");
     const row = document.createElement("div");
 
@@ -913,6 +1066,7 @@ function appendAIMessage(text) {
     if (window.MathJax?.typesetPromise) {
         MathJax.typesetPromise([content]).catch(() => {});
     }
+    if (record) rememberMessage("assistant", text);
 }
 
 
@@ -938,12 +1092,12 @@ async function handleChatSubmit(event) {
     const sendButton = document.getElementById("send-button");
 
     let message = input.value.trim();
+    const attachmentToSend = selectedFile;
+    const attachmentKindToSend = selectedAttachmentKind;
 
-    if (!message) {
-        if (selectedFile) {
-            showToast("File uploads require backend support. Please add your question as text.");
-        }
-        return;
+    if (!message && !attachmentToSend) return;
+    if (!message && attachmentToSend) {
+        message = `Please analyze the attached ${attachmentKindToSend || "file"} named "${attachmentToSend.name}" and explain its contents.`;
     }
 
     if (selectedStudyMode) {
@@ -971,16 +1125,23 @@ async function handleChatSubmit(event) {
     scrollToBottom();
 
     try {
-        /*
-          This uses the existing /api/chat endpoint.
-          Expected JSON response: { "response": "AI answer" }
-          Confirm that your app.py uses this endpoint.
-        */
-        const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: message })
-        });
+        // Keep the same /api/chat endpoint. Text-only chats keep the existing JSON contract;
+        // attachments use multipart/form-data so the backend can read the actual file bytes.
+        let requestOptions;
+        if (attachmentToSend) {
+            const formData = new FormData();
+            formData.append("message", message);
+            formData.append("attachment", attachmentToSend, attachmentToSend.name);
+            formData.append("attachment_kind", attachmentKindToSend || "file");
+            requestOptions = { method: "POST", body: formData };
+        } else {
+            requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
+            };
+        }
+        const response = await fetch("/api/chat", requestOptions);
 
         let data = {};
         try {
@@ -1019,15 +1180,9 @@ async function handleChatSubmit(event) {
 /* ---------- Reset visible chat ---------- */
 
 function clearChat() {
-    if (!confirm("Clear the messages currently shown on this page?")) return;
-
-    document.getElementById("messages-list").innerHTML = "";
-    document.getElementById("messages-list").classList.add("hidden");
-    document.getElementById("welcome-screen").classList.remove("hidden");
-    document.getElementById("chat-container").scrollTop = 0;
-
-    clearStudyMode();
-    showToast("Visible chat cleared. Server-side history may still remain.");
+    if (!confirm("Start a new chat? The current conversation will remain in Chat History.")) return;
+    startNewChat();
+    showToast("New chat started. Your previous conversation is in Chat History.");
 }
 
 /* ---------- Copy and save answers ---------- */
@@ -1385,6 +1540,8 @@ document.getElementById("voice-modal")?.addEventListener("click", event => {
     }
 });
 
+currentConversationId = String(Date.now());
+renderChatHistory();
 updateCharCount();
 </script>
 </body>
