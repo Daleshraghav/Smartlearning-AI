@@ -716,245 +716,33 @@ body.light-mode #note-content {
     }
 
     /* ChatGPT Dark Charcoal Box Color (#181b22) */
-/* SMARTLEARN AI — LUXURY CHAT COMPOSER */
+    #chat-form {
+        background: #181b22 !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 20px !important;
+        padding: 4px 6px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    }
 
-#chat-form {
-    width: 100%;
-    box-sizing: border-box;
-    background: linear-gradient(145deg, #20232c, #171920) !important;
-    border: 1px solid rgba(167, 139, 250, .22) !important;
-    border-radius: 24px !important;
-    box-shadow:
-        0 8px 26px rgba(0, 0, 0, .22),
-        inset 0 1px 0 rgba(255, 255, 255, .035) !important;
+    body.light-mode #chat-form {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    #chat-input {
+        font-size: 15px !important;
+        padding: 6px 4px !important;
+        max-height: 70px !important;
+        color: inherit !important;
+    }
 }
 
-#chat-form .composer-inline-row {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 8px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-}
-
-#chat-form .composer-attach-wrap {
-    position: relative;
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-}
-
-#chat-form .composer-icon-button {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex: 0 0 38px !important;
-    width: 38px !important;
-    min-width: 38px !important;
-    height: 38px !important;
-    padding: 0 !important;
-    border-radius: 50% !important;
-    color: #e5e7eb !important;
-    border: 1px solid rgba(255,255,255,.08) !important;
-    background: linear-gradient(145deg,#303442,#232631) !important;
-    cursor: pointer;
-    transition: transform .18s ease,
-                border-color .18s ease,
-                background .18s ease !important;
-}
-
-#chat-form .composer-icon-button i {
-    font-size: 15px !important;
-}
-
-#chat-form .composer-plus-button {
-    color: #e9ddff !important;
-    border-color: rgba(167,139,250,.35) !important;
-}
-
-#chat-form .composer-plus-button i {
-    font-size: 18px !important;
-}
-
-#chat-form .composer-voice-button {
-    color: #d7c6ff !important;
-}
-
-#chat-form .composer-icon-button:hover {
-    transform: translateY(-1px);
-    border-color: rgba(167,139,250,.65) !important;
-    background: linear-gradient(145deg,#3b3650,#282b38) !important;
-}
-
-#chat-form .composer-textarea {
-    display: block !important;
-    flex: 1 1 auto !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    min-height: 40px !important;
-    max-height: 120px !important;
-    height: 40px;
-    margin: 0 !important;
-    padding: 10px 3px !important;
-    resize: none !important;
-    border: 0 !important;
-    outline: none !important;
-    box-shadow: none !important;
-    color: #f3f4f6 !important;
-    background: transparent !important;
-    font-family: inherit;
-    font-size: 15px !important;
-    line-height: 1.4 !important;
-    overflow-y: auto !important;
-}
-
-#chat-form .composer-textarea::placeholder {
-    color: #9298a7 !important;
-    opacity: 1;
-}
-
-#chat-form #send-button.composer-send-button {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex: 0 0 40px !important;
-    width: 40px !important;
-    min-width: 40px !important;
-    height: 40px !important;
-    padding: 0 !important;
-    border: 1px solid rgba(255,255,255,.18) !important;
-    border-radius: 50% !important;
-    color: #fff !important;
-    background: linear-gradient(
-        135deg,#a78bfa 0%,#7c3aed 48%,#4f46e5 100%
-    ) !important;
-    box-shadow:
-        0 5px 16px rgba(124,58,237,.3),
-        inset 0 1px 0 rgba(255,255,255,.22) !important;
-    cursor: pointer;
-    transition: transform .18s ease,filter .18s ease !important;
-}
-
-#chat-form #send-button.composer-send-button i {
-    font-size: 16px !important;
-}
-
-#chat-form #send-button.composer-send-button:hover {
-    filter: brightness(1.12);
-    transform: translateY(-1px);
-}
-
-#chat-form #send-button.composer-send-button:active {
-    transform: scale(.95);
-}
-
-#chat-form #char-count {
+#welcome-screen.hidden,
+#messages-list.hidden {
     display: none !important;
 }
-
-#chat-form .attachment-menu {
-    position: absolute;
-    left: 0;
-    bottom: calc(100% + 12px) !important;
-    z-index: 1000;
-    width: 220px;
-    padding: 7px;
-    background: #242632;
-    border: 1px solid rgba(167,139,250,.3);
-    border-radius: 16px;
-    box-shadow: 0 12px 35px rgba(0,0,0,.4);
-}
-
-#chat-form .attachment-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 12px;
-    border: 0;
-    border-radius: 10px;
-    color: #f3f4f6;
-    text-align: left;
-    background: transparent;
-    cursor: pointer;
-}
-
-#chat-form .attachment-option:hover {
-    background: rgba(167,139,250,.13);
-}
-
-#chat-form .attachment-option span {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-#chat-form .attachment-option small {
-    color: #9298a7;
-    font-size: 11px;
-}
-
-@media (max-width: 767px) {
-    #chat-form {
-        padding: 6px 7px !important;
-        border-radius: 21px !important;
-    }
-
-    #chat-form .composer-inline-row {
-        gap: 5px !important;
-    }
-
-    #chat-form .composer-icon-button {
-        flex-basis: 34px !important;
-        width: 34px !important;
-        min-width: 34px !important;
-        height: 34px !important;
-    }
-
-    #chat-form .composer-textarea {
-        min-height: 38px !important;
-        height: 38px;
-        padding: 8px 1px !important;
-        font-size: 15px !important;
-    }
-
-    #chat-form #send-button.composer-send-button {
-        flex-basis: 37px !important;
-        width: 37px !important;
-        min-width: 37px !important;
-        height: 37px !important;
-    }
-}
-
-@media (max-width: 360px) {
-    #chat-form {
-        padding: 5px !important;
-    }
-
-    #chat-form .composer-inline-row {
-        gap: 4px !important;
-    }
-
-    #chat-form .composer-icon-button {
-        flex-basis: 31px !important;
-        width: 31px !important;
-        min-width: 31px !important;
-        height: 31px !important;
-    }
-
-    #chat-form .composer-textarea {
-        font-size: 14px !important;
-    }
-
-    #chat-form #send-button.composer-send-button {
-        flex-basis: 35px !important;
-        width: 35px !important;
-        min-width: 35px !important;
-        height: 35px !important;
-    }
-}
-
+    </style>
+</head>
 
 <body class="h-screen overflow-hidden flex relative">
 
@@ -1335,214 +1123,48 @@ body.light-mode #note-content {
                 </div>
 
                 <!-- Input panel -->
-             
-```html
-<form id="chat-form"
-      class="glass-panel rounded-2xl p-2 md:p-3 shadow-lg shadow-black/20"
-      onsubmit="handleChatSubmit(event)">
+                <form id="chat-form" class="glass-panel rounded-2xl p-2 md:p-3 shadow-lg shadow-black/20" onsubmit="handleChatSubmit(event)">
+                    <textarea
+                        id="chat-input"
+                        rows="1"
+                        maxlength="12000"
+                        placeholder="Ask your question..."
+                        aria-label="Ask your question"
+                        class="w-full resize-none bg-transparent text-sm font-medium text-gray-100 placeholder-gray-500 outline-none px-2 py-2 max-h-36 overflow-y-auto"
+                    ></textarea>
 
-    <div class="composer-inline-row">
+                    <div class="flex items-center justify-between gap-2 mt-1">
+                        <div class="flex items-center gap-1 min-w-0">
+                            <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
+                            <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
+                            <input type="file" id="video-input" class="hidden" accept="video/*" onchange="handleFileSelect(event,'video')">
+                            <div class="relative">
+                                <button type="button" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 flex items-center justify-center shrink-0" aria-label="Attach image, file or short video" title="Attach image, file or short video"><i class="fa-solid fa-paperclip"></i></button>
+                                <div id="attachment-menu" class="attachment-menu hidden">
+                                    <button type="button" class="attachment-option" onclick="chooseAttachment('image')"><i class="fa-regular fa-image text-purple-400 text-lg w-6 text-center"></i><span><strong>Image</strong><small>Choose from gallery or photos</small></span></button>
+                                    <button type="button" class="attachment-option" onclick="chooseAttachment('file')"><i class="fa-regular fa-file-lines text-blue-400 text-lg w-6 text-center"></i><span><strong>Files</strong><small>PDF and supported documents</small></span></button>
+                                    <button type="button" class="attachment-option" onclick="chooseAttachment('video')"><i class="fa-solid fa-film text-emerald-400 text-lg w-6 text-center"></i><span><strong>Short Video</strong><small>Select a short clip for summarization</small></span></button>
+                                </div>
+                            </div>
 
-        <!-- PLUS / ATTACHMENT BUTTON -->
-        <div class="composer-attach-wrap">
+                            <button type="button" onclick="startVoiceInput()" class="w-9 h-9 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 flex items-center justify-center shrink-0" aria-label="Voice input" title="Speak your question">
+                                <i class="fa-solid fa-microphone"></i>
+                            </button>
+                        </div>
 
-            <input type="file" id="image-input"
-                   class="hidden" accept="image/*"
-                   onchange="handleFileSelect(event,'image')">
+                        <div class="flex items-center gap-2">
+                            <span id="char-count" class="hidden sm:inline text-[10px] font-semibold text-gray-500">0/12000</span>
 
-            <input type="file" id="document-input"
-                   class="hidden"
-                   accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
-                   onchange="handleFileSelect(event,'file')">
-
-            <input type="file" id="video-input"
-                   class="hidden" accept="video/*"
-                   onchange="handleFileSelect(event,'video')">
-
-            <button type="button"
-                    onclick="toggleAttachmentMenu()"
-                    class="composer-icon-button composer-plus-button"
-                    aria-label="Attach file"
-                    title="Attach image, file or video">
-                <i class="fa-solid fa-plus"></i>
-            </button>
-
-            <div id="attachment-menu"
-                 class="attachment-menu hidden">
-
-                <button type="button"
-                        class="attachment-option"
-                        onclick="chooseAttachment('image')">
-                    <i class="fa-regular fa-image"></i>
-                    <span>
-                        <strong>Image</strong>
-                        <small>Choose a picture</small>
-                    </span>
-                </button>
-
-                <button type="button"
-                        class="attachment-option"
-                        onclick="chooseAttachment('file')">
-                    <i class="fa-regular fa-file-lines"></i>
-                    <span>
-                        <strong>Files</strong>
-                        <small>Choose a document</small>
-                    </span>
-                </button>
-
-                <button type="button"
-                        class="attachment-option"
-                        onclick="chooseAttachment('video')">
-                    <i class="fa-solid fa-film"></i>
-                    <span>
-                        <strong>Short Video</strong>
-                        <small>Select a video</small>
-                    </span>
-                </button>
-
+                            <button type="submit" id="send-button" class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-purple-900/30 hover:brightness-110 active:scale-95 transition shrink-0" aria-label="Send message">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
+        </footer>
+    </main>
 
-        <!-- MICROPHONE BUTTON -->
-        <button type="button"
-                onclick="startVoiceInput()"
-                class="composer-icon-button composer-voice-button"
-                aria-label="Voice input"
-                title="Speak your question">
-            <i class="fa-solid fa-microphone"></i>
-        </button>
-
-        <!-- QUESTION INPUT -->
-        <textarea id="chat-input"
-                  name="message"
-                  rows="1"
-                  maxlength="12000"
-                  placeholder="Ask your questions..."
-                  aria-label="Ask your questions"
-                  class="composer-textarea"></textarea>
-
-        <span id="char-count" class="hidden">0/12000</span>
-
-        <!-- SEND BUTTON -->
-        <button type="submit"
-                id="send-button"
-                class="composer-send-button"
-                aria-label="Send message"
-                title="Send message">
-            <i class="fa-solid fa-arrow-up"></i>
-        </button>
-
-    </div>
-</form>
-
-<script>
-(function () {
-    const form = document.getElementById("chat-form");
-    const input = document.getElementById("chat-input");
-    const menu = document.getElementById("attachment-menu");
-
-    if (!form || !input || !menu) return;
-
-    // Prevent duplicate event listeners if initialized again.
-    if (form.dataset.composerReady === "true") return;
-    form.dataset.composerReady = "true";
-
-    // Auto-resize textarea.
-    function resizeInput() {
-        input.style.height = "auto";
-        input.style.height =
-            Math.min(input.scrollHeight, 120) + "px";
-    }
-
-    input.addEventListener("input", resizeInput);
-
-    // Enter sends; Shift + Enter creates a new line.
-    input.addEventListener("keydown", function (event) {
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey &&
-            !event.isComposing
-        ) {
-            event.preventDefault();
-
-            if (typeof window.handleChatSubmit === "function") {
-                form.requestSubmit();
-            } else {
-                console.error(
-                    "Connect your existing handleChatSubmit() function."
-                );
-            }
-        }
-    });
-
-    // Attachment menu.
-    window.toggleAttachmentMenu = function () {
-        menu.classList.toggle("hidden");
-    };
-
-    window.chooseAttachment = function (type) {
-        const inputIds = {
-            image: "image-input",
-            file: "document-input",
-            video: "video-input"
-        };
-
-        const fileInput = document.getElementById(inputIds[type]);
-
-        menu.classList.add("hidden");
-
-        if (fileInput) fileInput.click();
-    };
-
-    // Close menu when clicking outside.
-    document.addEventListener("click", function (event) {
-        if (!event.target.closest(".composer-attach-wrap")) {
-            menu.classList.add("hidden");
-        }
-    });
-
-    // Basic browser voice-to-text support.
-    window.startVoiceInput = function () {
-        const SpeechRecognition =
-            window.SpeechRecognition ||
-            window.webkitSpeechRecognition;
-
-        if (!SpeechRecognition) {
-            alert(
-                "Voice input is not supported in this browser. Try Chrome."
-            );
-            return;
-        }
-
-        const recognition = new SpeechRecognition();
-        recognition.lang = "en-IN";
-        recognition.interimResults = false;
-        recognition.continuous = false;
-
-        recognition.onresult = function (event) {
-            const transcript =
-                event.results[0][0].transcript;
-
-            const separator =
-                input.value.trim() ? " " : "";
-
-            input.value += separator + transcript;
-            input.dispatchEvent(
-                new Event("input", { bubbles: true })
-            );
-            input.focus();
-        };
-
-        recognition.onerror = function (event) {
-            console.error("Voice input error:", event.error);
-        };
-
-        recognition.start();
-    };
-})();
-</script>
-
-       
     <!-- Voice assistant modal -->
     <div id="voice-modal" class="study-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="voice-modal-title">
         <div class="study-modal max-w-md text-center">
