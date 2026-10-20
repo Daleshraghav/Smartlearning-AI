@@ -773,8 +773,9 @@ def chat_with_tutor():
                 ],
             })
             model = os.getenv(
-                "GROQ_VISION_MODEL",
-                "meta-llama/llama-4-scout-17b-16e-instruct",
+    "GROQ_VISION_MODEL",
+    "qwen/qwen3.8-27b"
+)
             )
         else:
             messages.append({"role": "user", "content": user_message})
