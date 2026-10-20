@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SmartLearn AI - Luxury Tutor</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,7 +17,7 @@
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                displayMath: [['$$', '$$'], ['[', ']']]
             },
             options: {
                 skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -27,405 +27,515 @@
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+/* ==========================================
+   BASE & DARK NIGHT VIEW THEME
+   ========================================== */
+* {
+    box-sizing: border-box;
+}
 
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #05070e;
+    color: #f3f4f6;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Deep Dark Night View for Left Sidebar in Dark Mode */
+#sidebar-drawer {
+    background: linear-gradient(180deg, #03050a 0%, #070b14 55%, #04060c 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-panel {
+    background: rgba(10, 14, 24, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+    background: rgba(24, 33, 50, 0.45);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: border-color .2s ease, transform .2s ease;
+}
+
+.glass-card:hover {
+    border-color: rgba(168, 85, 247, 0.45);
+    transform: translateY(-2px);
+}
 
 /* ==========================================
-   MOBILE LAYOUT FIX — SmartLearn AI Tutor
+   SIDEBAR CATEGORIES: COMPACT, BOLD & ANIMATED
    ========================================== */
-
-@media screen and (max-width: 767px) {
-    html,
-    body {
-        width: 100%;
-        height: 100%;
-        min-width: 0;
-        min-height: 0;
-        margin: 0;
-        overflow: hidden;
+@keyframes dropdownReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
     }
-
-    body {
-        height: 100vh;
-        height: 100dvh;
-        overscroll-behavior: none;
-    }
-
-    /* The main panel fills the space beside the off-canvas sidebar. */
-    main.flex-1.flex.flex-col {
-        flex: 1 1 0%;
-        width: 0;
-        height: 100%;
-        min-width: 0;
-        min-height: 0;
-        overflow: hidden;
-    }
-
-    main > header {
-        flex: 0 0 60px;
-        min-height: 60px;
-        height: 60px;
-        padding-left: 10px;
-        padding-right: 10px;
-        gap: 6px;
-    }
-
-    main > header h2 {
-        font-size: 14px;
-        white-space: nowrap;
-    }
-
-    main > header p {
-        max-width: 155px;
-        font-size: 10px;
-    }
-
-    /* Keep scrolling inside the conversation, never on the whole page. */
-    #chat-container {
-        flex: 1 1 0%;
-        min-width: 0;
-        min-height: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        padding: 12px 12px 16px;
-        scrollbar-width: thin;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    #welcome-screen {
-        width: 100%;
-        min-width: 0;
-        min-height: auto;
-        padding: 18px 0 22px;
-        justify-content: flex-start;
-    }
-
-    #welcome-screen .ai-voice-orb {
-        width: 48px;
-        height: 48px;
-        margin-bottom: 12px;
-        border-radius: 15px;
-    }
-
-    #welcome-screen .ai-voice-orb i { font-size: 20px; }
-
-    #welcome-screen h1 {
-        font-size: clamp(21px, 5.6vw, 27px);
-        line-height: 1.3;
-        padding: 0 5px;
-        overflow-wrap: anywhere;
-    }
-
-    #welcome-screen > p {
-        margin-top: 10px;
-        padding: 0 8px;
-        font-size: 12px;
-        line-height: 1.55;
-    }
-
-    #welcome-screen > .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 9px;
-        margin-top: 18px;
-    }
-
-    #welcome-screen > .grid > button {
-        min-width: 0;
-        min-height: 0;
-        padding: 12px 10px;
-        border-radius: 15px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 9px;
-        text-align: left;
-        transform: none;
-    }
-
-    #welcome-screen > .grid > button > span:first-child {
-        width: 36px;
-        height: 36px;
-        border-radius: 11px;
-    }
-
-    #welcome-screen > .grid > button > span:first-child i { font-size: 14px; }
-
-    #welcome-screen > .grid > button > span:last-child {
-        width: 100%;
-        min-width: 0;
-    }
-
-    #welcome-screen > .grid > button > span:last-child > span:first-child {
-        font-size: 12px;
-        line-height: 1.35;
-    }
-
-    #welcome-screen > .grid > button > span:last-child > span:last-child {
-        font-size: 10px;
-        line-height: 1.45;
-        overflow-wrap: anywhere;
-    }
-
-    #welcome-screen > div.w-full.max-w-3xl.mt-6 { margin-top: 18px; }
-    #welcome-screen > div.w-full.max-w-3xl.mt-6 button {
-        padding: 8px 11px;
-        font-size: 11px;
-    }
-
-    main > footer {
-        position: relative;
-        z-index: 20;
-        flex: 0 0 auto;
-        min-width: 0;
-        padding: 8px 10px;
-        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-        background: rgba(9, 12, 20, 0.98);
-    }
-
-    main > footer > div { width: 100%; max-width: 100%; min-width: 0; }
-
-    #chat-form {
-        width: 100%;
-        min-width: 0;
-        padding: 8px;
-        border-radius: 17px;
-    }
-
-    #chat-input {
-        display: block;
-        width: 100%;
-        min-width: 0;
-        min-height: 44px;
-        max-height: 100px;
-        padding: 10px;
-        font-size: 16px;
-        line-height: 1.45;
-        box-sizing: border-box;
-        resize: none;
-    }
-
-    #chat-form button { touch-action: manipulation; }
-    #chat-form .w-9.h-9 { width: 34px; height: 34px; }
-    #chat-form #send-button { width: 40px; height: 40px; }
-
-    main > footer > div > p { margin-top: 5px; font-size: 9px; }
-
-    #messages-list,
-    #typing-indicator {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-    }
-
-    .ai-answer-content { overflow-wrap: anywhere; word-break: normal; }
-    .ai-answer-content pre { max-width: 100%; overflow-x: auto; }
-    .ai-answer-content table { display: block; max-width: 100%; overflow-x: auto; }
-}
-
-/* Extra-small phones */
-@media screen and (max-width: 380px) {
-    main > header p {
-        max-width: 115px;
-    }
-
-    #welcome-screen > .grid > button {
-        padding: 10px 8px;
-    }
-
-    #welcome-screen > .grid > button > span:last-child > span:first-child {
-        font-size: 11px;
-    }
-
-    #chat-form .flex.items-center.gap-1.min-w-0 {
-        gap: 0;
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 
-        
-        * {
-            box-sizing: border-box;
-        }
+.sidebar-dropdown-content {
+    animation: dropdownReveal 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform-origin: top center;
+}
 
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-        }
+.sidebar-category-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 8px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    background: transparent;
+    transition: background-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+}
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0b0f19;
-            color: #f3f4f6;
-        }
+.sidebar-category-btn:hover {
+    color: #ffffff;
+    background: rgba(139, 92, 246, 0.12);
+}
 
-        button,
-        input,
-        textarea,
-        select {
-            font: inherit;
-        }
+.sidebar-category-btn:active {
+    transform: scale(0.97);
+}
 
-        button {
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-        }
+.sidebar-sub-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 6px 9px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e2e8f0;
+    text-align: left;
+    background: transparent;
+    transition: background-color 0.16s ease, color 0.16s ease, transform 0.12s ease;
+}
 
-        /* Accessible, responsive modal styling for voice and study library. */
-        .study-modal-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 90;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.78);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
+.sidebar-sub-item:hover {
+    color: #ffffff;
+    background: rgba(139, 92, 246, 0.16);
+    transform: translateX(3px);
+}
 
-        .study-modal {
-            width: min(100%, 560px);
-            max-height: min(90vh, 760px);
-            max-height: min(90dvh, 760px);
-            overflow-y: auto;
-            padding: 22px;
-            border: 1px solid rgba(148, 163, 184, 0.22);
-            border-radius: 24px;
-            background: linear-gradient(145deg, rgba(17, 24, 39, 0.99), rgba(9, 12, 20, 0.99));
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-        }
+.sidebar-sub-item:active {
+    transform: scale(0.96);
+}
 
-        .study-item {
-            margin-top: 10px;
-            padding: 14px;
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            border-radius: 14px;
-            background: rgba(30, 41, 59, 0.45);
-            overflow-wrap: anywhere;
-        }
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+    padding: 6px 9px;
+    border-radius: 9px;
+    color: #e2e8f0;
+    font-size: 12.5px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    background: transparent;
+    transition: background-color 0.16s ease, transform 0.12s ease, border-color 0.16s ease;
+}
 
-        .study-item p {
-            margin-top: 8px;
-            color: #cbd5e1;
-            font-size: 13px;
-            line-height: 1.65;
-            white-space: pre-wrap;
-        }
+.history-item:hover,
+.history-item.active {
+    background: rgba(139, 92, 246, 0.18);
+    border-color: rgba(139, 92, 246, 0.35);
+    color: #ffffff;
+    transform: translateX(2px);
+}
 
-        #note-title,
-        #note-content {
-            display: block;
-            width: 100%;
-            min-width: 0;
-            padding: 11px 12px;
-            color: #f9fafb;
-            background: rgba(31, 41, 55, 0.7);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            border-radius: 12px;
-            outline: none;
-        }
+.history-item:active {
+    transform: scale(0.96);
+}
 
-        #note-title:focus,
-        #note-content:focus { border-color: #8b5cf6; }
+.history-item span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
+}
 
-        #note-content { resize: vertical; }
+/* ==========================================
+   100% TRANSPARENT SIDEBAR BOTTOM ITEMS
+   ========================================== */
+.sidebar-transparent-item {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: transform 0.14s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
 
-        .glass-panel {
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+.sidebar-transparent-item:hover {
+    background: transparent !important;
+    border-color: rgba(168, 85, 247, 0.3) !important;
+    transform: translateY(-1px);
+}
 
-        .glass-card {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: border-color .2s ease, transform .2s ease;
-        }
+.sidebar-transparent-item:active {
+    transform: scale(0.96);
+}
 
-        .glass-card:hover {
-            border-color: rgba(168, 85, 247, 0.4);
-            transform: translateY(-2px);
-        }
+/* ==========================================
+   3 WHITE DOTS LOADER
+   ========================================== */
+@keyframes dotFourStepRotate {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.45;
+    }
+    25% {
+        transform: translate(0, -3px) scale(1.18);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(2px, 0) scale(0.95);
+        opacity: 0.8;
+    }
+    75% {
+        transform: translate(0, 2px) scale(1.1);
+        opacity: 1;
+    }
+}
 
-        .glass-input {
-            background: rgba(31, 41, 55, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            outline: none;
-        }
+.three-white-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 2px 0;
+}
 
-        .glass-input:focus {
-            border-color: #8b5cf6;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
-        }
+.three-white-dots span {
+    display: inline-block;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 1;
+    animation: dotFourStepRotate 0.9s infinite ease-in-out;
+}
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.three-white-dots span:nth-child(2) {
+    animation-delay: 0.18s;
+}
 
-        .message-animation {
-            animation: slideUp .35s cubic-bezier(.16, 1, .3, 1) forwards;
-        }
+.three-white-dots span:nth-child(3) {
+    animation-delay: 0.36s;
+}
 
-        @keyframes orbPulse {
-            0%, 100% {
-                transform: scale(.95);
-                box-shadow: 0 0 20px rgba(168, 85, 247, .4),
-                            0 0 60px rgba(99, 102, 241, .2);
-            }
-            50% {
-                transform: scale(1.1);
-                box-shadow: 0 0 40px rgba(168, 85, 247, .8),
-                            0 0 100px rgba(99, 102, 241, .5);
-            }
-        }
+/* ==========================================
+   FULL LIGHT MODE — ALL WORDS SOLID BLACK & CLEAR
+   ========================================== */
+body.light-mode {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
 
-        .ai-voice-orb {
-            animation: orbPulse 3s infinite ease-in-out;
-        }
+body.light-mode #sidebar-drawer {
+    background: #f8fafc !important;
+    border-right: 1px solid #cbd5e1 !important;
+}
 
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
+body.light-mode main {
+    background-color: #ffffff !important;
+}
 
-        ::-webkit-scrollbar-track {
-            background: #0b0f19;
-        }
+body.light-mode header.glass-panel {
+    background: #ffffff !important;
+    border-bottom: 1px solid #cbd5e1 !important;
+}
 
-        ::-webkit-scrollbar-thumb {
-            background: #374151;
-            border-radius: 4px;
-        }
+body.light-mode footer {
+    background: #ffffff !important;
+    border-top: 1px solid #cbd5e1 !important;
+}
 
-        .luxury-gradient-text {
-            background: linear-gradient(135deg, #c084fc 0%, #60a5fa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+body.light-mode .glass-panel {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
 
-        /* AI answer formatting */
-     
+body.light-mode .glass-card {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+body.light-mode .glass-card:hover {
+    background: #f1f5f9 !important;
+    border-color: #7c3aed !important;
+}
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode p,
+body.light-mode span:not(.luxury-gradient-text),
+body.light-mode div,
+body.light-mode button,
+body.light-mode textarea,
+body.light-mode input,
+body.light-mode a,
+body.light-mode .text-white,
+body.light-mode .text-gray-100,
+body.light-mode .text-gray-200,
+body.light-mode .text-gray-300,
+body.light-mode .text-gray-400,
+body.light-mode .text-gray-500,
+body.light-mode .text-gray-600,
+body.light-mode .text-purple-200,
+body.light-mode .text-purple-300,
+body.light-mode .text-purple-400,
+body.light-mode .sidebar-category-btn,
+body.light-mode .sidebar-sub-item,
+body.light-mode .history-item {
+    color: #000000 !important;
+}
+
+body.light-mode #send-button,
+body.light-mode #send-button i,
+body.light-mode .from-purple-600 i,
+body.light-mode .from-purple-600 {
+    color: #ffffff !important;
+}
+
+body.light-mode .text-emerald-400 {
+    color: #047857 !important;
+    font-weight: 700 !important;
+}
+
+body.light-mode .history-item:hover,
+body.light-mode .history-item.active {
+    background: #ede9fe !important;
+    border-color: #8b5cf6 !important;
+    color: #000000 !important;
+    font-weight: 700 !important;
+}
+
+body.light-mode .sidebar-category-btn:hover,
+body.light-mode .sidebar-sub-item:hover {
+    background: #f1f5f9 !important;
+    color: #000000 !important;
+}
+
+body.light-mode .user-message-bubble {
+    background: #ede9fe !important;
+    border: 1px solid #c4b5fd !important;
+    color: #000000 !important;
+    font-weight: 600 !important;
+}
+
+body.light-mode .ai-answer-content,
+body.light-mode .ai-answer-content p,
+body.light-mode .ai-answer-content li,
+body.light-mode .ai-answer-content h1,
+body.light-mode .ai-answer-content h2,
+body.light-mode .ai-answer-content h3,
+body.light-mode .ai-answer-content strong {
+    color: #000000 !important;
+}
+
+body.light-mode .answer-actions button {
+    color: #000000 !important;
+    border-color: #94a3b8 !important;
+    font-weight: 600 !important;
+}
+
+body.light-mode .answer-actions button:hover {
+    background: #ede9fe !important;
+    border-color: #7c3aed !important;
+}
+
+body.light-mode #chat-input::placeholder {
+    color: #475569 !important;
+}
+
+body.light-mode .three-white-dots span {
+    color: #000000 !important;
+}
+
+body.light-mode .study-modal {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+}
+
+body.light-mode .study-item {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+}
+
+body.light-mode #note-title,
+body.light-mode #note-content {
+    background: #f8fafc !important;
+    border-color: #94a3b8 !important;
+    color: #000000 !important;
+}
+
+/* ==========================================
+   MODALS & GENERAL ANIMATIONS
+   ========================================== */
+.study-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.78);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.study-modal {
+    width: min(100%, 560px);
+    max-height: min(90vh, 760px);
+    max-height: min(90dvh, 760px);
+    overflow-y: auto;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(17, 24, 39, 0.99), rgba(9, 12, 20, 0.99));
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.study-item {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 14px;
+    background: rgba(30, 41, 59, 0.45);
+    overflow-wrap: anywhere;
+}
+
+.study-item p {
+    margin-top: 8px;
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+}
+
+#note-title,
+#note-content {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 11px 12px;
+    color: #f9fafb;
+    background: rgba(31, 41, 55, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 12px;
+    outline: none;
+}
+
+#note-title:focus,
+#note-content:focus { border-color: #8b5cf6; }
+
+#note-content { resize: vertical; }
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-animation {
+    animation: slideUp .35s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+@keyframes orbPulse {
+    0%, 100% {
+        transform: scale(.95);
+        box-shadow: 0 0 20px rgba(168, 85, 247, .4),
+                    0 0 60px rgba(99, 102, 241, .2);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 40px rgba(168, 85, 247, .8),
+                    0 0 100px rgba(99, 102, 241, .5);
+    }
+}
+
+.ai-voice-orb {
+    animation: orbPulse 3s infinite ease-in-out;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 4px;
+}
+
+.luxury-gradient-text {
+    background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 /* Clear, transparent AI answers */
 .ai-answer-content {
     background: transparent !important;
-    color: #f1f5f9 !important;
+    color: #f1f5f9;
     font-size: 16px !important;
-    line-height: 1.95 !important;
+    line-height: 1.9 !important;
     letter-spacing: 0.15px;
-    font-weight: 400;
+    font-weight: 500;
     overflow-wrap: anywhere;
     word-break: normal;
     min-width: 0;
@@ -433,32 +543,32 @@
 }
 
 .ai-answer-content p {
-    margin: 0 0 18px !important;
+    margin: 0 0 16px !important;
 }
 
 .ai-answer-content h1,
 .ai-answer-content h2,
 .ai-answer-content h3 {
-    color: #ffffff !important;
+    color: #ffffff;
     font-weight: 750;
     line-height: 1.5 !important;
-    margin: 24px 0 12px !important;
+    margin: 22px 0 10px !important;
 }
 
-.ai-answer-content h1 { font-size: 25px !important; }
-.ai-answer-content h2 { font-size: 21px !important; }
+.ai-answer-content h1 { font-size: 24px !important; }
+.ai-answer-content h2 { font-size: 20px !important; }
 .ai-answer-content h3 { font-size: 18px !important; }
 
 .ai-answer-content ul,
 .ai-answer-content ol {
     padding-left: 26px !important;
-    margin: 14px 0 20px !important;
+    margin: 12px 0 18px !important;
 }
 
 .ai-answer-content li {
     padding-left: 4px;
-    margin: 9px 0 !important;
-    line-height: 1.85 !important;
+    margin: 8px 0 !important;
+    line-height: 1.8 !important;
 }
 
 .ai-answer-content strong {
@@ -470,7 +580,7 @@
     background: transparent !important;
     border-left: 3px solid #a78bfa;
     padding: 8px 14px;
-    margin: 18px 0;
+    margin: 16px 0;
 }
 
 .ai-answer-content pre {
@@ -479,6 +589,7 @@
     padding: 14px !important;
     line-height: 1.7;
     border-radius: 10px;
+    background: rgba(15, 23, 42, 0.35) !important;
 }
 
 .ai-answer-content table {
@@ -486,46 +597,25 @@
     overflow-x: auto;
 }
 
-/* Compact header controls on laptop and mobile */
 .header-chat-action { white-space: nowrap; min-height: 30px; }
-@media (max-width: 380px) {
-    .header-chat-action { padding: 6px 7px !important; gap: 4px !important; font-size: 10px !important; }
-}
 
-@media (max-width: 640px) {
-    .study-modal { padding: 17px; border-radius: 19px; }
-
-    .ai-answer-content {
-        font-size: 15px !important;
-        line-height: 1.9 !important;
-    }
-
-    .ai-answer-content h1 { font-size: 22px !important; }
-    .ai-answer-content h2 { font-size: 19px !important; }
-    .ai-answer-content h3 { font-size: 17px !important; }
-
-    .ai-answer-content p {
-        margin-bottom: 16px !important;
-    }
-}
-
-/* Smaller Copy, Save and Read Aloud actions */
 .answer-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 14px;
+    gap: 6px;
+    margin-top: 12px;
 }
 
 .answer-actions button {
     min-width: 29px !important;
     min-height: 29px !important;
-    padding: 5px 8px !important;
+    padding: 5px 9px !important;
     font-size: 11px !important;
-    border: 1px solid rgba(148, 163, 184, 0.22) !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(148, 163, 184, 0.25) !important;
     border-radius: 8px !important;
     background: transparent !important;
-    color: #aebbd0 !important;
+    color: #cbd5e1;
 }
 
 .answer-actions button i {
@@ -533,683 +623,137 @@
 }
 
 .answer-actions button:hover {
-    color: #ffffff !important;
+    color: #ffffff;
     border-color: #a78bfa !important;
-    background: rgba(139, 92, 246, 0.10) !important;
+    background: rgba(139, 92, 246, 0.12) !important;
 }
 
-        .history-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 11px;border-radius:10px;color:#cbd5e1;font-size:12px;border:1px solid transparent;background:transparent}
-        .history-item:hover,.history-item.active{background:rgba(139,92,246,.14);border-color:rgba(139,92,246,.28);color:#fff}
-        .history-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
-        .attachment-menu{position:absolute;left:0;bottom:calc(100% + 10px);width:min(270px,calc(100vw - 32px));z-index:60;padding:8px;border-radius:16px;background:#111827;border:1px solid rgba(148,163,184,.22);box-shadow:0 18px 50px rgba(0,0,0,.45)}
-        .attachment-option{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:12px;text-align:left;color:#e5e7eb}
-        .attachment-option:hover{background:rgba(139,92,246,.14)}
-        .attachment-option small{display:block;color:#9ca3af;margin-top:3px}
-        .message-user-label{display:none!important}
-       
-@media(max-width:767px){ #sidebar-drawer{width:min(86vw,330px)}#chat-container{padding-left:12px;padding-right:12px}.ai-answer-content table{display:block;overflow-x:auto}}
-
-
-        
-    
+.attachment-menu{position:absolute;left:0;bottom:calc(100% + 10px);width:min(270px,calc(100vw - 32px));z-index:60;padding:8px;border-radius:16px;background:#111827;border:1px solid rgba(148,163,184,.22);box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.attachment-option{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:12px;text-align:left;color:#e5e7eb}
+.attachment-option:hover{background:rgba(139,92,246,.14)}
+.attachment-option small{display:block;color:#9ca3af;margin-top:3px}
+.message-user-label{display:none!important}
 
 /* ==========================================
-   FINAL MOBILE CHAT PANEL OVERRIDES
-   Keeps the conversation scrollable while the
-   composer stays visible above the phone keyboard.
+   PERFECT MOBILE LAYOUT: STICKY HEADER, CHATGPT COMPACT BAR & NO KEYBOARD GAP
    ========================================== */
 @media screen and (max-width: 767px) {
-    html, body {
-        width: 100%;
-        height: 100%;
-        min-width: 0;
-        min-height: 0;
-        overflow: hidden;
-    }
-
-    body {
-        display: flex;
-        flex-direction: row;
-        height: 100vh;
-        height: 100dvh;
-        max-height: 100dvh;
-    }
-
-    body > main.flex-1.flex.flex-col {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 0%;
-        width: auto;
-        height: 100%;
-        min-width: 0;
-        min-height: 0;
-        max-height: 100%;
-        overflow: hidden;
-    }
-
-    body > main > header {
-        position: relative;
-        flex: 0 0 58px;
-        height: 58px;
-        min-height: 58px;
-        max-height: 58px;
-        overflow: hidden;
-    }
-
-    body > main > header > div:first-child {
-        flex: 1 1 auto;
-        min-width: 0;
-        overflow: hidden;
-    }
-
-    body > main > header > div:last-child {
-        flex: 0 0 auto;
-        min-width: 0;
-    }
-
-    body > main > header .header-chat-action {
-        padding: 6px 7px;
-        gap: 4px;
-        white-space: nowrap;
-    }
-
-    body > main > header .header-chat-action span {
-        font-size: 10px;
-    }
-
-    #chat-container {
-        display: block;
-        flex: 1 1 0%;
-        width: 100%;
-        height: 0;
-        min-width: 0;
-        min-height: 0;
-        max-height: none;
-        overflow-x: hidden;
-        overflow-y: auto;
-        overscroll-behavior-y: contain;
-        -webkit-overflow-scrolling: touch;
-        padding: 12px 12px 18px;
-        scroll-padding-bottom: 18px;
-    }
-
-    #welcome-screen {
-        display: flex;
-        width: 100%;
-        min-width: 0;
-        min-height: 0;
-        height: auto;
-        flex: 0 0 auto;
-        justify-content: flex-start;
-        padding: 10px 0 20px;
-    }
-
-    #messages-list {
-        display: block;
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        padding-bottom: 12px;
-    }
-
-    #messages-list.hidden { display: none !important; }
-
-    #typing-indicator {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        padding: 10px 0 14px;
-    }
-
-    #typing-indicator > div {
-        align-items: flex-start;
-        min-width: 0;
-    }
-
-    #typing-indicator .glass-card {
-        min-width: 0;
-        max-width: calc(100% - 48px);
-        flex-wrap: wrap;
-    }
-
-    body > main > footer {
-        position: relative;
-        inset: auto;
-        z-index: 20;
-        display: block;
-        flex: 0 0 auto;
-        width: 100%;
-        min-width: 0;
-        min-height: 0;
-        max-height: 45dvh;
-        overflow: visible;
-        padding: 7px 9px calc(7px + env(safe-area-inset-bottom, 0px));
-        border-top: 1px solid rgba(148, 163, 184, 0.18);
-        background: rgba(9, 12, 20, 0.98);
-    }
-
-    body > main > footer > div {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #attachment-preview,
-    #selected-mode-wrap {
-        max-width: 100%;
-        min-width: 0;
-        overflow-wrap: anywhere;
-    }
-
-    #chat-form {
-        display: block;
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        margin: 0;
-        padding: 7px;
-        border-radius: 16px;
-    }
-
-    #chat-input {
-        display: block;
-        width: 100%;
-        min-width: 0;
-        height: auto;
-        min-height: 42px;
-        max-height: 92px;
-        margin: 0;
-        padding: 9px 10px;
-        overflow-x: hidden;
-        overflow-y: auto;
-        font-size: 16px;
-        line-height: 1.4;
-        box-sizing: border-box;
-        resize: none;
-        -webkit-appearance: none;
-    }
-
-    #chat-form > div {
-        min-width: 0;
-    }
-
-    #chat-form .flex.items-center.gap-1.min-w-0 {
-        flex: 1 1 auto;
-        min-width: 0;
-        gap: 2px;
-    }
-
-    #chat-form .w-9.h-9 {
-        width: 34px;
-        height: 34px;
-        flex: 0 0 34px;
-    }
-
-    #chat-form #research-toggle {
-        padding-left: 7px;
-        padding-right: 7px;
-    }
-
-    #chat-form #send-button {
-        width: 38px;
-        height: 38px;
-        flex: 0 0 38px;
-    }
-
-    body > main > footer > div > p {
-        margin-top: 4px;
-        font-size: 9px;
-        line-height: 1.35;
-    }
-
-    .ai-answer-content,
-    .ai-answer-content p,
-    .ai-answer-content li,
-    .ai-answer-content h1,
-    .ai-answer-content h2,
-    .ai-answer-content h3,
-    .ai-answer-content blockquote {
-        min-width: 0;
-        max-width: 100%;
-        overflow-wrap: anywhere;
-    }
-
-    .ai-answer-content pre,
-    .ai-answer-content table {
-        max-width: 100%;
-        overflow-x: auto;
-    }
-}
-
-@media screen and (max-width: 380px) {
-    body > main > header .header-chat-action span { display: none; }
-    body > main > header .header-chat-action { padding: 7px; }
-    #chat-form #research-toggle { padding-left: 5px; padding-right: 5px; }
-}
-
-
-
-/* FINAL MOBILE COMPOSER FIX: keep the entire input toolbar above the phone edge */
-@media screen and (max-width: 767px) {
-    body > main {
-        position: relative;
+    #sidebar-drawer {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        height: 100vh !important;
         height: 100dvh !important;
-        max-height: 100dvh !important;
-        min-height: 0 !important;
-        overflow: hidden !important;
+        z-index: 100 !important;
+        width: min(84vw, 290px) !important;
+    }
+
+    #sidebar-backdrop {
+        z-index: 95 !important;
+    }
+
+    main.flex-1 {
+        position: relative !important;
+        height: 100dvh !important;
         display: flex !important;
         flex-direction: column !important;
+        overflow: hidden !important;
     }
 
-    body > main > header {
-        flex: 0 0 58px !important;
+    /* Sticky Top Header - Never scrolls away */
+    main > header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 60 !important;
+        flex: 0 0 56px !important;
+        height: 56px !important;
+        background: rgba(10, 14, 24, 0.96) !important;
     }
 
-    body > main > #chat-container {
+    body.light-mode main > header {
+        background: #ffffff !important;
+    }
+
+    /* Chat container padding so header and footer don't overlap messages */
+    #chat-container {
         flex: 1 1 auto !important;
-        height: auto !important;
-        min-height: 0 !important;
-        padding-bottom: 190px !important;
+        height: 0 !important;
         overflow-y: auto !important;
+        padding: 68px 12px 90px !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
-    body > main > footer {
-        position: absolute !important;
+    /* 2x2 grid for welcome suggestions */
+    #welcome-screen .grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    #welcome-screen .grid > button {
+        min-h-[75px] !important;
+        padding: 10px !important;
+    }
+
+    /* ChatGPT Style Compact Typing Section at the Bottom (Zero extra gap above keyboard) */
+    main > footer {
+        position: fixed !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
         z-index: 50 !important;
-        width: 100% !important;
-        max-height: none !important;
-        height: auto !important;
-        flex: 0 0 auto !important;
-        overflow: visible !important;
-        padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-        background: #090c14 !important;
-        border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
+        padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+        background: rgba(5, 7, 14, 0.98) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
 
-    body > main > footer > div {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-        margin: 0 auto !important;
+    body.light-mode > main > footer {
+        background: #ffffff !important;
+        border-top: 1px solid #cbd5e1 !important;
     }
 
+    /* ChatGPT Dark Charcoal Box Color (#181b22) */
     #chat-form {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 5px !important;
-        width: 100% !important;
-        min-width: 0 !important;
-        padding: 7px !important;
-        margin: 0 !important;
+        background: #181b22 !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 20px !important;
+        padding: 4px 6px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    body.light-mode #chat-form {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
     }
 
     #chat-input {
-        display: block !important;
-        flex: 0 0 auto !important;
-        width: 100% !important;
-        height: 42px !important;
-        min-height: 42px !important;
-        max-height: 76px !important;
-        padding: 9px 10px !important;
-        margin: 0 !important;
-        line-height: 1.4 !important;
-        font-size: 16px !important;
-        overflow-y: auto !important;
-    }
-
-    #chat-form > div {
-        display: flex !important;
-        flex: 0 0 auto !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        gap: 5px !important;
-        width: 100% !important;
-        min-height: 38px !important;
-        margin-top: 0 !important;
-    }
-
-    #chat-form .flex.items-center.gap-1.min-w-0 {
-        display: flex !important;
-        flex: 1 1 auto !important;
-        min-width: 0 !important;
-        gap: 3px !important;
-    }
-
-    #chat-form .w-9.h-9,
-    #chat-form button[aria-label="Voice input"],
-    #chat-form button[aria-label="Attach image, file or short video"] {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 36px !important;
-        height: 36px !important;
-        min-width: 36px !important;
-        flex: 0 0 36px !important;
-    }
-
-    #chat-form #research-toggle {
-        width: 36px !important;
-        min-width: 36px !important;
-        height: 36px !important;
-        padding: 0 !important;
-        justify-content: center !important;
-        flex: 0 0 36px !important;
-    }
-
-    #chat-form #research-toggle span,
-    #char-count {
-        display: none !important;
-    }
-
-    #chat-form #send-button {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 40px !important;
-        height: 40px !important;
-        min-width: 40px !important;
-        flex: 0 0 40px !important;
-    }
-
-    body > main > footer > div > p {
-        margin: 5px 0 0 !important;
-        font-size: 9px !important;
-        line-height: 1.25 !important;
+        font-size: 15px !important;
+        padding: 6px 4px !important;
+        max-height: 70px !important;
+        color: inherit !important;
     }
 }
 
-@media screen and (max-width: 380px) {
-    #chat-form .flex.items-center.gap-1.min-w-0 { gap: 1px !important; }
-    #chat-form .w-9.h-9,
-    #chat-form button[aria-label="Voice input"],
-    #chat-form button[aria-label="Attach image, file or short video"] {
-        width: 33px !important;
-        min-width: 33px !important;
-        flex-basis: 33px !important;
-    }
+#welcome-screen.hidden,
+#messages-list.hidden {
+    display: none !important;
 }
-
-
-
-/* ================================================
-   FINAL RESPONSIVE CHAT LAYOUT — HEADER / KEYBOARD
-   ================================================ */
-:root { --app-height: 100dvh; }
-html, body { min-height: 0; }
-body {
-    height: var(--app-height, 100dvh) !important;
-    max-height: var(--app-height, 100dvh) !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-}
-body > main.flex-1.flex.flex-col {
-    display: flex !important;
-    flex-direction: column !important;
-    height: var(--app-height, 100dvh) !important;
-    max-height: var(--app-height, 100dvh) !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-}
-body > main > header {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 50 !important;
-    flex: 0 0 auto !important;
-    min-height: 58px;
-}
-body > main > #chat-container {
-    position: relative;
-    flex: 1 1 0% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    padding-top: 14px !important;
-    padding-bottom: 18px !important;
-    scroll-padding-top: 14px;
-    scroll-padding-bottom: 18px;
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
-}
-body > main > footer {
-    position: relative !important;
-    inset: auto !important;
-    z-index: 40 !important;
-    display: block !important;
-    flex: 0 0 auto !important;
-    width: 100% !important;
-    height: auto !important;
-    max-height: none !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-    background: #181b22 !important;
-    border-top: 1px solid rgba(148, 163, 184, 0.18) !important;
-}
-body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin: 0 auto; }
-#chat-form {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    gap: 5px !important;
-    padding: 8px !important;
-    margin: 0 !important;
-    background: #181b22 !important;
-    border: 1px solid rgba(148, 163, 184, 0.2) !important;
-    border-radius: 20px !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,.16) !important;
-}
-#chat-input {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 42px !important;
-    max-height: 120px !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 10px 11px !important;
-    font-size: 16px !important;
-    line-height: 1.45 !important;
-    resize: none !important;
-    overflow-y: auto !important;
-    background: transparent !important;
-    box-sizing: border-box !important;
-}
-#chat-form > div { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 8px !important; width: 100% !important; min-width: 0 !important; margin-top: 0 !important; }
-#chat-form .flex.items-center.gap-1.min-w-0 { display: flex !important; align-items: center !important; flex: 1 1 auto !important; min-width: 0 !important; gap: 6px !important; }
-#chat-form button[aria-label="Attach image, file or short video"],
-#chat-form button[aria-label="Voice input"] {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    flex: 0 0 38px !important;
-    border-radius: 50% !important;
-    background: transparent !important;
-    color: #d1d5db !important;
-}
-#chat-form button[aria-label="Attach image, file or short video"]:hover,
-#chat-form button[aria-label="Voice input"]:hover { background: #292d36 !important; color: #fff !important; }
-#chat-form #send-button {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    flex: 0 0 40px !important;
-    border-radius: 50% !important;
-    background: #f3f4f6 !important;
-    color: #181b22 !important;
-    box-shadow: none !important;
-}
-#chat-form #send-button:hover { filter: brightness(.92); }
-#chat-form #char-count { display: none !important; }
-@media screen and (max-width: 767px) {
-    html, body { width: 100%; min-width: 0; overflow: hidden !important; }
-    body { display: flex !important; flex-direction: row !important; }
-    body > main.flex-1.flex.flex-col { flex: 1 1 0% !important; width: auto !important; min-width: 0 !important; }
-    body > main > header { padding-left: 10px; padding-right: 10px; }
-    body > main > #chat-container { padding-left: 12px !important; padding-right: 12px !important; }
-    body > main > footer { padding-left: 9px !important; padding-right: 9px !important; }
-    body > main > footer > div > p { margin-top: 5px !important; font-size: 9px !important; line-height: 1.3 !important; }
-    #chat-form .flex.items-center.gap-1.min-w-0 { gap: 5px !important; }
-}
-@media screen and (max-width: 380px) {
-    #chat-form button[aria-label="Attach image, file or short video"],
-    #chat-form button[aria-label="Voice input"] { width: 35px !important; min-width: 35px !important; flex-basis: 35px !important; }
-}
-
-
-
-/* ==========================================
-   CHATGPT-LIKE CHAT TYPOGRAPHY — FINAL OVERRIDE
-   Balanced message and answer sizing on desktop/mobile.
-   ========================================== */
-#messages-list > .message-animation > div.rounded-2xl .whitespace-pre-wrap {
-    font-size: 14px !important;
-    line-height: 1.65 !important;
-    letter-spacing: 0 !important;
-    font-weight: 400 !important;
-}
-
-#messages-list .ai-answer-content {
-    font-size: 15px !important;
-    line-height: 1.72 !important;
-    letter-spacing: 0 !important;
-    font-weight: 400 !important;
-}
-
-#messages-list .ai-answer-content p {
-    margin: 0 0 12px !important;
-    line-height: inherit !important;
-}
-
-#messages-list .ai-answer-content li {
-    margin: 5px 0 !important;
-    line-height: 1.7 !important;
-}
-
-#messages-list .ai-answer-content h1 { font-size: 21px !important; line-height: 1.35 !important; margin: 18px 0 9px !important; }
-#messages-list .ai-answer-content h2 { font-size: 19px !important; line-height: 1.4 !important; margin: 16px 0 8px !important; }
-#messages-list .ai-answer-content h3 { font-size: 17px !important; line-height: 1.45 !important; margin: 14px 0 7px !important; }
-#messages-list .ai-answer-content ul,
-#messages-list .ai-answer-content ol { margin: 9px 0 13px !important; padding-left: 23px !important; }
-
-@media (max-width: 767px) {
-    #messages-list > .message-animation > div.rounded-2xl .whitespace-pre-wrap {
-        font-size: 14px !important;
-        line-height: 1.6 !important;
-    }
-    #messages-list .ai-answer-content {
-        font-size: 14px !important;
-        line-height: 1.68 !important;
-    }
-    #messages-list .ai-answer-content h1 { font-size: 20px !important; }
-    #messages-list .ai-answer-content h2 { font-size: 18px !important; }
-    #messages-list .ai-answer-content h3 { font-size: 16px !important; }
-}
-
-
-
-/* FINAL LUXURY COMPOSER: plus, voice, prompt and send on one line */
-#welcome-screen.hidden { display: none !important; }
-#welcome-screen:not(.hidden) { display: flex; }
-#chat-form {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    padding: 8px 10px !important;
-    gap: 8px !important;
-    border: 1px solid rgba(168, 142, 255, .24) !important;
-    border-radius: 24px !important;
-    background: linear-gradient(145deg, #1d2029 0%, #171a21 100%) !important;
-    box-shadow: 0 8px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.035) !important;
-}
-#chat-form .composer-inline-row {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 8px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-}
-#chat-form .composer-attach-wrap { position: relative; flex: 0 0 auto; display: flex; align-items: center; }
-#chat-form .composer-icon-button {
-    display: inline-flex !important; align-items: center !important; justify-content: center !important;
-    flex: 0 0 38px !important; width: 38px !important; min-width: 38px !important; height: 38px !important;
-    border-radius: 50% !important; color: #e5e7eb !important;
-    border: 1px solid rgba(255,255,255,.08) !important;
-    background: linear-gradient(145deg, #303442, #232631) !important;
-    box-shadow: 0 3px 10px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06) !important;
-    transition: transform .18s ease, border-color .18s ease, background .18s ease !important;
-}
-#chat-form .composer-icon-button i { font-size: 15px !important; }
-#chat-form .composer-plus-button { color: #e9ddff !important; border-color: rgba(167,139,250,.28) !important; }
-#chat-form .composer-plus-button i { font-size: 18px !important; font-weight: 900 !important; }
-#chat-form .composer-voice-button { color: #d7c6ff !important; }
-#chat-form .composer-icon-button:hover { transform: translateY(-1px); border-color: rgba(167,139,250,.55) !important; background: linear-gradient(145deg, #3b3650, #282b38) !important; }
-#chat-form .composer-textarea {
-    display: block !important; flex: 1 1 auto !important; width: 0 !important; min-width: 0 !important;
-    min-height: 40px !important; max-height: 120px !important; height: auto !important;
-    margin: 0 !important; padding: 10px 3px !important; resize: none !important;
-    border: 0 !important; outline: none !important; box-shadow: none !important;
-    color: #f3f4f6 !important; background: transparent !important;
-    font-size: 15px !important; line-height: 1.4 !important; overflow-y: auto !important;
-}
-#chat-form .composer-textarea::placeholder { color: #9298a7 !important; opacity: 1; }
-#chat-form #send-button.composer-send-button {
-    display: inline-flex !important; align-items: center !important; justify-content: center !important;
-    flex: 0 0 40px !important; width: 40px !important; min-width: 40px !important; height: 40px !important;
-    border: 1px solid rgba(255,255,255,.18) !important; border-radius: 50% !important;
-    color: #fff !important; background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 48%, #4f46e5 100%) !important;
-    box-shadow: 0 5px 16px rgba(124,58,237,.3), inset 0 1px 0 rgba(255,255,255,.22) !important;
-    transition: transform .18s ease, filter .18s ease !important;
-}
-#chat-form #send-button.composer-send-button i { font-size: 16px !important; }
-#chat-form #send-button.composer-send-button:hover { filter: brightness(1.12); transform: translateY(-1px); }
-#chat-form #send-button.composer-send-button:active { transform: scale(.95); }
-#chat-form #char-count { display: none !important; }
-#chat-form .attachment-menu { bottom: calc(100% + 12px) !important; }
-@media (max-width: 767px) {
-    #chat-form { padding: 6px 7px !important; gap: 5px !important; border-radius: 21px !important; }
-    #chat-form .composer-inline-row { gap: 5px !important; }
-    #chat-form .composer-icon-button { flex-basis: 34px !important; width: 34px !important; min-width: 34px !important; height: 34px !important; }
-    #chat-form .composer-plus-button i { font-size: 17px !important; }
-    #chat-form .composer-textarea { min-height: 38px !important; padding: 8px 1px !important; font-size: 15px !important; }
-    #chat-form #send-button.composer-send-button { flex-basis: 37px !important; width: 37px !important; min-width: 37px !important; height: 37px !important; }
-}
-@media (max-width: 360px) {
-    #chat-form { padding: 5px !important; }
-    #chat-form .composer-inline-row { gap: 4px !important; }
-    #chat-form .composer-icon-button { flex-basis: 31px !important; width: 31px !important; min-width: 31px !important; height: 31px !important; }
-    #chat-form .composer-textarea { font-size: 14px !important; }
-    #chat-form #send-button.composer-send-button { flex-basis: 35px !important; width: 35px !important; min-width: 35px !important; height: 35px !important; }
-}
-</style>
+    </style>
 </head>
 
 <body class="h-screen overflow-hidden flex relative">
 
-  <!-- Mobile sidebar background -->
+    <!-- Mobile sidebar background -->
     <div
         id="sidebar-backdrop"
         onclick="closeMobileSidebar()"
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden transition-opacity">
     </div>
 
-    <!-- Responsive sidebar -->
+    <!-- Left Sidebar -->
     <aside
         id="sidebar-drawer"
         class="fixed md:static inset-y-0 left-0 w-80 flex flex-col justify-between z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
@@ -1281,7 +825,7 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
                 </div>
             </div>
 
-            <!-- Category 2: AI CAPABILITIES (8 compact bold items, hidden until clicked)[cite: 1] -->
+            <!-- Category 2: AI CAPABILITIES (8 compact bold items, hidden until clicked) -->
             <div>
                 <button
                     type="button"
@@ -1447,6 +991,7 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
         </div>
 
     </aside>
+
     <!-- Main chat area -->
     <main class="flex-1 flex flex-col h-full min-w-0 bg-[#07090e] relative overflow-hidden">
         <header class="h-16 shrink-0 glass-panel border-b border-gray-800/80 flex items-center justify-between px-3 md:px-6 z-10">
@@ -1456,32 +1001,33 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
                 </button>
 
                 <div class="min-w-0">
-                    <h2 class="font-semibold text-white text-sm md:text-base flex items-center gap-2">
+                    <h2 class="font-bold text-white text-sm md:text-base flex items-center gap-2">
                         SmartLearn AI
-                        <span class="bg-purple-500/10 text-purple-400 text-[10px] md:text-xs px-2 py-0.5 rounded-full border border-purple-500/20">Pro</span>
+                        <span class="bg-purple-500/15 text-purple-400 text-[10px] md:text-xs px-2 py-0.5 rounded-full border border-purple-500/30 font-bold">Pro</span>
                     </h2>
-                    <p class="text-[11px] md:text-xs text-gray-400 truncate" id="current-mode">Ready to guide you step-by-step</p>
+                    <p class="text-[11px] md:text-xs text-gray-400 font-medium truncate" id="current-mode">Ready to guide you step-by-step</p>
                 </div>
             </div>
 
+            <!-- Top Right Controls: New Chat + Dark/Light Mode Toggle -->
             <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
                 <button type="button" onclick="startNewChat()" title="Start a new chat" aria-label="Start a new chat"
-                    class="header-chat-action rounded-lg border border-purple-500/40 bg-purple-500/10 px-2 py-1.5 text-[11px] sm:text-xs font-semibold text-purple-200 hover:bg-purple-500/20 transition inline-flex items-center gap-1.5">
+                    class="header-chat-action rounded-lg border border-purple-500/40 bg-purple-500/10 px-2.5 py-1.5 text-[11px] sm:text-xs font-bold text-purple-200 hover:bg-purple-500/20 transition inline-flex items-center gap-1.5">
                     <i class="fa-solid fa-plus"></i><span>New Chat</span>
                 </button>
-                <button type="button" onclick="clearChat()" title="Reset current chat" aria-label="Reset current chat"
-                    class="header-chat-action rounded-lg border border-gray-700 px-2 py-1.5 text-[11px] sm:text-xs font-medium text-gray-300 hover:text-white hover:bg-gray-800/70 transition inline-flex items-center gap-1.5">
-                    <i class="fa-solid fa-rotate-left text-red-400"></i><span>Reset</span>
+
+                <button type="button" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch Dark / Light Mode" aria-label="Switch Dark or Light Mode"
+                    class="header-chat-action rounded-full border border-gray-700 bg-gray-800/50 px-2.5 py-1.5 text-xs font-semibold text-gray-300 hover:text-white hover:border-purple-500/40 transition inline-flex items-center gap-2">
+                    <i id="theme-sun-icon" class="fa-solid fa-sun text-amber-400"></i>
+                    <i id="theme-moon-icon" class="fa-solid fa-moon text-indigo-400"></i>
                 </button>
             </div>
         </header>
 
         <div id="chat-container" class="flex-1 min-h-0 overflow-y-auto p-3 md:p-6 relative">
-            <!-- Welcome screen and remaining chat UI continue in Part 2 -->
-
-                        <!-- Welcome screen -->
-            <section id="welcome-screen" class="min-h-full flex flex-col items-center justify-center py-8 md:py-12 px-1">
-                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-xl shadow-purple-900/30 mb-5 ai-voice-orb">
+            <!-- Welcome screen -->
+            <section id="welcome-screen" class="min-h-full flex flex-col items-center justify-center py-6 md:py-12 px-1">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-xl shadow-purple-900/30 mb-4 ai-voice-orb">
                     <i class="fa-solid fa-brain text-white text-2xl"></i>
                 </div>
 
@@ -1490,49 +1036,49 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
                     <span class="luxury-gradient-text">{{ user.name if user and user.name else 'Student' }}</span>?
                 </h1>
 
-                <p class="mt-3 text-xs md:text-sm text-gray-400 text-center max-w-lg leading-relaxed px-2">
+                <p class="mt-2 text-xs md:text-sm text-gray-400 font-medium text-center max-w-lg leading-relaxed px-2">
                     Your personal AI tutor is ready! Ask a question, use voice, or upload a photo to get started.
                 </p>
 
                 <!-- Prompt suggestions -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-7 md:mt-9 w-full max-w-3xl">
-                    <button onclick="setPrompt('Explain an important Physics concept with formulas and examples:')" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
-                        <span class="w-10 h-10 shrink-0 rounded-xl bg-purple-500/15 text-purple-300 flex items-center justify-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 md:mt-9 w-full max-w-3xl">
+                    <button onclick="setPrompt('Explain an important Physics concept with formulas and examples:')" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
                             <i class="fa-solid fa-atom"></i>
                         </span>
                         <span class="min-w-0">
-                            <span class="block text-sm font-semibold text-gray-100">Physics Revision</span>
-                            <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Formulas and step-by-step solutions.</span>
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Physics Revision</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Formulas & solutions.</span>
                         </span>
                     </button>
 
-                    <button onclick="setPrompt('Teach me a programming concept step by step with simple examples:')" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
-                        <span class="w-10 h-10 shrink-0 rounded-xl bg-emerald-500/15 text-emerald-300 flex items-center justify-center">
+                    <button onclick="setPrompt('Teach me a programming concept step by step with simple examples:')" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
                             <i class="fa-solid fa-code"></i>
                         </span>
                         <span class="min-w-0">
-                            <span class="block text-sm font-semibold text-gray-100">Coding Concepts</span>
-                            <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Learn Python, C++, and web development.</span>
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Coding Concepts</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Python, C++, Web.</span>
                         </span>
                     </button>
 
-                    <button onclick="openAttachmentMenu()" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
-                        <span class="w-10 h-10 shrink-0 rounded-xl bg-blue-500/15 text-blue-300 flex items-center justify-center">
+                    <button onclick="openAttachmentMenu()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center">
                             <i class="fa-solid fa-camera"></i>
                         </span>
                         <span class="min-w-0">
-                            <span class="block text-sm font-semibold text-gray-100">Photo & File Doubt</span>
-                            <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Attach a supported file or photo with your question.</span>
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Photo & File Doubt</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Attach a file or photo.</span>
                         </span>
                     </button>
 
-                    <button onclick="openVoiceAssistant()" class="glass-card rounded-2xl p-4 text-left flex items-start gap-3 min-h-[90px]">
-                        <span class="w-10 h-10 shrink-0 rounded-xl bg-amber-500/15 text-amber-300 flex items-center justify-center">
+                    <button onclick="openVoiceAssistant()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
                             <i class="fa-solid fa-microphone"></i>
                         </span>
                         <span class="min-w-0">
-                            <span class="block text-sm font-semibold text-gray-100">Voice Assistant</span>
-                            <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Ask your questions using your voice.</span>
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Voice Assistant</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Speak your question.</span>
                         </span>
                     </button>
                 </div>
@@ -1541,30 +1087,26 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
             <!-- Messages are inserted here by JavaScript -->
             <section id="messages-list" class="hidden w-full max-w-4xl mx-auto space-y-6 pb-5" aria-live="polite"></section>
 
-            <!-- Loading indicator -->
-            <div id="typing-indicator" class="hidden w-full max-w-4xl mx-auto py-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-brain text-white text-sm"></i>
-                    </div>
-                    <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2">
-                        <span class="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></span>
-                        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
-                        <span class="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:300ms]"></span>
-                        <span class="text-xs text-gray-400 ml-1" id="typing-text">Thinking...</span>
+            <!-- Loading indicator: Only 3 Bold Dots -->
+            <div id="typing-indicator" class="hidden w-full max-w-4xl mx-auto py-2">
+                <div class="flex items-center gap-3 bg-transparent">
+                    <div class="three-white-dots" aria-label="AI is replying">
+                        <span>&bull;</span>
+                        <span>&bull;</span>
+                        <span>&bull;</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Chat input section -->
-        <footer class="shrink-0 w-full border-t border-gray-800/70 bg-[#090c14]/95 px-3 pt-3 pb-3 md:px-6 md:pt-4 md:pb-4">
+        <!-- Chat input section (ChatGPT style compact bar, Search icon removed, Send button on right) -->
+        <footer class="shrink-0 w-full border-t border-gray-800/70 bg-[#090c14]/95 px-3 pt-2 pb-2 md:px-6 md:pt-4 md:pb-4">
             <div class="max-w-4xl mx-auto">
                 <!-- Attachment preview -->
                 <div id="attachment-preview" class="hidden mb-2 p-2 rounded-xl bg-gray-800/60 border border-gray-700 flex items-center justify-between gap-3">
                     <div class="flex items-center gap-2 min-w-0">
-                        <i class="fa-solid fa-paperclip text-purple-300"></i>
-                        <span id="attachment-name" class="text-xs text-gray-300 truncate"></span>
+                        <i class="fa-solid fa-paperclip text-purple-400"></i>
+                        <span id="attachment-name" class="text-xs font-semibold text-gray-300 truncate"></span>
                     </div>
                     <button type="button" onclick="clearAttachment()" class="text-gray-400 hover:text-white p-2" aria-label="Remove attachment">
                         <i class="fa-solid fa-xmark"></i>
@@ -1573,49 +1115,106 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
 
                 <!-- Selected mode -->
                 <div id="selected-mode-wrap" class="hidden mb-2 flex items-center gap-2">
-                    <span class="text-xs text-purple-300">Mode:</span>
-                    <span id="selected-mode-label" class="text-xs text-gray-200 bg-purple-500/10 border border-purple-500/20 rounded-full px-3 py-1"></span>
+                    <span class="text-xs font-bold text-purple-400">Mode:</span>
+                    <span id="selected-mode-label" class="text-xs font-semibold text-gray-200 bg-purple-500/10 border border-purple-500/20 rounded-full px-3 py-1"></span>
                     <button type="button" onclick="clearStudyMode()" class="text-gray-500 hover:text-white text-xs" aria-label="Clear study mode">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
                 <!-- Input panel -->
-                <form id="chat-form" class="glass-panel rounded-2xl p-2 md:p-3 shadow-lg shadow-black/20" onsubmit="handleChatSubmit(event)">
-                    <div class="composer-inline-row">
-                        <div class="composer-attach-wrap">
-                            <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
-                            <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
-                            <input type="file" id="video-input" class="hidden" accept="video/*" onchange="handleFileSelect(event,'video')">
-                            <button type="button" onclick="toggleAttachmentMenu()" class="composer-icon-button composer-plus-button" aria-label="Attach image, file or short video" title="Attach image, file or short video"><i class="fa-solid fa-plus"></i></button>
-                            <div id="attachment-menu" class="attachment-menu hidden">
-                                <button type="button" class="attachment-option" onclick="chooseAttachment('image')"><i class="fa-regular fa-image text-purple-300 text-lg w-6 text-center"></i><span><strong>Image</strong><small>Choose from gallery or photos</small></span></button>
-                                <button type="button" class="attachment-option" onclick="chooseAttachment('file')"><i class="fa-regular fa-file-lines text-blue-300 text-lg w-6 text-center"></i><span><strong>Files</strong><small>PDF and supported documents</small></span></button>
-                                <button type="button" class="attachment-option" onclick="chooseAttachment('video')"><i class="fa-solid fa-film text-emerald-300 text-lg w-6 text-center"></i><span><strong>Short Video</strong><small>Select a short clip for summarization</small></span></button>
-                            </div>
-                        </div>
+             
+<form id="chat-form"
+      class="glass-panel rounded-2xl p-2 md:p-3 shadow-lg shadow-black/20"
+      onsubmit="handleChatSubmit(event)">
 
-                        <button type="button" onclick="startVoiceInput()" class="composer-icon-button composer-voice-button" aria-label="Voice input" title="Speak your question"><i class="fa-solid fa-microphone"></i></button>
+    <div class="composer-inline-row">
 
-                        <textarea id="chat-input" rows="1" maxlength="12000" placeholder="Ask your questions..." aria-label="Ask your questions" class="composer-textarea"></textarea>
+        <!-- PLUS / ATTACHMENT BUTTON -->
+        <div class="composer-attach-wrap">
 
-                        <span id="char-count" class="hidden">0/12000</span>
-                        <button type="submit" id="send-button" class="composer-send-button" aria-label="Send message" title="Send message"><i class="fa-solid fa-arrow-up"></i></button>
-                    </div>
-                </form>
+            <input type="file" id="image-input"
+                   class="hidden" accept="image/*"
+                   onchange="handleFileSelect(event,'image')">
 
-                <p class="text-[10px] md:text-[11px] text-gray-600 text-center mt-2">
-                    SmartLearn AI can make mistakes. Verify important learning concepts.
-                </p>
+            <input type="file" id="document-input"
+                   class="hidden"
+                   accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
+                   onchange="handleFileSelect(event,'file')">
+
+            <input type="file" id="video-input"
+                   class="hidden" accept="video/*"
+                   onchange="handleFileSelect(event,'video')">
+
+            <button type="button"
+                    onclick="toggleAttachmentMenu()"
+                    class="composer-icon-button composer-plus-button"
+                    aria-label="Attach file"
+                    title="Attach image, file or video">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+
+            <div id="attachment-menu" class="attachment-menu hidden">
+                <button type="button" class="attachment-option"
+                        onclick="chooseAttachment('image')">
+                    <i class="fa-regular fa-image"></i>
+                    <span><strong>Image</strong>
+                    <small>Choose a picture</small></span>
+                </button>
+
+                <button type="button" class="attachment-option"
+                        onclick="chooseAttachment('file')">
+                    <i class="fa-regular fa-file-lines"></i>
+                    <span><strong>Files</strong>
+                    <small>Choose a document</small></span>
+                </button>
+
+                <button type="button" class="attachment-option"
+                        onclick="chooseAttachment('video')">
+                    <i class="fa-solid fa-film"></i>
+                    <span><strong>Short Video</strong>
+                    <small>Select a video</small></span>
+                </button>
             </div>
-        </footer>
-    </main>
+        </div>
+
+        <!-- MICROPHONE BUTTON -->
+        <button type="button"
+                onclick="startVoiceInput()"
+                class="composer-icon-button composer-voice-button"
+                aria-label="Voice input"
+                title="Speak your question">
+            <i class="fa-solid fa-microphone"></i>
+        </button>
+
+        <!-- QUESTION INPUT -->
+        <textarea id="chat-input"
+                  rows="1"
+                  maxlength="12000"
+                  placeholder="Ask your questions..."
+                  aria-label="Ask your questions"
+                  class="composer-textarea"></textarea>
+
+        <span id="char-count" class="hidden">0/12000</span>
+
+        <!-- SEND BUTTON -->
+        <button type="submit"
+                id="send-button"
+                class="composer-send-button"
+                aria-label="Send message"
+                title="Send message">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
+
+    </div>
+</form>
+
 
     <!-- Voice assistant modal -->
     <div id="voice-modal" class="study-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="voice-modal-title">
         <div class="study-modal max-w-md text-center">
             <div class="flex items-center justify-between mb-5">
-                <span class="text-xs uppercase tracking-wider text-gray-400">Voice assistant</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Voice assistant</span>
                 <button type="button" onclick="closeVoiceAssistant()" class="text-gray-400 hover:text-white p-2" aria-label="Close voice assistant">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -1653,10 +1252,10 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
             </div>
 
             <div class="flex gap-2 mb-4">
-                <button type="button" id="library-saved-tab" onclick="switchLibraryTab('saved')" class="rounded-xl px-3 py-2 text-xs border border-purple-500 bg-purple-500/20 text-white">
+                <button type="button" id="library-saved-tab" onclick="switchLibraryTab('saved')" class="rounded-xl px-3 py-2 text-xs font-bold border border-purple-500 bg-purple-500/20 text-white">
                     Saved Answers
                 </button>
-                <button type="button" id="library-notes-tab" onclick="switchLibraryTab('notes')" class="rounded-xl px-3 py-2 text-xs border border-gray-700 text-gray-300">
+                <button type="button" id="library-notes-tab" onclick="switchLibraryTab('notes')" class="rounded-xl px-3 py-2 text-xs font-bold border border-gray-700 text-gray-300">
                     Study Notes
                 </button>
             </div>
@@ -1664,7 +1263,7 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
             <div id="library-items"></div>
 
             <div id="note-editor" class="hidden mt-5 border-t border-gray-800 pt-4">
-                <h3 class="font-semibold text-sm mb-3">Create a study note</h3>
+                <h3 class="font-bold text-sm mb-3">Create a study note</h3>
                 <input id="note-title" type="text" maxlength="120" placeholder="Note title">
                 <textarea id="note-content" rows="5" maxlength="12000" placeholder="Write your notes here..." class="mt-2"></textarea>
                 <button type="button" onclick="saveStudyNote()" class="mt-3 w-full rounded-xl bg-purple-600 hover:bg-purple-500 py-2.5 text-sm font-semibold text-white">
@@ -1672,23 +1271,19 @@ body > main > footer > div { width: 100%; max-width: 56rem; min-width: 0; margin
                 </button>
             </div>
 
-            <button type="button" id="new-note-button" onclick="showNoteEditor()" class="mt-4 w-full rounded-xl border border-gray-700 hover:border-purple-500 py-2.5 text-sm text-gray-200">
+            <button type="button" id="new-note-button" onclick="showNoteEditor()" class="mt-4 w-full rounded-xl border border-gray-700 hover:border-purple-500 py-2.5 text-sm font-semibold text-gray-200">
                 <i class="fa-solid fa-plus mr-2"></i>Create Note
             </button>
         </div>
     </div>
 
     <!-- Confirmation / notification -->
-    <div id="toast-message" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[100] hidden max-w-[90vw] rounded-xl border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white shadow-xl" role="status" aria-live="polite"></div>
-
-    <!-- Part 3 JavaScript goes below this line -->
+    <div id="toast-message" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[100] hidden max-w-[90vw] rounded-xl border border-gray-700 bg-gray-900 px-4 py-3 text-sm font-semibold text-white shadow-xl" role="status" aria-live="polite"></div>
 
     <script>
 /* ==========================================
-   SMARTLEARN AI — PART 3: JAVASCRIPT
-   Mobile controls, chat, Markdown, saving,
-   study modes and voice input
-========================================== */
+   SMARTLEARN AI — JAVASCRIPT
+   ========================================== */
 
 let selectedFile = null;
 let selectedStudyMode = "";
@@ -1700,17 +1295,51 @@ let voiceRequestInProgress = false;
 const SAVED_KEY = "smartlearn_saved_answers_v1";
 const NOTES_KEY = "smartlearn_study_notes_v1";
 const HISTORY_KEY = "smartlearn_chat_history_v1";
+const THEME_KEY = "smartlearn_theme_v1";
 let currentConversationId = null;
 let currentConversation = [];
 let selectedAttachmentKind = "";
 const MAX_HISTORY_ITEMS = 50;
 
+/* ---------- Theme Toggle ---------- */
+function applySavedTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    document.body.classList.toggle("light-mode", savedTheme === "light");
+}
+
+function toggleTheme() {
+    const isLight = document.body.classList.toggle("light-mode");
+    try {
+        localStorage.setItem(THEME_KEY, isLight ? "light" : "dark");
+    } catch (_) {}
+    showToast(isLight ? "Light mode enabled" : "Dark mode enabled");
+}
+
+/* ---------- Collapsible Sidebar Menus ---------- */
+function toggleSidebarSection(menuId, chevronId) {
+    const menu = document.getElementById(menuId);
+    const chevron = document.getElementById(chevronId);
+    if (!menu) return;
+
+    const isHidden = menu.classList.toggle("hidden");
+    if (!isHidden) {
+        menu.classList.remove("sidebar-dropdown-content");
+        void menu.offsetWidth;
+        menu.classList.add("sidebar-dropdown-content");
+    }
+    if (chevron) {
+        chevron.style.transform = isHidden ? "rotate(0deg)" : "rotate(180deg)";
+    }
+}
+
+/* ---------- Chat History ---------- */
 function loadChatHistory() {
     try {
         const value = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
         return Array.isArray(value) ? value : [];
     } catch (_) { return []; }
 }
+
 function saveCurrentConversation() {
     if (!currentConversation.length) return;
     const history = loadChatHistory();
@@ -1726,6 +1355,7 @@ function saveCurrentConversation() {
     currentConversationId = id;
     renderChatHistory();
 }
+
 function renderChatHistory() {
     const container = document.getElementById("chat-history-list");
     if (!container) return;
@@ -1733,7 +1363,7 @@ function renderChatHistory() {
     const history = loadChatHistory();
     if (!history.length) {
         const empty = document.createElement("p");
-        empty.className = "px-2 py-2 text-xs text-gray-500";
+        empty.className = "px-2 py-1.5 text-xs font-medium text-gray-500";
         empty.textContent = "Your conversations will appear here.";
         container.appendChild(empty);
         return;
@@ -1752,6 +1382,7 @@ function renderChatHistory() {
         container.appendChild(button);
     });
 }
+
 function openSavedConversation(id) {
     saveCurrentConversation();
     const item = loadChatHistory().find(entry => entry.id === id);
@@ -1760,67 +1391,57 @@ function openSavedConversation(id) {
     currentConversation = Array.isArray(item.messages) ? item.messages.slice() : [];
     const list = document.getElementById("messages-list");
     list.replaceChildren();
+    let lastAiElement = null;
     currentConversation.forEach(message => {
         if (message.role === "user") appendUserMessage(message.text, false);
-        else if (message.role === "assistant") appendAIMessage(message.text, false);
+        else if (message.role === "assistant") lastAiElement = appendAIMessage(message.text, false);
     });
     const hasMessages = currentConversation.length > 0;
-    document.getElementById("welcome-screen")?.classList.toggle("hidden", hasMessages);
-    document.getElementById("welcome-screen")?.style.setProperty("display", hasMessages ? "none" : "flex", "important");
+    const welcome = document.getElementById("welcome-screen");
+    welcome?.classList.toggle("hidden", hasMessages);
+    if (welcome) welcome.style.display = hasMessages ? "none" : "";
     list.classList.toggle("hidden", !hasMessages);
+    list.style.display = hasMessages ? "block" : "none";
     closeMobileSidebar();
-    scrollToBottom();
+    if (lastAiElement) {
+        scrollToElementTop(lastAiElement);
+    }
     renderChatHistory();
 }
+
 function startNewChat() {
     saveCurrentConversation();
-    
-
-/* Mobile browser/keyboard viewport sync. Uses visualViewport where supported. */
-(function syncChatViewportHeight() {
-    const updateHeight = () => {
-        const viewport = window.visualViewport;
-        const height = viewport && viewport.height ? viewport.height : window.innerHeight;
-        document.documentElement.style.setProperty('--app-height', `${Math.round(height)}px`);
-    };
-    updateHeight();
-    window.addEventListener('resize', updateHeight, { passive: true });
-    window.addEventListener('orientationchange', () => window.setTimeout(updateHeight, 120), { passive: true });
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', updateHeight, { passive: true });
-        window.visualViewport.addEventListener('scroll', updateHeight, { passive: true });
-    }
-    const chatInput = document.getElementById('chat-input');
-    chatInput?.addEventListener('focus', () => window.setTimeout(() => {
-        updateHeight();
-        const chat = document.getElementById('chat-container');
-        if (chat) chat.scrollTop = chat.scrollHeight;
-    }, 180));
-})();
-
-currentConversationId = String(Date.now());
+    currentConversationId = String(Date.now());
     currentConversation = [];
     document.getElementById("messages-list")?.replaceChildren();
-    document.getElementById("messages-list")?.classList.add("hidden");
-    document.getElementById("welcome-screen")?.classList.remove("hidden");
-    document.getElementById("welcome-screen")?.style.removeProperty("display");
+    const messages = document.getElementById("messages-list");
+    const welcome = document.getElementById("welcome-screen");
+    messages?.classList.add("hidden");
+    if (messages) messages.style.display = "none";
+    welcome?.classList.remove("hidden");
+    if (welcome) welcome.style.display = "";
     document.getElementById("chat-container").scrollTop = 0;
     clearAttachment();
     clearStudyMode();
     renderChatHistory();
 }
+
 function clearAllHistory() {
     if (!confirm("Delete all locally saved chat history? This cannot be undone.")) return;
     try { localStorage.removeItem(HISTORY_KEY); } catch (_) {}
     currentConversationId = String(Date.now());
     currentConversation = [];
     document.getElementById("messages-list")?.replaceChildren();
-    document.getElementById("messages-list")?.classList.add("hidden");
-    document.getElementById("welcome-screen")?.classList.remove("hidden");
-    document.getElementById("welcome-screen")?.style.removeProperty("display");
+    const messages = document.getElementById("messages-list");
+    const welcome = document.getElementById("welcome-screen");
+    messages?.classList.add("hidden");
+    if (messages) messages.style.display = "none";
+    welcome?.classList.remove("hidden");
+    if (welcome) welcome.style.display = "";
     renderChatHistory();
     showToast("Chat history cleared from this browser.");
 }
+
 function rememberMessage(role, text) {
     currentConversation.push({ role, text: String(text || ""), createdAt: new Date().toISOString() });
     saveCurrentConversation();
@@ -1870,23 +1491,6 @@ function clearStudyMode() {
     selectedStudyMode = "";
     document.getElementById("selected-mode-wrap")?.classList.add("hidden");
     document.getElementById("current-mode").textContent = "Ready to guide you step-by-step";
-}
-
-function toggleResearchMode() {
-    researchEnabled = !researchEnabled;
-
-    const button = document.getElementById("research-toggle");
-    if (!button) return;
-
-    button.classList.toggle("text-purple-300", researchEnabled);
-    button.classList.toggle("border-purple-500", researchEnabled);
-    button.classList.toggle("bg-purple-500/10", researchEnabled);
-
-    showToast(
-        researchEnabled
-            ? "Research mode enabled. Backend web-search support may be required."
-            : "Research mode disabled."
-    );
 }
 
 /* ---------- Safe HTML helpers ---------- */
@@ -1991,7 +1595,7 @@ function clearAttachment() {
     document.getElementById("attachment-preview")?.classList.add("hidden");
 }
 
-/* ---------- Chat rendering ---------- */
+/* ---------- Chat rendering & Top-of-Answer Scroll ---------- */
 
 function appendUserMessage(text, record = true) {
     const list = document.getElementById("messages-list");
@@ -1999,23 +1603,23 @@ function appendUserMessage(text, record = true) {
 
     row.className = "flex justify-end message-animation";
     row.innerHTML = `
-        <div class="max-w-[92%] sm:max-w-[85%] rounded-2xl border border-purple-500/30 bg-purple-900/20 p-3 md:p-4">
+        <div class="user-message-bubble max-w-[92%] sm:max-w-[85%] rounded-2xl border border-purple-500/30 bg-purple-900/20 p-3 md:p-4">
             <p class="message-user-label">You</p>
-            <div class="text-sm text-gray-100 whitespace-pre-wrap break-words"></div>
+            <div class="text-sm font-medium text-gray-100 whitespace-pre-wrap break-words"></div>
         </div>
     `;
 
     row.querySelector(".whitespace-pre-wrap").textContent = text;
     list.appendChild(row);
     if (record) rememberMessage("user", text);
+    return row;
 }
-
 
 function appendAIMessage(text, record = true) {
     const list = document.getElementById("messages-list");
     const row = document.createElement("div");
 
-    row.className = "flex items-start gap-3 message-animation";
+    row.className = "flex items-start gap-3 message-animation bg-transparent";
     row.setAttribute("data-answer-card", "");
 
     row.innerHTML = `
@@ -2024,7 +1628,7 @@ function appendAIMessage(text, record = true) {
         </div>
 
         <div class="min-w-0 flex-1 bg-transparent border-0 shadow-none p-0">
-            <p class="text-xs font-semibold text-purple-300 mb-3">
+            <p class="text-xs font-bold text-purple-400 mb-2">
                 SmartLearn AI Tutor
             </p>
 
@@ -2052,33 +1656,37 @@ function appendAIMessage(text, record = true) {
     list.appendChild(row);
 
     if (window.MathJax?.typesetPromise) {
-        MathJax.typesetPromise([content]).catch(() => {});
+        requestAnimationFrame(() => {
+            MathJax.typesetPromise([content]).catch(() => {});
+        });
     }
     if (record) rememberMessage("assistant", text);
+    return row;
 }
-
 
 function showChat() {
     const welcome = document.getElementById("welcome-screen");
     const messages = document.getElementById("messages-list");
-    welcome?.classList.add("hidden");
-    if (welcome) welcome.style.setProperty("display", "none", "important");
-    messages?.classList.remove("hidden");
-    if (messages) messages.style.removeProperty("display");
+    if (welcome) {
+        welcome.classList.add("hidden");
+        welcome.style.display = "none";
+    }
+    if (messages) {
+        messages.classList.remove("hidden");
+        messages.style.display = "block";
+    }
 }
 
-function scrollToBottom() {
-    const container = document.getElementById("chat-container");
-    if (!container) return;
-    const moveToBottom = () => {
-        container.scrollTop = container.scrollHeight;
+function scrollToElementTop(element) {
+    if (!element) return;
+    const alignTop = () => {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
     };
-    moveToBottom();
-    requestAnimationFrame(moveToBottom);
-    setTimeout(moveToBottom, 80);
+    alignTop();
+    requestAnimationFrame(alignTop);
 }
 
-/* ---------- Send message ---------- */
+/* ---------- Send message (Stops auto-opening mobile keyboard) ---------- */
 
 async function handleChatSubmit(event) {
     event.preventDefault();
@@ -2095,15 +1703,11 @@ async function handleChatSubmit(event) {
 
     if (!message && !attachmentToSend) return;
     if (!message && attachmentToSend) {
-        message = `Please analyze the attached ${attachmentKindToSend || "file"} named "${attachmentToSend.name}" and explain its contents.`;
+        message = `Analyze the attached ${attachmentKindToSend || "file"} "${attachmentToSend.name}" and explain clearly.`;
     }
 
     if (selectedStudyMode) {
-        message = "Study mode: " + selectedStudyMode + "\n\n" + message;
-    }
-
-    if (researchEnabled) {
-        message = "Deep Research: " + message;
+        message = "Mode: " + selectedStudyMode + "\n" + message;
     }
 
     requestInProgress = true;
@@ -2111,34 +1715,39 @@ async function handleChatSubmit(event) {
     sendButton.classList.add("opacity-50");
     showChat();
 
-    appendUserMessage(message);
+    const userRow = appendUserMessage(message);
 
     input.value = "";
     updateCharCount();
     clearAttachment();
     closeMobileSidebar();
 
+    input.blur();
+
     typing.classList.remove("hidden");
-    document.getElementById("typing-text").textContent = "Thinking...";
-    scrollToBottom();
+    scrollToElementTop(userRow);
+
+    let aiRow = null;
 
     try {
-        // Keep the same /api/chat endpoint. Text-only chats keep the existing JSON contract;
-        // attachments use multipart/form-data so the backend can read the actual file bytes.
+        const requestMessage = "Be a friendly, clear AI tutor:\n" + message;
+
         let requestOptions;
         if (attachmentToSend) {
             const formData = new FormData();
-            formData.append("message", message);
+            formData.append("message", requestMessage);
             formData.append("attachment", attachmentToSend, attachmentToSend.name);
             formData.append("attachment_kind", attachmentKindToSend || "file");
-            requestOptions = { method: "POST", body: formData };
+            requestOptions = { method: "POST", body: formData, priority: "high" };
         } else {
             requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: message })
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                body: JSON.stringify({ message: requestMessage }),
+                priority: "high"
             };
         }
+
         const response = await fetch("/api/chat", requestOptions);
 
         let data = {};
@@ -2158,9 +1767,9 @@ async function handleChatSubmit(event) {
             throw new Error("The server response did not contain an answer.");
         }
 
-        appendAIMessage(String(answer));
+        aiRow = appendAIMessage(String(answer));
     } catch (error) {
-        appendAIMessage(
+        aiRow = appendAIMessage(
             "Sorry, I couldn't get a response from the server.\n\n" +
             "Details: " + (error.message || "Network connection failed.") +
             "\n\nPlease check your internet connection and the Flask `/api/chat` route."
@@ -2170,17 +1779,11 @@ async function handleChatSubmit(event) {
         requestInProgress = false;
         sendButton.disabled = false;
         sendButton.classList.remove("opacity-50");
-        scrollToBottom();
-        input.focus();
+
+        if (aiRow) {
+            scrollToElementTop(aiRow);
+        }
     }
-}
-
-/* ---------- Reset visible chat ---------- */
-
-function clearChat() {
-    if (!confirm("Start a new chat? The current conversation will remain in Chat History.")) return;
-    startNewChat();
-    showToast("New chat started. Your previous conversation is in Chat History.");
 }
 
 /* ---------- Copy and save answers ---------- */
@@ -2230,7 +1833,6 @@ function writeItems(key, items) {
     }
 }
 
-
 const saveTapTimes = new WeakMap();
 
 function saveAnswer(button) {
@@ -2246,7 +1848,6 @@ function saveAnswer(button) {
     let items = readItems(SAVED_KEY);
     const existing = items.find(item => item.content === content);
 
-    // Double tap within 350ms removes the saved answer.
     if (now - previousTap < 350) {
         if (existing) {
             items = items.filter(item => item.content !== content);
@@ -2263,7 +1864,6 @@ function saveAnswer(button) {
         return;
     }
 
-    // First tap saves the answer if it isn't already saved.
     if (existing) {
         button.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
         showToast("Already saved. Double-tap to unsave.");
@@ -2282,7 +1882,6 @@ function saveAnswer(button) {
         showToast("Answer saved!");
     }
 }
-
 
 function speakAnswer(button) {
     const text = button.closest("[data-answer-card]")?.querySelector(".ai-answer-content")?.innerText;
@@ -2309,7 +1908,7 @@ let libraryMode = "saved";
 function openStudyLibrary(mode = "saved") {
     libraryMode = mode;
     document.getElementById("study-library-modal").classList.remove("hidden");
-    renderLibrary();
+    switchLibraryTab(mode);
 }
 
 function closeStudyLibrary() {
@@ -2321,13 +1920,13 @@ function switchLibraryTab(mode) {
 
     document.getElementById("library-saved-tab").className =
         mode === "saved"
-            ? "rounded-xl px-3 py-2 text-xs border border-purple-500 bg-purple-500/20 text-white"
-            : "rounded-xl px-3 py-2 text-xs border border-gray-700 text-gray-300";
+            ? "rounded-xl px-3 py-2 text-xs font-bold border border-purple-500 bg-purple-500/20 text-white"
+            : "rounded-xl px-3 py-2 text-xs font-bold border border-gray-700 text-gray-300";
 
     document.getElementById("library-notes-tab").className =
         mode === "notes"
-            ? "rounded-xl px-3 py-2 text-xs border border-purple-500 bg-purple-500/20 text-white"
-            : "rounded-xl px-3 py-2 text-xs border border-gray-700 text-gray-300";
+            ? "rounded-xl px-3 py-2 text-xs font-bold border border-purple-500 bg-purple-500/20 text-white"
+            : "rounded-xl px-3 py-2 text-xs font-bold border border-gray-700 text-gray-300";
 
     document.getElementById("note-editor").classList.toggle("hidden", mode !== "notes");
     document.getElementById("new-note-button").classList.toggle("hidden", mode !== "notes");
@@ -2374,7 +1973,7 @@ function renderLibrary() {
 
     if (!items.length) {
         container.innerHTML = `
-            <p class="text-center text-sm text-gray-400 py-8">
+            <p class="text-center text-sm font-medium text-gray-400 py-8">
                 Nothing saved here yet.
             </p>`;
         return;
@@ -2385,7 +1984,7 @@ function renderLibrary() {
         article.className = "study-item";
 
         const title = document.createElement("h3");
-        title.className = "font-semibold text-sm text-white";
+        title.className = "font-bold text-sm text-white";
         title.textContent = item.title || "Untitled";
 
         const content = document.createElement("p");
@@ -2395,7 +1994,7 @@ function renderLibrary() {
         actions.className = "flex flex-wrap gap-3 mt-3";
 
         const copy = document.createElement("button");
-        copy.className = "text-xs text-purple-300";
+        copy.className = "text-xs font-bold text-purple-400";
         copy.textContent = "Copy";
         copy.onclick = async () => {
             try {
@@ -2407,7 +2006,7 @@ function renderLibrary() {
         };
 
         const remove = document.createElement("button");
-        remove.className = "text-xs text-red-300";
+        remove.className = "text-xs font-bold text-red-400";
         remove.textContent = "Delete";
         remove.onclick = () => {
             if (!confirm("Delete this saved item?")) return;
@@ -2538,10 +2137,10 @@ document.getElementById("voice-modal")?.addEventListener("click", event => {
     }
 });
 
+applySavedTheme();
 currentConversationId = String(Date.now());
 renderChatHistory();
 updateCharCount();
-</script>
+    </script>
 </body>
 </html>
-
