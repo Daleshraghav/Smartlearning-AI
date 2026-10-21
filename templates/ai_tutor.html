@@ -33,7 +33,53 @@
 /* ==========================================
    BASE & DARK NIGHT VIEW THEME
    ========================================== */
-* { box-sizing: border-box; }
+/* ✨ Luxury Ask Your Question Input */
+#chat-form {
+    width: calc(100% - 20px) !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+    border: 1px solid rgba(167, 139, 250, 0.22) !important;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease,
+        transform 0.3s ease !important;
+}
+
+/* Click karke typing start karte hi glow */
+#chat-form:focus-within {
+    border-color: rgba(167, 139, 250, 0.95) !important;
+    box-shadow:
+        0 0 0 2px rgba(139, 92, 246, 0.12),
+        0 0 14px rgba(139, 92, 246, 0.28),
+        0 0 28px rgba(99, 102, 241, 0.14),
+        inset 0 0 10px rgba(139, 92, 246, 0.04) !important;
+    transform: translateY(-1px);
+}
+
+/* Input text styling */
+#chat-input {
+    transition: color 0.25s ease, caret-color 0.25s ease !important;
+    caret-color: #c4b5fd !important;
+}
+
+#chat-input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Light mode luxury glow */
+body.light-mode #chat-form:focus-within {
+    border-color: #8b5cf6 !important;
+    box-shadow:
+        0 0 0 2px rgba(139, 92, 246, 0.10),
+        0 0 16px rgba(139, 92, 246, 0.20),
+        0 0 28px rgba(99, 102, 241, 0.10) !important;
+}
+        
+        * { box-sizing: border-box; }
 
 html, body {
     width: 100%;
@@ -794,18 +840,24 @@ body.light-mode footer {
                         </div>
                     </div>
 
-                    <textarea
-                        id="chat-input"
-                        rows="1"
-                        maxlength="12000"
-                        placeholder="Ask your questions..."
-                        aria-label="Ask your questions"
-                        class="flex-1 resize-none bg-transparent text-sm font-medium text-gray-100 placeholder-gray-400 outline-none px-2 py-1.5 max-h-36 overflow-y-auto"
-                    ></textarea>
+            
+<textarea
+    id="chat-input"
+    rows="1"
+    maxlength="12000"
+    placeholder="Ask your questions..."
+    aria-label="Ask your questions"
+    class="flex-1 resize-none bg-transparent text-sm font-medium text-gray-100 placeholder-gray-400 outline-none px-2 py-1.5 max-h-36 overflow-y-auto"
+></textarea>
 
-                    <button type="submit" id="send-button" class="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center shadow-lg hover:brightness-110 active:scale-95 transition shrink-0" aria-label="Send message">
-                        <i class="fa-solid fa-paper-plane text-xs"></i>
-                    </button>
+<button
+    type="submit"
+    id="send-button"
+    class="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center shadow-lg hover:brightness-110 active:scale-95 transition shrink-0"
+    aria-label="Send message"
+>
+    <i class="fa-solid fa-paper-plane text-xs"></i>
+</button>
                 </form>
             </div>
         </footer>
@@ -1087,7 +1139,7 @@ function selectStudyMode(mode) {
 function clearStudyMode() {
     selectedStudyMode = "";
     document.getElementById("selected-mode-wrap")?.classList.add("hidden");
-    document.getElementById("current-mode").textContent = "Ready to guide you step-by-step";
+    document.getElementById("current-mode").textContent = "Ready to guide you";
 }
 
 /* ---------- Safe HTML helpers ---------- */
