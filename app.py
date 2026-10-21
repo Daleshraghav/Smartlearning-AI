@@ -695,8 +695,7 @@ def dashboard():
 # AI TUTOR
 # ---------------------------------------------------------------
 MAX_MESSAGE_CHARS = 2000
-HISTORY_TURNS = 40  # recent messages; durable user memories are also loaded separately
-
+HISTORY_TURNS = 40
 
 @app.route("/tutor")
 @login_required
@@ -718,12 +717,25 @@ def load_history(user_id, limit=HISTORY_TURNS):
     # Ensure conversation context starts with a user message.
     while rows and rows[0]["role"] not in ("user",):
         rows.pop(0)
-
     history = []
+
     for row in rows:
         role = "assistant" if row["role"] == "model" else row["role"]
-        if role in ("user", "assistant"):
-            history.append({"role": role, "content": row["content"]})
+
+        if role not in ("user", "assistant"):
+            continue
+
+        content = (row["content"] or "").strip()
+
+        # Prevent unusually large old messages from inflating API requests.
+        content = content[:1200]
+
+        if content:
+            history.append({
+                "role": role,
+                "content": content
+            })
+
     return history
 
 def save_message(user_id, role, content):
@@ -993,7 +1005,7 @@ def get_youtube_transcript(video_id):
             "YouTube transcript retrieved successfully for video %s",
             video_id,
         )
-        return transcript[:50000]
+             return transcript[:7000]
 
     except requests.Timeout as exc:
         raise RuntimeError(
@@ -1315,11 +1327,12 @@ def chat_with_tutor():
             messages.append({"role": "user", "content": prompt_text})
             model_to_use = GROQ_MODEL
 
-        request_kwargs = {
+            request_kwargs = {
             "messages": messages,
             "temperature": 0.3 if image_content or extracted_document_text else 0.5,
-            "max_completion_tokens": 4096,
+            "max_completion_tokens": 1500,
         }
+    
         try:
             response = client.chat.completions.create(model=model_to_use, **request_kwargs)
         except Exception as first_model_error:
@@ -1383,6 +1396,26 @@ def chat_with_tutor():
         logger.exception("Groq chat error (model=%s, image=%s, document=%s)", model_to_use if "model_to_use" in locals() else "not-selected", bool(image_content), bool(extracted_document_text))
         # Do not expose API keys or raw provider payloads to the browser.
         message = str(exc).lower()
+                status_code = getattr(exc, "status_code", None)
+
+        if status_code == 413 or (
+            "tokens per minute" in message
+            or "request too large" in message
+        ):
+            return jsonify({
+                "error": (
+                    "This request is too large for the current AI limit. "
+                    "Please try a shorter question or a shorter video."
+                )
+            }), 413
+
+        if status_code == 429 or "rate_limit_exceeded" in message:
+            return jsonify({
+                "error": (
+                    "The AI service has reached its current usage limit. "
+                    "Please wait briefly and try again."
+                )
+            }), 429
         if "model" in message and ("not found" in message or "decommission" in message or "does not exist" in message):
             safe_error = "The configured AI model is unavailable. Check GROQ_MODEL and GROQ_VISION_MODEL in Render Environment."
         elif "image" in message or "vision" in message or "multimodal" in message:
