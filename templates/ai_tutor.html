@@ -17,7 +17,7 @@
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                displayMath: [['$$', '$$'], ['[', ']']]
             },
             options: {
                 skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -327,97 +327,6 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
         font-size: 14.5px !important; padding: 6px 4px !important; max-height: 70px !important; color: inherit !important;
         flex: 1 1 auto !important;
     }
-}
-
-
-/* ==========================================
-   RESPONSIVE ANSWER WIDTH + MATHJAX OVERFLOW FIX
-   Keeps the PAGE from moving left/right on any screen.
-   Only genuinely wide code/equations/tables may scroll inside themselves.
-   ========================================== */
-html, body {
-    max-width: 100%;
-    overflow-x: hidden !important;
-}
-body, main, #chat-container, #messages-list, #typing-indicator,
-#messages-list > *, [data-answer-card], .ai-answer-content,
-.ai-answer-content > *, .answer-actions {
-    box-sizing: border-box;
-    min-width: 0;
-    max-width: 100%;
-}
-main.flex-1 { min-width: 0 !important; }
-#chat-container {
-    width: 100%;
-    overflow-x: hidden !important;
-    overscroll-behavior-x: none;
-}
-#messages-list {
-    width: 100%;
-    overflow-wrap: anywhere;
-    word-break: normal;
-}
-#messages-list > .message-animation { width: 100%; }
-#messages-list [data-answer-card] > .min-w-0 { min-width: 0 !important; width: 100%; }
-.ai-answer-content {
-    width: 100%;
-    overflow-wrap: anywhere;
-    word-break: normal;
-    white-space: normal;
-}
-.ai-answer-content p, .ai-answer-content li,
-.ai-answer-content h1, .ai-answer-content h2, .ai-answer-content h3,
-.ai-answer-content blockquote { max-width: 100%; overflow-wrap: anywhere; }
-.ai-answer-content img, .ai-answer-content video, .ai-answer-content iframe,
-.ai-answer-content canvas { max-width: 100% !important; height: auto; }
-.ai-answer-content pre {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    white-space: pre;
-}
-.ai-answer-content table {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    border-collapse: collapse;
-}
-/* MathJax display equations stay inside the answer column. */
-.ai-answer-content mjx-container {
-    max-width: 100% !important;
-}
-.ai-answer-content mjx-container[display="true"] {
-    display: block;
-    width: 100%;
-    max-width: 100% !important;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 4px 0 8px;
-    overscroll-behavior-x: contain;
-}
-.ai-answer-content mjx-container[display="true"] > svg,
-.ai-answer-content mjx-container[display="true"] > mjx-math {
-    max-width: none;
-}
-.answer-actions { display: flex; flex-wrap: wrap; gap: 6px; }
-.answer-actions button { flex: 0 0 auto; }
-
-@media (max-width: 767px) {
-    #chat-container {
-        padding-left: 12px !important;
-        padding-right: 12px !important;
-    }
-    #messages-list, #typing-indicator { margin-left: 0 !important; margin-right: 0 !important; }
-    #messages-list > .message-animation { gap: 8px; }
-    #messages-list [data-answer-card] > .min-w-0 { flex: 1 1 0%; }
-    .ai-answer-content { font-size: 14px !important; line-height: 1.72 !important; }
-    .ai-answer-content mjx-container[display="true"] { font-size: 82% !important; }
-    .answer-actions button { min-height: 30px !important; }
-    #chat-form, #chat-input { min-width: 0 !important; }
 }
 
 #welcome-screen.hidden, #messages-list.hidden { display: none !important; }
@@ -1135,7 +1044,7 @@ function formatAIResponse(text) {
     const source = String(text ?? "");
 
     if (window.marked && window.DOMPurify) {
-        marked.setOptions({ gfm: true, breaks: true, headerIds: false, mangle: false });
+        marked.setOptions({ gfm: true, breaks: true });
         return DOMPurify.sanitize(marked.parse(source));
     }
 
@@ -1195,15 +1104,11 @@ function handleFileSelect(event, kind = "file") {
         event.target.value = "";
         return;
     }
-    // Some browsers (especially mobile) report an empty or generic MIME type.
-    // Validate by extension as a fallback; the Flask backend verifies file bytes.
-    const imageExtensionOk = /\.(png|jpe?g|webp)$/i.test(file.name);
-    if (kind === "image" && !(file.type.startsWith("image/") || imageExtensionOk)) {
-        showToast("Choose a PNG, JPG, JPEG, or WEBP image."); event.target.value = ""; return;
+    if (kind === "image" && !file.type.startsWith("image/")) {
+        showToast("Please choose an image."); event.target.value = ""; return;
     }
-    const videoExtensionOk = /\.(mp4|mov|webm|m4v)$/i.test(file.name);
-    if (kind === "video" && !(file.type.startsWith("video/") || videoExtensionOk)) {
-        showToast("Please choose a supported video."); event.target.value = ""; return;
+    if (kind === "video" && !file.type.startsWith("video/")) {
+        showToast("Please choose a video."); event.target.value = ""; return;
     }
     if (kind === "file" && !/\.(pdf|txt|md|csv|doc|docx|ppt|pptx|xls|xlsx)$/i.test(file.name)) {
         showToast("Choose a supported document (PDF, TXT, DOCX, etc.)."); event.target.value = ""; return;
@@ -1225,7 +1130,26 @@ function clearAttachment() {
     document.getElementById("attachment-preview")?.classList.add("hidden");
 }
 
-/* ---------- Chat rendering without auto-scroll jumps ---------- */
+/* ---------- Chat rendering + reliable auto-scroll (desktop and mobile) ---------- */
+
+function scrollChatToLatest(smooth = true) {
+    const container = document.getElementById("chat-container");
+    if (!container) return;
+
+    const moveToLatest = () => {
+        // Scroll the chat panel itself, not the entire browser page.
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: smooth ? "smooth" : "auto"
+        });
+    };
+
+    // Two frames allow newly inserted messages and layout changes to be measured.
+    requestAnimationFrame(() => {
+        moveToLatest();
+        requestAnimationFrame(moveToLatest);
+    });
+}
 
 function appendUserMessage(text, record = true) {
     const list = document.getElementById("messages-list");
@@ -1242,6 +1166,7 @@ function appendUserMessage(text, record = true) {
     row.querySelector(".whitespace-pre-wrap").textContent = text;
     list.appendChild(row);
     if (record) rememberMessage("user", text);
+    scrollChatToLatest();
     return row;
 }
 
@@ -1287,13 +1212,13 @@ function appendAIMessage(text, record = true) {
 
     if (window.MathJax?.typesetPromise) {
         requestAnimationFrame(() => {
-            if (window.MathJax?.typesetClear) {
-                try { MathJax.typesetClear([content]); } catch (_) {}
-            }
-            MathJax.typesetPromise([content]).catch(() => {});
+            MathJax.typesetPromise([content])
+                .then(() => scrollChatToLatest())
+                .catch(() => {});
         });
     }
     if (record) rememberMessage("assistant", text);
+    scrollChatToLatest();
     return row;
 }
 
@@ -1310,7 +1235,7 @@ function showChat() {
     }
 }
 
-/* ---------- Send message (Screen stays stable, no auto-scrolling) ---------- */
+/* ---------- Send message with automatic latest-message scrolling ---------- */
 
 async function handleChatSubmit(event) {
     event.preventDefault();
@@ -1349,7 +1274,7 @@ async function handleChatSubmit(event) {
     input.blur();
 
     typing.classList.remove("hidden");
-    // Auto-scroll removed completely to keep screen stable
+    scrollChatToLatest();
 
     try {
         const requestMessage = "Be a friendly, clear AI tutor:\n" + message;
@@ -1401,7 +1326,8 @@ async function handleChatSubmit(event) {
         requestInProgress = false;
         sendButton.disabled = false;
         sendButton.classList.remove("opacity-50");
-        // Screen remains stable where user left it
+        // Keep the latest user message and AI answer visible after completion.
+        scrollChatToLatest();
     }
 }
 
