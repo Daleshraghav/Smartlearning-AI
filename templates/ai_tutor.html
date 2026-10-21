@@ -273,10 +273,47 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
 .answer-actions button i { font-size: 10.5px; }
 .answer-actions button:hover { color: #ffffff; border-color: #a78bfa !important; background: rgba(139, 92, 246, 0.12) !important; }
 
-.attachment-menu { position: absolute; left: 0; bottom: calc(100% + 10px); width: min(270px, calc(100vw - 32px)); z-index: 60; padding: 8px; border-radius: 16px; background: #111827; border: 1px solid rgba(148,163,184,.22); box-shadow: 0 18px 50px rgba(0,0,0,.45); }
-.attachment-option { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; border-radius: 12px; text-align: left; color: #e5e7eb; }
-.attachment-option:hover { background: rgba(139, 92, 246, .14); }
-.attachment-option small { display: block; color: #9ca3af; margin-top: 3px; }
+/* ==========================================
+   LUXURY ANIMATED ATTACHMENT MENU
+   ========================================== */
+.attachment-menu {
+    position: absolute; left: 0; bottom: calc(100% + 14px);
+    width: min(220px, calc(100vw - 32px)); z-index: 60; padding: 8px; border-radius: 20px;
+    background: linear-gradient(145deg, rgba(34, 28, 66, 0.92), rgba(10, 13, 26, 0.95));
+    -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 0 24px 60px rgba(0,0,0,.6), 0 0 40px rgba(139, 92, 246, .2), inset 0 1px 0 rgba(255,255,255,.06);
+    transform-origin: bottom left;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transform: translateY(14px) scale(.9);
+    transition: opacity .2s ease, transform .32s cubic-bezier(.34, 1.56, .64, 1), visibility 0s linear .32s;
+}
+.attachment-menu.open {
+    opacity: 1; visibility: visible; pointer-events: auto; transform: none;
+    transition-delay: 0s;
+}
+@keyframes optionIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.attachment-option {
+    display: flex; align-items: center; gap: 13px; width: 100%; padding: 10px 11px;
+    border-radius: 14px; text-align: left; color: #f1f5f9; font-size: 14px; font-weight: 700;
+    background: transparent; transition: background .2s ease, transform .2s ease;
+}
+.attachment-menu.open .attachment-option { animation: optionIn .4s cubic-bezier(.16, 1, .3, 1) backwards; }
+.attachment-menu.open .attachment-option:nth-child(1) { animation-delay: .04s; }
+.attachment-menu.open .attachment-option:nth-child(2) { animation-delay: .09s; }
+.attachment-menu.open .attachment-option:nth-child(3) { animation-delay: .14s; }
+.attachment-option:hover { background: linear-gradient(90deg, rgba(139,92,246,.25), rgba(99,102,241,.06)); transform: translateX(4px); }
+.attachment-option:active { transform: scale(.96); }
+.attachment-option .opt-icon {
+    width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+}
+body.light-mode .attachment-menu { background: rgba(255,255,255,.97) !important; border-color: #c4b5fd !important; box-shadow: 0 20px 50px rgba(76,29,149,.2) !important; }
+body.light-mode .attachment-option:hover { background: #ede9fe !important; }
+
 .message-user-label { display: none !important; }
 
 /* ==========================================
@@ -315,7 +352,7 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
     }
     body.light-mode > main > footer { background: #ffffff !important; border-top: 1px solid #cbd5e1 !important; }
 
-    /* ChatGPT Pill-shaped Input Box Style (#181b22) with Plus, Mic & Send */
+    /* ChatGPT Pill-shaped Input Box Style (#181b22) with Plus & Send */
     #chat-form {
         background: #181b22 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 9999px !important; padding: 4px 8px !important; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
@@ -330,6 +367,26 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
 }
 
 #welcome-screen.hidden, #messages-list.hidden { display: none !important; }
+
+/* ==========================================
+   FOOTER TRANSPARENT: only the input pill is visible, raised a bit
+   (keep this block LAST so it overrides everything above)
+   ========================================== */
+body main > footer,
+body.light-mode main > footer,
+body.light-mode footer {
+    background: transparent !important;
+    border-top: none !important;
+    box-shadow: none !important;
+    padding-bottom: 26px !important;
+}
+@media screen and (max-width: 767px) {
+    body main > footer,
+    body.light-mode main > footer {
+        padding: 4px 10px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    #chat-container { padding-bottom: 108px !important; }
+}
     </style>
 </head>
 
@@ -688,8 +745,8 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
             </div>
         </div>
 
-        <!-- Chat input section (ChatGPT style pill input box with Plus, Mic & Send) -->
-        <footer class="shrink-0 w-full border-t border-gray-800/70 bg-[#090c14]/95 px-3 pt-2 pb-2 md:px-6 md:pt-4 md:pb-4">
+        <!-- Chat input section (transparent footer, only pill input is visible) -->
+        <footer class="shrink-0 w-full px-3 pt-2 pb-2 md:px-6 md:pt-4 md:pb-4">
             <div class="max-w-4xl mx-auto">
                 <!-- Attachment preview -->
                 <div id="attachment-preview" class="hidden mb-2 p-2 rounded-xl bg-gray-800/60 border border-gray-700 flex items-center justify-between gap-3">
@@ -716,21 +773,26 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
                     <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
                     <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
                     <input type="file" id="video-input" class="hidden" accept="video/*" onchange="handleFileSelect(event,'video')">
-                    
+
                     <div class="relative">
-                        <button type="button" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center shrink-0 border border-white/10 transition" title="Attach file">
+                        <button type="button" id="attach-btn" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center shrink-0 border border-white/10 transition" title="Attach file">
                             <i class="fa-solid fa-plus text-sm"></i>
                         </button>
-                        <div id="attachment-menu" class="attachment-menu hidden">
-                            <button type="button" class="attachment-option" onclick="chooseAttachment('image')"><i class="fa-regular fa-image text-purple-400 text-lg w-6 text-center"></i><span><strong>Image</strong><small>Choose from gallery or photos</small></span></button>
-                            <button type="button" class="attachment-option" onclick="chooseAttachment('file')"><i class="fa-regular fa-file-lines text-blue-400 text-lg w-6 text-center"></i><span><strong>Files</strong><small>PDF and supported documents</small></span></button>
-                            <button type="button" class="attachment-option" onclick="chooseAttachment('video')"><i class="fa-solid fa-film text-emerald-400 text-lg w-6 text-center"></i><span><strong>Short Video</strong><small>Select a short clip for summarization</small></span></button>
+                        <div id="attachment-menu" class="attachment-menu">
+                            <button type="button" class="attachment-option" onclick="chooseAttachment('image')">
+                                <span class="opt-icon bg-purple-500/15"><i class="fa-regular fa-image text-purple-400 text-base"></i></span>
+                                <span>Image</span>
+                            </button>
+                            <button type="button" class="attachment-option" onclick="chooseAttachment('file')">
+                                <span class="opt-icon bg-blue-500/15"><i class="fa-regular fa-file-lines text-blue-400 text-base"></i></span>
+                                <span>Files</span>
+                            </button>
+                            <button type="button" class="attachment-option" onclick="chooseAttachment('video')">
+                                <span class="opt-icon bg-emerald-500/15"><i class="fa-solid fa-film text-emerald-400 text-base"></i></span>
+                                <span>Short Video</span>
+                            </button>
                         </div>
                     </div>
-
-                    <button type="button" onclick="startVoiceInput()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center shrink-0 border border-white/10 transition" title="Voice input">
-                        <i class="fa-solid fa-microphone text-sm"></i>
-                    </button>
 
                     <textarea
                         id="chat-input"
@@ -1083,13 +1145,25 @@ function updateCharCount() {
     }
 }
 
+/* ---------- Attachment menu (animated, closes on outside click) ---------- */
+
 function openAttachmentMenu() { toggleAttachmentMenu(true); }
+
 function toggleAttachmentMenu(forceOpen) {
     const menu = document.getElementById("attachment-menu");
     if (!menu) return;
-    const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : menu.classList.contains("hidden");
-    menu.classList.toggle("hidden", !shouldOpen);
+    const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !menu.classList.contains("open");
+    menu.classList.toggle("open", shouldOpen);
 }
+
+// Screen par kahin bhi click karo to menu band ho jayega
+document.addEventListener("pointerdown", event => {
+    const menu = document.getElementById("attachment-menu");
+    if (!menu || !menu.classList.contains("open")) return;
+    if (event.target.closest("#attachment-menu") || event.target.closest("#attach-btn")) return;
+    toggleAttachmentMenu(false);
+});
+
 function chooseAttachment(kind) {
     toggleAttachmentMenu(false);
     const ids = { image: "image-input", file: "document-input", video: "video-input" };
@@ -1130,24 +1204,21 @@ function clearAttachment() {
     document.getElementById("attachment-preview")?.classList.add("hidden");
 }
 
-/* ---------- Chat rendering + reliable auto-scroll (desktop and mobile) ---------- */
+/* ---------- Chat rendering + scroll behaviour ---------- */
 
-function scrollChatToLatest(smooth = true) {
+// Auto-scroll to bottom is DISABLED so you can read the answer from the top.
+// (Old calls to scrollChatToLatest() still exist in the code but do nothing.)
+function scrollChatToLatest() {}
+
+// Only the user's question is aligned to the top, so the answer starts right below it.
+function scrollToMessageTop(el) {
     const container = document.getElementById("chat-container");
-    if (!container) return;
-
-    const moveToLatest = () => {
-        // Scroll the chat panel itself, not the entire browser page.
-        container.scrollTo({
-            top: container.scrollHeight,
-            behavior: smooth ? "smooth" : "auto"
-        });
-    };
-
-    // Two frames allow newly inserted messages and layout changes to be measured.
+    if (!container || !el) return;
+    const offset = window.innerWidth < 768 ? 70 : 16;
     requestAnimationFrame(() => {
-        moveToLatest();
-        requestAnimationFrame(moveToLatest);
+        const top = container.scrollTop +
+            (el.getBoundingClientRect().top - container.getBoundingClientRect().top) - offset;
+        container.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     });
 }
 
@@ -1235,7 +1306,7 @@ function showChat() {
     }
 }
 
-/* ---------- Send message with automatic latest-message scrolling ---------- */
+/* ---------- Send message ---------- */
 
 async function handleChatSubmit(event) {
     event.preventDefault();
@@ -1264,7 +1335,8 @@ async function handleChatSubmit(event) {
     sendButton.classList.add("opacity-50");
     showChat();
 
-    appendUserMessage(message);
+    const userRow = appendUserMessage(message);
+    scrollToMessageTop(userRow);
 
     input.value = "";
     updateCharCount();
@@ -1274,7 +1346,6 @@ async function handleChatSubmit(event) {
     input.blur();
 
     typing.classList.remove("hidden");
-    scrollChatToLatest();
 
     try {
         const requestMessage = "Be a friendly, clear AI tutor:\n" + message;
@@ -1326,8 +1397,6 @@ async function handleChatSubmit(event) {
         requestInProgress = false;
         sendButton.disabled = false;
         sendButton.classList.remove("opacity-50");
-        // Keep the latest user message and AI answer visible after completion.
-        scrollChatToLatest();
     }
 }
 
@@ -1570,7 +1639,7 @@ function renderLibrary() {
     });
 }
 
-/* ---------- Voice input ---------- */
+/* ---------- Voice input (voice modal only; mic icon removed from the input bar) ---------- */
 
 function openVoiceAssistant() {
     document.getElementById("voice-modal").classList.remove("hidden");
@@ -1664,6 +1733,7 @@ document.getElementById("chat-input")?.addEventListener("keydown", event => {
 
 document.addEventListener("keydown", event => {
     if (event.key === "Escape") {
+        toggleAttachmentMenu(false);
         closeMobileSidebar();
         closeVoiceAssistant();
         closeStudyLibrary();
