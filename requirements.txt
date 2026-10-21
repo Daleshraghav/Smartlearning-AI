@@ -13,3 +13,4 @@ python-pptx
 openpyxl
 odfpy
 youtube-transcript-api
+requests
