@@ -1195,11 +1195,15 @@ function handleFileSelect(event, kind = "file") {
         event.target.value = "";
         return;
     }
-    if (kind === "image" && !file.type.startsWith("image/")) {
-        showToast("Please choose an image."); event.target.value = ""; return;
+    // Some browsers (especially mobile) report an empty or generic MIME type.
+    // Validate by extension as a fallback; the Flask backend verifies file bytes.
+    const imageExtensionOk = /\.(png|jpe?g|webp)$/i.test(file.name);
+    if (kind === "image" && !(file.type.startsWith("image/") || imageExtensionOk)) {
+        showToast("Choose a PNG, JPG, JPEG, or WEBP image."); event.target.value = ""; return;
     }
-    if (kind === "video" && !file.type.startsWith("video/")) {
-        showToast("Please choose a video."); event.target.value = ""; return;
+    const videoExtensionOk = /\.(mp4|mov|webm|m4v)$/i.test(file.name);
+    if (kind === "video" && !(file.type.startsWith("video/") || videoExtensionOk)) {
+        showToast("Please choose a supported video."); event.target.value = ""; return;
     }
     if (kind === "file" && !/\.(pdf|txt|md|csv|doc|docx|ppt|pptx|xls|xlsx)$/i.test(file.name)) {
         showToast("Choose a supported document (PDF, TXT, DOCX, etc.)."); event.target.value = ""; return;
