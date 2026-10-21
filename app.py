@@ -7,6 +7,7 @@ import sqlite3
 import secrets
 import logging
 import re
+import requests
 from collections import defaultdict, deque
 from pathlib import Path
 from functools import wraps
@@ -852,33 +853,161 @@ def extract_youtube_video_id(url):
         return None
 
 
+
 def get_youtube_transcript(video_id):
-    """Fetch available captions without pretending to analyze video frames."""
-    try:
-        from youtube_transcript_api import YouTubeTranscriptApi
-    except ImportError as exc:
-        raise RuntimeError("YouTube transcript support is not installed. Add youtube-transcript-api to requirements.txt and redeploy.") from exc
+    """Retrieve a YouTube transcript through YouTubeTranscript.dev."""
+    api_key = os.getenv("YOUTUBE_TRANSCRIPT_API_KEY", "").strip()
 
-    api = YouTubeTranscriptApi()
-    try:
-        # Newer youtube-transcript-api releases expose .fetch().
-        fetched = api.fetch(video_id, languages=["en", "hi", "en-US", "en-GB"])
-    except (AttributeError, TypeError):
-        # Compatibility with older releases.
-        fetched = YouTubeTranscriptApi.get_transcript(video_id, languages=["en", "hi", "en-US", "en-GB"])
+    if not api_key:
+        raise RuntimeError(
+            "YouTube transcript API is not configured. "
+            "Add YOUTUBE_TRANSCRIPT_API_KEY in Render Environment."
+        )
 
-    lines = []
-    for item in fetched:
-        if isinstance(item, dict):
-            value = item.get("text", "")
-        else:
-            value = getattr(item, "text", "")
-        if value:
-            lines.append(str(value).replace("\n", " ").strip())
-    transcript = " ".join(lines).strip()
-    if not transcript:
-        raise RuntimeError("This YouTube video has no accessible captions/transcript. Try a video with captions enabled or paste its transcript.")
-    return transcript[:50000]
+    base_url = "https://www.youtubetranscript.dev/api/v2"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+
+    try:
+        response = requests.post(
+            f"{base_url}/transcribe",
+            headers=headers,
+            json={
+                "video": video_id,
+                "mode": "auto",
+                "format": {"timestamp": False, "paragraphs": True},
+            },
+            timeout=(10, 30),
+        )
+
+        try:
+            data = response.json()
+        except ValueError:
+            raise RuntimeError(
+                "The transcript provider returned an invalid response."
+            )
+
+        if response.status_code == 401:
+            raise RuntimeError(
+                "The YouTube transcript API key is invalid. "
+                "Check YOUTUBE_TRANSCRIPT_API_KEY in Render Environment."
+            )
+
+        if response.status_code == 402:
+            raise RuntimeError(
+                "The YouTube transcript API has insufficient credits. "
+                "Check your provider dashboard."
+            )
+
+        if response.status_code == 429:
+            raise RuntimeError(
+                "The transcript service is busy. Please wait and try again."
+            )
+
+        if response.status_code >= 400:
+            error_info = data.get("error", {})
+            if isinstance(error_info, dict):
+                error_code = error_info.get("code", "")
+                error_message = error_info.get("message", "")
+            else:
+                error_code = str(error_info)
+                error_message = ""
+
+            if error_code == "no_captions":
+                raise RuntimeError(
+                    "No captions were available for this video. "
+                    "Try another video or provide its transcript."
+                )
+
+            logger.warning(
+                "Transcript provider returned HTTP %s, code=%s",
+                response.status_code,
+                error_code,
+            )
+            raise RuntimeError(
+                error_message[:250]
+                if error_message
+                else "The transcript provider could not process this video."
+            )
+
+        # Caption-based responses may be immediate; ASR can be asynchronous.
+        job_id = data.get("job_id")
+        status = str(data.get("status", "")).lower()
+        deadline = time.monotonic() + 120
+
+        while status in {"processing", "queued", "pending"} and job_id:
+            if time.monotonic() >= deadline:
+                raise RuntimeError(
+                    "Video transcription is taking longer than expected. "
+                    "Please retry this link in a little while."
+                )
+
+            time.sleep(3)
+
+            job_response = requests.get(
+                f"{base_url}/jobs/{job_id}",
+                headers=headers,
+                timeout=(10, 20),
+            )
+
+            if job_response.status_code == 401:
+                raise RuntimeError("The transcript API key was rejected.")
+
+            if job_response.status_code == 402:
+                raise RuntimeError(
+                    "The transcript API has insufficient credits."
+                )
+
+            job_response.raise_for_status()
+            data = job_response.json()
+            status = str(data.get("status", "")).lower()
+
+        if status in {"failed", "error"}:
+            raise RuntimeError(
+                "The transcript service could not transcribe this video. "
+                "Try another video or paste its transcript."
+            )
+
+        result_data = data.get("data") or {}
+        transcript_data = result_data.get("transcript") or {}
+
+        transcript = (
+            transcript_data.get("text", "")
+            if isinstance(transcript_data, dict)
+            else ""
+        )
+
+        transcript = transcript.strip()
+
+        if not transcript:
+            raise RuntimeError(
+                "No transcript was returned for this video. "
+                "It may have unavailable captions or require additional "
+                "transcription processing."
+            )
+
+        logger.info(
+            "YouTube transcript retrieved successfully for video %s",
+            video_id,
+        )
+        return transcript[:50000]
+
+    except requests.Timeout as exc:
+        raise RuntimeError(
+            "The transcript service timed out. Please retry the video link."
+        ) from exc
+    except requests.RequestException as exc:
+        logger.warning(
+            "Transcript provider network error: %s",
+            type(exc).__name__,
+        )
+        raise RuntimeError(
+            "Could not connect to the transcript service. Please try again."
+        ) from exc
+
 
 
 @app.route("/api/chat", methods=["POST"])
@@ -940,9 +1069,23 @@ def chat_with_tutor():
             return jsonify({"error": "Please enter a valid YouTube video link (youtube.com or youtu.be)."}), 400
         try:
             youtube_transcript = get_youtube_transcript(youtube_video_id)
-        except RuntimeError as exc:
-            status = 503 if "not installed" in str(exc).lower() else 422
-            return jsonify({"error": str(exc)}), status
+      except RuntimeError as exc:
+    error_text = str(exc).lower()
+
+    if any(term in error_text for term in (
+        "not configured",
+        "not installed",
+        "api key",
+        "insufficient credits",
+        "taking longer",
+        "timed out",
+        "could not connect",
+    )):
+        status = 503
+    else:
+        status = 422
+
+    return jsonify({"error": str(exc)}), status
         except Exception:
             logger.exception("YouTube transcript retrieval failed")
             return jsonify({"error": "I couldn't access captions for this YouTube video. It may have captions disabled, be private/restricted, or block transcript access. Try another video or paste its transcript."}), 422
