@@ -8,4 +8,7 @@ groq
 
 Pillow
 pypdf
+python-docx
+python-pptx
+openpyxl
 odfpy
