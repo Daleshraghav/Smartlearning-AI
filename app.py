@@ -1061,6 +1061,7 @@ def chat_with_tutor():
             combined = (old_memory + "\n- " + memory_to_save).strip() if old_memory else "- " + memory_to_save
         save_user_memory(user_id, combined[-6000:])
 
+    
     youtube_transcript = ""
     youtube_video_id = None
 
@@ -1069,16 +1070,21 @@ def chat_with_tutor():
 
         if not youtube_video_id:
             return jsonify({
-                "error": "Please enter a valid YouTube video link (youtube.com or youtu.be)."
+                "error": (
+                    "Please enter a valid YouTube video link "
+                    "(youtube.com or youtu.be)."
+                )
             }), 400
 
-              try:
-            youtube_transcript = get_youtube_transcript(youtube_video_id)
+        try:
+            youtube_transcript = get_youtube_transcript(
+                youtube_video_id
+            )
 
         except RuntimeError as exc:
             error_text = str(exc).lower()
 
-            if any(term in error_text for term in (
+            temporary_error_terms = (
                 "not configured",
                 "not installed",
                 "api key",
@@ -1086,56 +1092,37 @@ def chat_with_tutor():
                 "taking longer",
                 "timed out",
                 "could not connect",
-            )):
-                status = 503
-            else:
-                status = 422
+                "service is busy",
+            )
+
+            status = (
+                503
+                if any(
+                    term in error_text
+                    for term in temporary_error_terms
+                )
+                else 422
+            )
 
             return jsonify({"error": str(exc)}), status
 
         except Exception:
-            logger.exception("YouTube transcript retrieval failed")
+            logger.exception(
+                "YouTube transcript retrieval failed"
+            )
+
             return jsonify({
                 "error": (
-                    "I couldn't access captions for this YouTube video. "
-                    "Please try another video."
+                    "I couldn't retrieve the transcript for this "
+                    "YouTube video. Please try another video."
                 )
             }), 422
-
-            return jsonify({"error": str(exc)}), status
-
-        except Exception:
-            logger.exception("YouTube transcript retrieval failed")
-            return jsonify({
-                "error": (
-                    "I couldn't access captions for this YouTube video. "
-                    "It may have captions disabled or be private/restricted. "
-                    "Please try another video."
-                )
-            }), 422
-
-    if any(term in error_text for term in (
-        "not configured",
-        "not installed",
-        "api key",
-        "insufficient credits",
-        "taking longer",
-        "timed out",
-        "could not connect",
-    )):
-        status = 503
-    else:
-        status = 422
-
-    return jsonify({"error": str(exc)}), status
-        except Exception:
-            logger.exception("YouTube transcript retrieval failed")
-            return jsonify({"error": "I couldn't access captions for this YouTube video. It may have captions disabled, be private/restricted, or block transcript access. Try another video or paste its transcript."}), 422
 
     attachment_name = ""
     image_content = None
     extracted_document_text = ""
 
+  
     if attachment and attachment.filename:
         # Keep a safe display name but use the original suffix for format detection.
         original_name = Path(attachment.filename).name
