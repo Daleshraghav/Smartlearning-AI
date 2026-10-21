@@ -67,6 +67,17 @@ app.config.update(
     UPLOAD_FOLDER=str(UPLOAD_FOLDER),
 )
 
+@app.after_request
+def add_security_headers(response):
+    """Set defensive browser headers without breaking the current CDN-based UI."""
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(self), geolocation=()")
+    if not IS_DEV:
+        response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+    return response
+
 # ---------------------------------------------------------------
 # GROQ CONFIGURATION  (key comes from environment)
 # --------------------------------------------------------------
@@ -74,7 +85,7 @@ app.config.update(
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 # Separate vision model so the existing text model/API configuration stays intact.
-GROQ_VISION_MODEL = os.getenv("GROQ_VISION_MODEL", "qwen/qwen3.8-27b")
+GROQ_VISION_MODEL = os.getenv("GROQ_VISION_MODEL", "meta-llama/llama-4-scout-17b-16e-instruct")
 
 SMARTLEARN_SYSTEM_PROMPT = """
 You are SmartLearn AI, a friendly, capable, student-focused AI tutor and study assistant.
@@ -742,6 +753,15 @@ def is_creator_question(message):
     import re
     text = (message or "").lower().strip()
     text = re.sub(r"[^a-z0-9\u0900-\u097f]+", " ", text)
+    # Distinguish WHY-purpose questions from WHO-created questions.
+    # Example: "Q/kyu banaya hai tumhe?" asks the purpose, not the creator.
+    why_patterns = (
+        r"\b(why|kyu|kyun|q|kis liye|kahe)\b.*\b(banaya|bnaaya|created|built|developed)\b",
+        r"\b(banaya|bnaaya|created|built|developed)\b.*\b(kyu|kyun|q|kis liye)\b",
+        r"(क्यों|किसलिए|किस लिये).*(बनाया|निर्मित किया)",
+    )
+    if any(re.search(pattern, text) for pattern in why_patterns):
+        return False
     patterns = (
         r"\b(who (made|created|built|developed) you|who is your (creator|owner|maker|developer)|who owns you)\b",
         r"\b(tera|tumhara|aapka|is ai ka|is tutor ka) (malik|owner|creator|maker) (kaun|kon) (hai|h)\b",
@@ -986,12 +1006,50 @@ def chat_with_tutor():
             messages.append({"role": "user", "content": prompt_text})
             model_to_use = GROQ_MODEL
 
-        response = client.chat.completions.create(
-            model=model_to_use,
-            messages=messages,
-            temperature=0.3 if image_content or extracted_document_text else 0.5,
-            max_completion_tokens=4096,
-        )
+        request_kwargs = {
+            "messages": messages,
+            "temperature": 0.3 if image_content or extracted_document_text else 0.5,
+            "max_completion_tokens": 4096,
+        }
+        try:
+            response = client.chat.completions.create(model=model_to_use, **request_kwargs)
+        except Exception as first_model_error:
+            error_text = str(first_model_error).lower()
+            model_unavailable = any(term in error_text for term in (
+                "model not found", "model_not_found", "decommission", "does not exist",
+                "unknown model", "model is not available", "not supported",
+                "vision is not supported", "multimodal",
+            ))
+            if not image_content or not model_unavailable:
+                raise
+
+            # Try alternate vision-capable model IDs only when the configured model
+            # appears unavailable/unsupported. Keep API keys and raw errors private.
+            fallback_models = (
+                "meta-llama/llama-4-scout-17b-16e-instruct",
+                "qwen/qwen3.8-27b",
+            )
+            last_error = first_model_error
+            response = None
+            for fallback_model in fallback_models:
+                if fallback_model == model_to_use:
+                    continue
+                try:
+                    logger.warning("Vision model unavailable; trying configured fallback candidate: %s", fallback_model)
+                    response = client.chat.completions.create(model=fallback_model, **request_kwargs)
+                    model_to_use = fallback_model
+                    break
+                except Exception as fallback_error:
+                    last_error = fallback_error
+                    fallback_text = str(fallback_error).lower()
+                    if not any(term in fallback_text for term in (
+                        "model not found", "model_not_found", "decommission", "does not exist",
+                        "unknown model", "model is not available", "not supported",
+                        "vision is not supported", "multimodal",
+                    )):
+                        raise
+            if response is None:
+                raise last_error
         reply = (response.choices[0].message.content or "").strip()
         if not reply:
             reply = "I couldn't generate a reply just now. Please try asking in a different way."
