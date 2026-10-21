@@ -85,7 +85,7 @@ def add_security_headers(response):
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 # Separate vision model so the existing text model/API configuration stays intact.
-GROQ_VISION_MODEL = os.getenv("GROQ_VISION_MODEL", "meta-llama/llama-4-scout-17b-16e-instruct")
+GROQ_VISION_MODEL = os.getenv("GROQ_VISION_MODEL", "qwen/qwen3.8-27b")
 
 SMARTLEARN_SYSTEM_PROMPT = """
 You are SmartLearn AI, a friendly, capable, student-focused AI tutor and study assistant.
@@ -749,28 +749,44 @@ def save_user_memory(user_id, memory_text):
 
 
 def is_creator_question(message):
-    """Recognize questions about this tutor's creator/owner in English/Hindi/Hinglish."""
+    """
+    Return True only when the user is asking WHO created/owns the tutor.
+    Purpose questions such as 'Q bnaya hai?' / 'tumhe kyun banaya?' must
+    go to the AI model, not trigger the fixed creator-name response.
+    """
     import re
+
     text = (message or "").lower().strip()
     text = re.sub(r"[^a-z0-9\u0900-\u097f]+", " ", text)
-    # Distinguish WHY-purpose questions from WHO-created questions.
-    # Example: "Q/kyu banaya hai tumhe?" asks the purpose, not the creator.
-    why_patterns = (
-        r"\b(why|kyu|kyun|q|kis liye|kahe)\b.*\b(banaya|bnaaya|created|built|developed)\b",
-        r"\b(banaya|bnaaya|created|built|developed)\b.*\b(kyu|kyun|q|kis liye)\b",
-        r"(क्यों|किसलिए|किस लिये).*(बनाया|निर्मित किया)",
+    text = re.sub(r"\s+", " ", text).strip()
+
+    # First classify purpose/reason questions. These must never receive the
+    # fixed creator response, even if they contain a word like "banaya".
+    purpose_patterns = (
+        r"\b(why|kyu|kyun|q|kisliye|kis liye|kahe|purpose|what for)\b",
+        r"\b(kyu|kyun|q)\s+(banaya|bnaaya|bnaya|bna|create|created|built|developed)\b",
+        r"\b(why|what for)\b.*\b(you|tujhe|tumhe|aapko|ai|tutor)\b",
+        r"(क्यों|किसलिए|किस लिये|किस वजह से).*(बनाया|निर्मित|बनाने)",
     )
-    if any(re.search(pattern, text) for pattern in why_patterns):
+    if any(re.search(pattern, text) for pattern in purpose_patterns):
         return False
-    patterns = (
-        r"\b(who (made|created|built|developed) you|who is your (creator|owner|maker|developer)|who owns you)\b",
-        r"\b(tera|tumhara|aapka|is ai ka|is tutor ka) (malik|owner|creator|maker) (kaun|kon) (hai|h)\b",
-        r"\b(tujhe|tumhe|aapko|is ai ko|is tutor ko) kisne (banaya|bnaaya| बनाया|develop kiya|create kiya)\b",
-        r"\b(kisne (banaya|bnaaya|create kiya|develop kiya)|creator kaun hai|owner kaun hai|malik kaun hai)\b",
-        r"\b(who is behind (you|smartlearn ai)|who made smartlearn ai|who created smartlearn ai)\b",
-        r"(तुम्हें किसने बनाया|तुम्हे किसने बनाया|आपको किसने बनाया|आपको किसने बनाया है|तुम्हारा मालिक कौन है|तुम्हारा मालिक कौन|आपका मालिक कौन है|मालिक कौन है|तुम्हें किसने बनाया है|तुझे किसने बनाया है|किसने बनाया है)",
+
+    # Explicit "who" / "kisne" creator questions.
+    creator_patterns = (
+        r"\bwho\s+(made|created|built|developed)\s+(you|this|smartlearn)",
+        r"\bwho\s+(is|s)\s+(your|the)\s+(creator|owner|maker|developer)\b",
+        r"\bwho\s+owns\s+(you|this|smartlearn)",
+        r"\bwho\s+is\s+behind\s+(you|smartlearn ai)\b",
+        r"\b(kisne|kis nay)\s+(banaya|bnaaya|bnaya|bana|create kiya|develop kiya|built)\b",
+        r"\b(tujhe|tumhe|aapko|tumko|tujhko)\s+kisne\s+(banaya|bnaaya|bnaya|bana|create kiya|develop kiya)\b",
+        r"\b(tera|tumhara|aapka|is ai ka|is tutor ka|smartlearn ai ka)\s+(malik|owner|creator|maker|developer)\s+(kaun|kon|who)\b",
+        r"\b(creator|owner|developer|maker)\s+(kaun|kon)\s+(hai|h)\b",
+        r"\b(malik|owner|creator|maker|developer)\s+(kaun|kon)\b",
+        r"\bwho\s+made\s+smartlearn ai\b",
+        r"\bwho\s+created\s+smartlearn ai\b",
+        r"(तुम्हें किसने बनाया|तुम्हे किसने बनाया|तुझे किसने बनाया|आपको किसने बनाया|आपको किसने बनाया है|तुम्हारा मालिक कौन है|आपका मालिक कौन है|मालिक कौन है|किसने बनाया है)",
     )
-    return any(re.search(pattern, text) for pattern in patterns)
+    return any(re.search(pattern, text) for pattern in creator_patterns)
 
 
 def explicit_memory_request(message):
@@ -906,9 +922,9 @@ def chat_with_tutor():
                         for shape in slide.shapes:
                             if getattr(shape, "has_text_frame", False) and shape.text.strip():
                                 parts.append(shape.text.strip())
-                        if getattr(shape, "has_table", False):
-                            for row in shape.table.rows:
-                                parts.append(" | ".join(cell.text for cell in row.cells))
+                            if getattr(shape, "has_table", False):
+                                for row in shape.table.rows:
+                                    parts.append(" | ".join(cell.text for cell in row.cells))
                     extracted_document_text = "\n".join(parts)[:60000]
                 elif ext in {".xlsx", ".xlsm"}:
                     from openpyxl import load_workbook
