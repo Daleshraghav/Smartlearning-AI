@@ -1072,7 +1072,7 @@ def chat_with_tutor():
                 "error": "Please enter a valid YouTube video link (youtube.com or youtu.be)."
             }), 400
 
-        try:
+              try:
             youtube_transcript = get_youtube_transcript(youtube_video_id)
 
         except RuntimeError as exc:
@@ -1090,6 +1090,17 @@ def chat_with_tutor():
                 status = 503
             else:
                 status = 422
+
+            return jsonify({"error": str(exc)}), status
+
+        except Exception:
+            logger.exception("YouTube transcript retrieval failed")
+            return jsonify({
+                "error": (
+                    "I couldn't access captions for this YouTube video. "
+                    "Please try another video."
+                )
+            }), 422
 
             return jsonify({"error": str(exc)}), status
 
