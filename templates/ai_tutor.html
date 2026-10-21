@@ -818,7 +818,6 @@ body.light-mode footer {
                 <form id="chat-form" class="flex items-center gap-2 px-3 py-2 rounded-full bg-[#181b22] border border-white/10 shadow-2xl" onsubmit="handleChatSubmit(event)">
                     <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
                     <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
-                    <input type="file" id="video-input" class="hidden" accept="video/*" onchange="handleFileSelect(event,'video')">
 
                     <div class="relative">
                         <button type="button" id="attach-btn" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center shrink-0 border border-white/10 transition" title="Attach file">
@@ -835,7 +834,7 @@ body.light-mode footer {
                             </button>
                             <button type="button" class="attachment-option" onclick="chooseAttachment('video')">
                                 <span class="opt-icon bg-emerald-500/15"><i class="fa-solid fa-film text-emerald-400 text-base"></i></span>
-                                <span>Short Video</span>
+                                <span>Video Link</span>
                             </button>
                         </div>
                     </div>
@@ -1216,25 +1215,41 @@ document.addEventListener("pointerdown", event => {
     toggleAttachmentMenu(false);
 });
 
+let pendingVideoUrl = "";
+
 function chooseAttachment(kind) {
     toggleAttachmentMenu(false);
-    const ids = { image: "image-input", file: "document-input", video: "video-input" };
+    if (kind === "video") {
+        const url = window.prompt("Paste a YouTube video link:");
+        if (!url || !url.trim()) return;
+        const cleaned = url.trim();
+        if (!/^https?:\/\/(www\.)?(youtube\.com\/(watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)/i.test(cleaned)) {
+            showToast("Please paste a valid YouTube link.");
+            return;
+        }
+        pendingVideoUrl = cleaned;
+        selectedFile = null;
+        selectedAttachmentKind = "video_link";
+        const name = document.getElementById("attachment-name");
+        if (name) name.textContent = "YouTube video: " + cleaned;
+        document.getElementById("attachment-preview")?.classList.remove("hidden");
+        showToast("Video link ready. Press Send to analyze its available captions.");
+        return;
+    }
+    const ids = { image: "image-input", file: "document-input" };
     document.getElementById(ids[kind])?.click();
 }
 function handleFileSelect(event, kind = "file") {
     const file = event.target.files?.[0];
     if (!file) return;
-    const maxSize = kind === "video" ? 30 * 1024 * 1024 : 15 * 1024 * 1024;
+    const maxSize = 15 * 1024 * 1024;
     if (file.size > maxSize) {
-        showToast(kind === "video" ? "Video must be 30 MB or smaller." : "File must be 15 MB or smaller.");
+        showToast("File must be 15 MB or smaller.");
         event.target.value = "";
         return;
     }
     if (kind === "image" && !file.type.startsWith("image/")) {
         showToast("Please choose an image."); event.target.value = ""; return;
-    }
-    if (kind === "video" && !file.type.startsWith("video/")) {
-        showToast("Please choose a video."); event.target.value = ""; return;
     }
     if (kind === "file" && !/\.(pdf|txt|md|csv|doc|docx|ppt|pptx|xls|xlsx)$/i.test(file.name)) {
         showToast("Choose a supported document (PDF, TXT, DOCX, etc.)."); event.target.value = ""; return;
@@ -1242,14 +1257,15 @@ function handleFileSelect(event, kind = "file") {
     selectedFile = file;
     selectedAttachmentKind = kind;
     const name = document.getElementById("attachment-name");
-    if (name) name.textContent = `${kind === "image" ? "Image" : kind === "video" ? "Short video" : "File"}: ${file.name}`;
+    if (name) name.textContent = `${kind === "image" ? "Image" : "File"}: ${file.name}`;
     document.getElementById("attachment-preview")?.classList.remove("hidden");
     showToast("Attachment ready. Ask a question, then press Send to analyze it.");
 }
 function clearAttachment() {
     selectedFile = null;
     selectedAttachmentKind = "";
-    ["image-input", "document-input", "video-input"].forEach(id => {
+    pendingVideoUrl = "";
+    ["image-input", "document-input"].forEach(id => {
         const input = document.getElementById(id);
         if (input) input.value = "";
     });
@@ -1345,6 +1361,59 @@ function appendAIMessage(text, record = true) {
     return row;
 }
 
+function appendVideoActionButtons(answerRow, videoUrl) {
+    if (!answerRow || !videoUrl || answerRow.querySelector(".video-followup-actions")) return;
+    const actions = document.createElement("div");
+    actions.className = "video-followup-actions flex flex-wrap gap-2 mt-4";
+    actions.innerHTML = `
+        <button type="button" class="px-3 py-2 rounded-xl text-xs font-bold border border-purple-400/30 bg-purple-500/10 text-purple-200 hover:bg-purple-500/20 transition" data-video-action="handwritten">
+            <i class="fa-solid fa-file-pen mr-1.5"></i> Handwritten-style Notes
+        </button>
+        <button type="button" class="px-3 py-2 rounded-xl text-xs font-bold border border-indigo-400/30 bg-indigo-500/10 text-indigo-200 hover:bg-indigo-500/20 transition" data-video-action="explain">
+            <i class="fa-solid fa-graduation-cap mr-1.5"></i> Explain All Topics
+        </button>`;
+    actions.querySelectorAll("button").forEach(button => {
+        button.addEventListener("click", () => runVideoFollowup(videoUrl, button.dataset.videoAction));
+    });
+    answerRow.querySelector(".min-w-0.flex-1")?.appendChild(actions);
+}
+
+async function runVideoFollowup(videoUrl, action) {
+    if (requestInProgress) return;
+    const input = document.getElementById("chat-input");
+    const typing = document.getElementById("typing-indicator");
+    const sendButton = document.getElementById("send-button");
+    const message = action === "handwritten"
+        ? "Create printable handwritten-style study notes from this YouTube video."
+        : "Explain every topic in this YouTube video in detail.";
+
+    requestInProgress = true;
+    sendButton.disabled = true;
+    sendButton.classList.add("opacity-50");
+    showChat();
+    appendUserMessage(message);
+    typing.classList.remove("hidden");
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({ message, video_url: videoUrl, video_action: action }),
+            priority: "high"
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not process this video request.");
+        appendAIMessage(String(data.response || data.answer || "No answer was returned."));
+    } catch (error) {
+        appendAIMessage("I couldn't process that video request.\n\n" + (error.message || "Please try again."));
+    } finally {
+        typing.classList.add("hidden");
+        requestInProgress = false;
+        sendButton.disabled = false;
+        sendButton.classList.remove("opacity-50");
+        if (input) input.focus();
+    }
+}
+
 function showChat() {
     const welcome = document.getElementById("welcome-screen");
     const messages = document.getElementById("messages-list");
@@ -1372,9 +1441,12 @@ async function handleChatSubmit(event) {
     let message = input.value.trim();
     const attachmentToSend = selectedFile;
     const attachmentKindToSend = selectedAttachmentKind;
+    const videoUrlToSend = pendingVideoUrl;
 
-    if (!message && !attachmentToSend) return;
-    if (!message && attachmentToSend) {
+    if (!message && !attachmentToSend && !videoUrlToSend) return;
+    if (!message && videoUrlToSend) {
+        message = "Please analyze this YouTube video and explain its main topics: " + videoUrlToSend;
+    } else if (!message && attachmentToSend) {
         message = `Analyze the attached ${attachmentKindToSend || "file"} "${attachmentToSend.name}" and explain clearly.`;
     }
 
@@ -1403,7 +1475,14 @@ async function handleChatSubmit(event) {
         const requestMessage = "Be a friendly, clear AI tutor:\n" + message;
 
         let requestOptions;
-        if (attachmentToSend) {
+        if (videoUrlToSend) {
+            requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                body: JSON.stringify({ message: requestMessage, video_url: videoUrlToSend }),
+                priority: "high"
+            };
+        } else if (attachmentToSend) {
             const formData = new FormData();
             formData.append("message", requestMessage);
             formData.append("attachment", attachmentToSend, attachmentToSend.name);
@@ -1437,7 +1516,8 @@ async function handleChatSubmit(event) {
             throw new Error("The server response did not contain an answer.");
         }
 
-        appendAIMessage(String(answer));
+        const answerRow = appendAIMessage(String(answer));
+        if (data.video_url) appendVideoActionButtons(answerRow, data.video_url);
     } catch (error) {
         appendAIMessage(
             "Sorry, I couldn't get a response from the server.\n\n" +
