@@ -6,10 +6,12 @@ import io
 import sqlite3
 import secrets
 import logging
+import re
 from collections import defaultdict, deque
 from pathlib import Path
 from functools import wraps
 from datetime import timedelta
+from urllib.parse import urlparse, parse_qs
 
 from flask import (
     Flask, render_template, request, redirect,
@@ -830,6 +832,55 @@ def explicit_memory_request(message):
     return cleaned[:1000] if cleaned else raw[:1000]
 
 
+def extract_youtube_video_id(url):
+    """Return a valid YouTube video ID from common YouTube URL formats."""
+    try:
+        parsed = urlparse((url or "").strip())
+        host = (parsed.hostname or "").lower()
+        if host in {"youtu.be", "www.youtu.be"}:
+            candidate = parsed.path.strip("/").split("/")[0]
+        elif host in {"youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com"}:
+            if parsed.path == "/watch":
+                candidate = parse_qs(parsed.query).get("v", [""])[0]
+            else:
+                parts = [part for part in parsed.path.split("/") if part]
+                candidate = parts[1] if len(parts) >= 2 and parts[0] in {"shorts", "embed", "live"} else ""
+        else:
+            return None
+        return candidate if re.fullmatch(r"[A-Za-z0-9_-]{11}", candidate or "") else None
+    except Exception:
+        return None
+
+
+def get_youtube_transcript(video_id):
+    """Fetch available captions without pretending to analyze video frames."""
+    try:
+        from youtube_transcript_api import YouTubeTranscriptApi
+    except ImportError as exc:
+        raise RuntimeError("YouTube transcript support is not installed. Add youtube-transcript-api to requirements.txt and redeploy.") from exc
+
+    api = YouTubeTranscriptApi()
+    try:
+        # Newer youtube-transcript-api releases expose .fetch().
+        fetched = api.fetch(video_id, languages=["en", "hi", "en-US", "en-GB"])
+    except (AttributeError, TypeError):
+        # Compatibility with older releases.
+        fetched = YouTubeTranscriptApi.get_transcript(video_id, languages=["en", "hi", "en-US", "en-GB"])
+
+    lines = []
+    for item in fetched:
+        if isinstance(item, dict):
+            value = item.get("text", "")
+        else:
+            value = getattr(item, "text", "")
+        if value:
+            lines.append(str(value).replace("\n", " ").strip())
+    transcript = " ".join(lines).strip()
+    if not transcript:
+        raise RuntimeError("This YouTube video has no accessible captions/transcript. Try a video with captions enabled or paste its transcript.")
+    return transcript[:50000]
+
+
 @app.route("/api/chat", methods=["POST"])
 @login_required
 def chat_with_tutor():
@@ -844,6 +895,8 @@ def chat_with_tutor():
 
     attachment = None
     attachment_kind = ""
+    video_url = ""
+    video_action = ""
     if request.content_type and request.content_type.startswith("multipart/form-data"):
         user_message = (request.form.get("message") or "").strip()
         attachment = request.files.get("attachment")
@@ -851,6 +904,13 @@ def chat_with_tutor():
     else:
         data = request.get_json(silent=True) or {}
         user_message = (data.get("message") or "").strip()
+        video_url = (data.get("video_url") or "").strip()
+        video_action = (data.get("video_action") or "").strip().lower()
+
+    # A YouTube URL can be submitted directly in the chat or through Video Link.
+    url_match = re.search(r"https?://(?:www\.)?(?:youtube\.com/watch\?[^\s]+|youtu\.be/[^\s]+|youtube\.com/(?:shorts|embed|live)/[^\s]+)", user_message, re.IGNORECASE)
+    if not video_url and url_match:
+        video_url = url_match.group(0).rstrip(".,)>]")
 
     if not user_message and not (attachment and attachment.filename):
         return jsonify({"error": "Please type a question or attach a file."}), 400
@@ -871,6 +931,21 @@ def chat_with_tutor():
         if memory_to_save.lower() not in old_memory.lower():
             combined = (old_memory + "\n- " + memory_to_save).strip() if old_memory else "- " + memory_to_save
         save_user_memory(user_id, combined[-6000:])
+
+    youtube_transcript = ""
+    youtube_video_id = None
+    if video_url:
+        youtube_video_id = extract_youtube_video_id(video_url)
+        if not youtube_video_id:
+            return jsonify({"error": "Please enter a valid YouTube video link (youtube.com or youtu.be)."}), 400
+        try:
+            youtube_transcript = get_youtube_transcript(youtube_video_id)
+        except RuntimeError as exc:
+            status = 503 if "not installed" in str(exc).lower() else 422
+            return jsonify({"error": str(exc)}), status
+        except Exception:
+            logger.exception("YouTube transcript retrieval failed")
+            return jsonify({"error": "I couldn't access captions for this YouTube video. It may have captions disabled, be private/restricted, or block transcript access. Try another video or paste its transcript."}), 422
 
     attachment_name = ""
     image_content = None
@@ -1025,6 +1100,30 @@ def chat_with_tutor():
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(load_history(user_id))
         prompt_text = user_message or "Please analyze the attached file and explain its contents."
+        if youtube_transcript:
+            if video_action == "handwritten":
+                prompt_text = (
+                    "Create complete, well-organized study notes based only on the supplied YouTube transcript. "
+                    "Format them like neat handwritten classroom notes: clear title, topic headings, short readable bullets, "
+                    "definitions, examples, key formulas where present, and a final quick-revision summary. Keep the notes "
+                    "easy to copy onto paper and print. Do not claim to create an actual image or handwritten scan; provide "
+                    "a clean notes layout that the student can print. Match the user's language/script.\n\n"
+                    f"Video link: {video_url}\nTRANSCRIPT:\n{youtube_transcript}"
+                )
+            elif video_action == "explain":
+                prompt_text = (
+                    "Explain the YouTube video's topics in detail, in a clear tutor style. Cover the main ideas in order, "
+                    "define important terms, explain examples and reasoning, and finish with a concise recap. Only use the "
+                    "transcript below; clearly mention if something cannot be determined from captions. Match the user's language/script.\n\n"
+                    f"Video link: {video_url}\nTRANSCRIPT:\n{youtube_transcript}"
+                )
+            else:
+                prompt_text = (
+                    "Analyze the following YouTube transcript and give the student a useful overview: identify the topic, "
+                    "explain the main concepts, list key takeaways, and suggest what to study next. Do not claim to have seen "
+                    "visuals or heard anything absent from the transcript. Match the user's language/script.\n\n"
+                    f"Video link: {video_url}\nTRANSCRIPT:\n{youtube_transcript}"
+                )
         if extracted_document_text:
             prompt_text += (
                 f"\n\nThe user attached a document named {attachment_name}. "
@@ -1095,9 +1194,18 @@ def chat_with_tutor():
         saved_user_message = user_message or "Please analyze my attached file."
         if attachment_name:
             saved_user_message += f"\n[Attachment: {attachment_name}]"
+        if video_url:
+            saved_user_message += f"\n[YouTube video: {video_url}]"
+            if video_action == "handwritten":
+                saved_user_message = "Create printable handwritten-style notes for: " + video_url
+            elif video_action == "explain":
+                saved_user_message = "Explain all video topics in detail: " + video_url
         save_message(user_id, "user", saved_user_message)
         save_message(user_id, "model", reply)
-        return jsonify({"response": reply, "status": "success"})
+        result = {"response": reply, "status": "success"}
+        if video_url and not video_action:
+            result["video_url"] = video_url
+        return jsonify(result)
 
     except Exception as exc:
         logger.exception("Groq chat error (model=%s, image=%s, document=%s)", model_to_use if "model_to_use" in locals() else "not-selected", bool(image_content), bool(extracted_document_text))
