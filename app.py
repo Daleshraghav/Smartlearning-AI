@@ -1063,14 +1063,45 @@ def chat_with_tutor():
 
     youtube_transcript = ""
     youtube_video_id = None
+
     if video_url:
         youtube_video_id = extract_youtube_video_id(video_url)
+
         if not youtube_video_id:
-            return jsonify({"error": "Please enter a valid YouTube video link (youtube.com or youtu.be)."}), 400
+            return jsonify({
+                "error": "Please enter a valid YouTube video link (youtube.com or youtu.be)."
+            }), 400
+
         try:
             youtube_transcript = get_youtube_transcript(youtube_video_id)
-      except RuntimeError as exc:
-    error_text = str(exc).lower()
+
+        except RuntimeError as exc:
+            error_text = str(exc).lower()
+
+            if any(term in error_text for term in (
+                "not configured",
+                "not installed",
+                "api key",
+                "insufficient credits",
+                "taking longer",
+                "timed out",
+                "could not connect",
+            )):
+                status = 503
+            else:
+                status = 422
+
+            return jsonify({"error": str(exc)}), status
+
+        except Exception:
+            logger.exception("YouTube transcript retrieval failed")
+            return jsonify({
+                "error": (
+                    "I couldn't access captions for this YouTube video. "
+                    "It may have captions disabled or be private/restricted. "
+                    "Please try another video."
+                )
+            }), 422
 
     if any(term in error_text for term in (
         "not configured",
