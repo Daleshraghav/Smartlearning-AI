@@ -1251,12 +1251,13 @@ def edit_uploaded_image():
             timeout=180,
         )
 
-       if not api_response.ok:
-    logger.error(
-        "OpenAI image edit failed: status=%s response=%s",
-        api_response.status_code,
-        api_response.text[:3000],
-    )
+     
+        if not api_response.ok:
+            logger.error(
+                "OpenAI image edit failed: status=%s response=%s",
+                api_response.status_code,
+                api_response.text[:3000],
+            )
 
             if api_response.status_code == 401:
                 return jsonify({
@@ -1271,6 +1272,7 @@ def edit_uploaded_image():
             return jsonify({
                 "error": "The image editing service could not complete the edit. Check the OpenAI model, API access, and Render logs."
             }), 502
+
 
         result = api_response.json()
         image_data = (result.get("data") or [{}])[0].get("b64_json")
