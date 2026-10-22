@@ -562,6 +562,49 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
     .user-message-bubble .whitespace-pre-wrap { font-size: 14px; line-height: 1.85; }
     .attachment-menu { max-height: min(68dvh, 400px) !important; }
 }
+
+
+/* Welcome suggestion cards: keep icon and copy together inside each card. */
+#welcome-screen .grid > button {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    min-height: 72px !important;
+    padding: 12px !important;
+    gap: 12px !important;
+    overflow: hidden !important;
+}
+#welcome-screen .grid > button > span:first-child {
+    display: flex !important;
+    flex: 0 0 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+#welcome-screen .grid > button > span:last-child {
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+#welcome-screen .grid > button > span:last-child > span {
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    margin-top: 2px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+}
+@media (max-width: 767px) {
+    #welcome-screen .grid > button { min-height: 68px !important; padding: 9px !important; gap: 8px !important; }
+    #welcome-screen .grid > button > span:first-child { flex-basis: 30px !important; width: 30px !important; height: 30px !important; }
+}
+
 </style>
 </head>
 
@@ -867,18 +910,16 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                         <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
                             <i class="fa-solid fa-atom"></i>
                         </span>
+                        <span class="min-w-0">
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Physics Revision</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Formulas & solutions.</span>
+                        </span>
+                    </button>
 
                     <button onclick="setPrompt('Teach me a programming concept step by step with simple examples:')" class="glass-card rounded-2xl p-2.5 md:p-3.5 text-left flex items-start gap-2 md:gap-3">
                         <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
                             <i class="fa-solid fa-code"></i>
                         </span>
-
-                          <span class="min-w-0">
-                            <span class="block text-xs md:text-sm font-bold text-gray-100">Physics Revision</span>
-                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Formulas & solutions.</span>
-                        </span>
-                    </button>
-                        
                         <span class="min-w-0">
                             <span class="block text-xs md:text-sm font-bold text-gray-100">Coding Concepts</span>
                             <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Python, C++, Web.</span>
@@ -901,16 +942,6 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                         <span class="min-w-0">
                             <span class="block text-xs md:text-sm font-bold text-gray-100">Handwritten PDF Notes</span>
                             <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Create and download study notes.</span>
-                        </span>
-                    </button>
-
-                    <button type="button" onclick="openImageEditorModal()" class="glass-card rounded-2xl p-2.5 md:p-3.5 text-left flex items-start gap-2 md:gap-3">
-                        <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-fuchsia-500/15 text-fuchsia-300 flex items-center justify-center">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        </span>
-                        <span class="min-w-0">
-                            <span class="block text-xs md:text-sm font-bold text-gray-100">AI Image Editor</span>
-                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Edit images using a prompt.</span>
                         </span>
                     </button>
                 </div>
