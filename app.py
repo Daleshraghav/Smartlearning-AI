@@ -1251,11 +1251,12 @@ def edit_uploaded_image():
             timeout=180,
         )
 
-        if not api_response.ok:
-            logger.error(
-                "OpenAI image edit failed with HTTP status %s",
-                api_response.status_code,
-            )
+       if not api_response.ok:
+    logger.error(
+        "OpenAI image edit failed: status=%s response=%s",
+        api_response.status_code,
+        api_response.text[:3000],
+    )
 
             if api_response.status_code == 401:
                 return jsonify({
