@@ -994,19 +994,18 @@ def get_youtube_transcript(video_id):
 
         transcript = transcript.strip()
 
-        if not transcript:
+            if not transcript:
             raise RuntimeError(
                 "No transcript was returned for this video. "
                 "It may have unavailable captions or require additional "
                 "transcription processing."
             )
 
-               logger.info(
+        logger.info(
             "YouTube transcript retrieved successfully for video %s",
             video_id,
         )
-        return transcript[:7000]
-
+        return transcript[:7000]     
     except requests.Timeout as exc:
         raise RuntimeError(
             "The transcript service timed out. Please retry the video link."
