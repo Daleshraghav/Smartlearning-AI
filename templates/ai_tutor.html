@@ -433,7 +433,23 @@ body.light-mode footer {
     }
     #chat-container { padding-bottom: 108px !important; }
 }
-    </style>
+    
+/* New study tools: handwritten PDF and actual AI image editing */
+.tool-modal-label { display:block; margin: 12px 0 6px; color:#d1d5db; font-size:12px; font-weight:700; }
+.tool-modal-field {
+    width:100%; border:1px solid rgba(148,163,184,.24); border-radius:12px;
+    background:rgba(15,23,42,.82); color:#f8fafc; padding:11px 12px; font-size:13px;
+    outline:none; transition:border-color .2s ease, box-shadow .2s ease;
+}
+.tool-modal-field:focus { border-color:#a78bfa; box-shadow:0 0 0 3px rgba(139,92,246,.16); }
+.tool-modal-field::placeholder { color:#94a3b8; }
+.tool-modal-status { min-height:20px; margin-top:10px; color:#c4b5fd; font-size:12px; line-height:1.5; }
+#image-edit-result img { display:block; max-width:100%; max-height:48vh; object-fit:contain; margin:0 auto; border-radius:14px; border:1px solid rgba(148,163,184,.2); }
+body.light-mode .tool-modal-label { color:#334155; }
+body.light-mode .tool-modal-field { background:#fff; color:#0f172a; border-color:#cbd5e1; }
+body.light-mode .tool-modal-field::placeholder { color:#64748b; }
+
+</style>
 </head>
 
 <body class="h-screen overflow-hidden flex relative">
@@ -773,6 +789,25 @@ body.light-mode footer {
                             <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Speak your question.</span>
                         </span>
                     </button>
+                    <button type="button" onclick="openNotesPdfModal()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-pink-500/15 text-pink-300 flex items-center justify-center">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </span>
+                        <span class="min-w-0">
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">Handwritten PDF Notes</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Create and download study notes.</span>
+                        </span>
+                    </button>
+
+                    <button type="button" onclick="openImageEditorModal()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
+                        <span class="w-9 h-9 shrink-0 rounded-xl bg-fuchsia-500/15 text-fuchsia-300 flex items-center justify-center">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </span>
+                        <span class="min-w-0">
+                            <span class="block text-xs md:text-sm font-bold text-gray-100">AI Image Editor</span>
+                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Edit images using a prompt.</span>
+                        </span>
+                    </button>
                 </div>
             </section>
 
@@ -926,6 +961,83 @@ body.light-mode footer {
             <button type="button" id="new-note-button" onclick="showNoteEditor()" class="mt-4 w-full rounded-xl border border-gray-700 hover:border-purple-500 py-2.5 text-sm font-semibold text-gray-200">
                 <i class="fa-solid fa-plus mr-2"></i>Create Note
             </button>
+        </div>
+    </div>
+
+
+    <!-- Handwritten notes PDF generator -->
+    <div id="notes-pdf-modal" class="study-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="notes-pdf-title" onclick="if(event.target===this) closeNotesPdfModal()">
+        <div class="study-modal">
+            <div class="flex items-center justify-between gap-3 mb-3">
+                <div>
+                    <h2 id="notes-pdf-title" class="text-lg font-bold text-white">Handwritten Notes PDF</h2>
+                    <p class="text-xs text-gray-400 mt-1">Generate notebook-style notes and download them as a PDF.</p>
+                </div>
+                <button type="button" onclick="closeNotesPdfModal()" class="text-gray-400 hover:text-white p-2" aria-label="Close notes generator"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="notes-pdf-form" onsubmit="downloadHandwrittenNotes(event)">
+                <label class="tool-modal-label" for="notes-topic">Topic</label>
+                <input id="notes-topic" class="tool-modal-field" type="text" maxlength="300" placeholder="e.g. Operating System — Process Scheduling">
+                <label class="tool-modal-label" for="notes-source">Study material (optional)</label>
+                <textarea id="notes-source" class="tool-modal-field" rows="5" maxlength="20000" placeholder="Paste your syllabus, textbook material, or existing notes here..."></textarea>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="tool-modal-label" for="notes-language">Notes language</label>
+                        <select id="notes-language" class="tool-modal-field">
+                            <option value="hinglish" selected>Hinglish (default)</option>
+                            <option value="english">English</option>
+                            <option value="hindi">Hindi</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="tool-modal-label" for="notes-style">Handwriting style</label>
+                        <select id="notes-style" class="tool-modal-field">
+                            <option value="student" selected>Realistic student style</option>
+                            <option value="neat">Neat & readable</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="text-[11px] text-gray-400 mt-3">The PDF uses ruled notebook pages. Formulas, examples, diagrams and important questions are included when useful.</p>
+                <p id="notes-pdf-status" class="tool-modal-status" role="status" aria-live="polite"></p>
+                <button id="notes-pdf-submit" type="submit" class="mt-2 w-full rounded-xl px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-sm font-bold hover:brightness-110 transition">
+                    <i class="fa-solid fa-download mr-2"></i>Generate & Download PDF
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Actual AI image editor -->
+    <div id="image-editor-modal" class="study-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="image-editor-title" onclick="if(event.target===this) closeImageEditorModal()">
+        <div class="study-modal">
+            <div class="flex items-center justify-between gap-3 mb-3">
+                <div>
+                    <h2 id="image-editor-title" class="text-lg font-bold text-white">AI Image Editor</h2>
+                    <p class="text-xs text-gray-400 mt-1">Upload an image, describe the edit, then download the edited result.</p>
+                </div>
+                <button type="button" onclick="closeImageEditorModal()" class="text-gray-400 hover:text-white p-2" aria-label="Close image editor"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="image-editor-form" onsubmit="submitImageEdit(event)">
+                <label class="tool-modal-label" for="image-edit-file">Choose image (PNG, JPG or WEBP; max 10 MB)</label>
+                <input id="image-edit-file" class="tool-modal-field" type="file" accept="image/png,image/jpeg,image/webp" required>
+                <div id="image-edit-source-wrap" class="hidden mt-3">
+                    <p class="text-xs text-gray-400 mb-2">Selected image</p>
+                    <img id="image-edit-source-preview" class="max-h-40 max-w-full rounded-xl border border-gray-700 object-contain" alt="Selected image preview">
+                </div>
+                <label class="tool-modal-label" for="image-edit-prompt">What should be changed?</label>
+                <textarea id="image-edit-prompt" class="tool-modal-field" rows="4" maxlength="3000" required placeholder="e.g. Replace the background with a warm sunset beach, keep the person unchanged, and improve lighting."></textarea>
+                <p class="text-[11px] text-gray-400 mt-2">This uses a separate image-editing API. Your existing Groq tutor and image-question analysis remain separate.</p>
+                <p id="image-edit-status" class="tool-modal-status" role="status" aria-live="polite"></p>
+                <button id="image-edit-submit" type="submit" class="mt-2 w-full rounded-xl px-4 py-3 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white text-sm font-bold hover:brightness-110 transition">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Edit Image
+                </button>
+            </form>
+            <div id="image-edit-result" class="hidden mt-5 border-t border-gray-700 pt-4">
+                <h3 class="text-sm font-bold text-white mb-3">Edited image</h3>
+                <img id="image-edit-output" alt="AI edited result">
+                <a id="image-edit-download" class="mt-3 inline-flex w-full items-center justify-center rounded-xl px-4 py-3 bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold transition" download="SmartLearn_AI_Edited_Image.png">
+                    <i class="fa-solid fa-download mr-2"></i>Download Edited Image
+                </a>
+            </div>
         </div>
     </div>
 
@@ -1529,6 +1641,170 @@ async function handleChatSubmit(event) {
         requestInProgress = false;
         sendButton.disabled = false;
         sendButton.classList.remove("opacity-50");
+    }
+}
+
+
+/* ---------- Handwritten PDF generator ---------- */
+function openNotesPdfModal() {
+    document.getElementById("notes-pdf-modal")?.classList.remove("hidden");
+    document.getElementById("notes-topic")?.focus();
+}
+function closeNotesPdfModal() {
+    document.getElementById("notes-pdf-modal")?.classList.add("hidden");
+}
+async function downloadHandwrittenNotes(event) {
+    event.preventDefault();
+    const topic = document.getElementById("notes-topic")?.value.trim() || "";
+    const sourceMaterial = document.getElementById("notes-source")?.value.trim() || "";
+    const language = document.getElementById("notes-language")?.value || "hinglish";
+    const style = document.getElementById("notes-style")?.value || "student";
+    const status = document.getElementById("notes-pdf-status");
+    const button = document.getElementById("notes-pdf-submit");
+    if (!topic && !sourceMaterial) {
+        if (status) status.textContent = "Enter a topic or paste study material first.";
+        return;
+    }
+    button.disabled = true;
+    button.classList.add("opacity-60");
+    if (status) status.textContent = "Step 1 of 2: AI is preparing your notes…";
+    try {
+        const languageInstruction = language === "english"
+            ? "Write entirely in clear English."
+            : language === "hindi"
+                ? "Write entirely in Hindi using Devanagari script."
+                : "Write in natural Hinglish using Roman script by default; do not switch to Devanagari Hindi unless explicitly asked.";
+        const prompt = [
+            "Prepare accurate, well-organized study notes for a handwritten-style student PDF.",
+            languageInstruction,
+            "Use a clear title, short headings, bullet points, definitions, step-by-step explanations, examples, formulas where relevant, and a short quick-revision section. Avoid markdown tables because the PDF layout is simple.",
+            topic ? "TOPIC: " + topic : "",
+            sourceMaterial ? "SOURCE MATERIAL (prioritize this material and do not invent details unsupported by it):\n" + sourceMaterial : "",
+            "Return only the notes content, ready to place into a study notebook."
+        ].filter(Boolean).join("\n\n");
+
+        const notesResponse = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({ message: prompt })
+        });
+        let notesData = {};
+        try { notesData = await notesResponse.json(); } catch (_) {}
+        if (!notesResponse.ok) throw new Error(notesData.error || "AI could not prepare the notes.");
+        const notesText = String(notesData.response || notesData.answer || "").trim();
+        if (!notesText) throw new Error("AI returned empty notes. Please try again.");
+
+        if (status) status.textContent = "Step 2 of 2: Creating your PDF…";
+        const pdfResponse = await fetch("/api/notes/pdf", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/pdf, application/json" },
+            body: JSON.stringify({ notes_text: notesText, title: topic || "SmartLearn AI Study Notes", style, language })
+        });
+        if (!pdfResponse.ok) {
+            let data = {};
+            try { data = await pdfResponse.json(); } catch (_) {}
+            throw new Error(data.error || "PDF generation failed.");
+        }
+        const blob = await pdfResponse.blob();
+        if (!blob.type.includes("pdf")) throw new Error("The server did not return a PDF file.");
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        const safeTopic = (topic || "Study_Notes").replace(/[^a-z0-9_-]+/gi, "_").slice(0, 45) || "Study_Notes";
+        link.download = `SmartLearn_${safeTopic}_Handwritten_Notes.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+        if (status) status.textContent = "PDF created. Your download should start automatically.";
+        showToast("Handwritten notes PDF downloaded!");
+    } catch (error) {
+        if (status) status.textContent = error.message || "Could not create the PDF. Please try again.";
+    } finally {
+        button.disabled = false;
+        button.classList.remove("opacity-60");
+    }
+}
+
+/* ---------- Actual AI image editing ---------- */
+let imageEditPreviewUrl = "";
+let editedImageObjectUrl = "";
+function openImageEditorModal() {
+    document.getElementById("image-editor-modal")?.classList.remove("hidden");
+}
+function closeImageEditorModal() {
+    document.getElementById("image-editor-modal")?.classList.add("hidden");
+}
+document.getElementById("image-edit-file")?.addEventListener("change", event => {
+    const file = event.target.files?.[0];
+    const status = document.getElementById("image-edit-status");
+    const wrap = document.getElementById("image-edit-source-wrap");
+    const preview = document.getElementById("image-edit-source-preview");
+    if (!file) {
+        wrap?.classList.add("hidden");
+        return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+        event.target.value = "";
+        wrap?.classList.add("hidden");
+        if (status) status.textContent = "Image must be 10 MB or smaller.";
+        return;
+    }
+    if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+        event.target.value = "";
+        wrap?.classList.add("hidden");
+        if (status) status.textContent = "Choose a PNG, JPG, or WEBP image.";
+        return;
+    }
+    if (imageEditPreviewUrl) URL.revokeObjectURL(imageEditPreviewUrl);
+    imageEditPreviewUrl = URL.createObjectURL(file);
+    if (preview) preview.src = imageEditPreviewUrl;
+    wrap?.classList.remove("hidden");
+    if (status) status.textContent = "";
+});
+async function submitImageEdit(event) {
+    event.preventDefault();
+    const file = document.getElementById("image-edit-file")?.files?.[0];
+    const prompt = document.getElementById("image-edit-prompt")?.value.trim() || "";
+    const status = document.getElementById("image-edit-status");
+    const button = document.getElementById("image-edit-submit");
+    if (!file || !prompt) {
+        if (status) status.textContent = "Choose an image and describe the edit you want.";
+        return;
+    }
+    button.disabled = true;
+    button.classList.add("opacity-60");
+    if (status) status.textContent = "Editing the image. This can take a little while…";
+    document.getElementById("image-edit-result")?.classList.add("hidden");
+    try {
+        const formData = new FormData();
+        formData.append("image", file, file.name);
+        formData.append("prompt", prompt);
+        const response = await fetch("/api/image/edit", { method: "POST", body: formData });
+        if (!response.ok) {
+            let data = {};
+            try { data = await response.json(); } catch (_) {}
+            throw new Error(data.error || "Image editing failed.");
+        }
+        const imageBlob = await response.blob();
+        if (!imageBlob.type.startsWith("image/")) throw new Error("The server did not return a valid edited image.");
+        const output = document.getElementById("image-edit-output");
+        const download = document.getElementById("image-edit-download");
+        if (editedImageObjectUrl) URL.revokeObjectURL(editedImageObjectUrl);
+        editedImageObjectUrl = URL.createObjectURL(imageBlob);
+        if (output) output.src = editedImageObjectUrl;
+        if (download) {
+            download.href = editedImageObjectUrl;
+            download.download = "SmartLearn_AI_Edited_Image.png";
+        }
+        document.getElementById("image-edit-result")?.classList.remove("hidden");
+        if (status) status.textContent = "Image edited successfully. Preview it below or download the result.";
+        showToast("Edited image is ready!");
+    } catch (error) {
+        if (status) status.textContent = error.message || "Could not edit this image. Please try again.";
+    } finally {
+        button.disabled = false;
+        button.classList.remove("opacity-60");
     }
 }
 
