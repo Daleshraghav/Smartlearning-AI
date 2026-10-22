@@ -1001,11 +1001,11 @@ def get_youtube_transcript(video_id):
                 "transcription processing."
             )
 
-        logger.info(
+               logger.info(
             "YouTube transcript retrieved successfully for video %s",
             video_id,
         )
-             return transcript[:7000]
+        return transcript[:7000]
 
     except requests.Timeout as exc:
         raise RuntimeError(
