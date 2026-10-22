@@ -324,7 +324,7 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
    ========================================== */
 .attachment-menu {
     position: absolute; left: 0; bottom: calc(100% + 14px);
-    width: min(220px, calc(100vw - 32px)); z-index: 60; padding: 8px; border-radius: 20px;
+    width: min(270px, calc(100vw - 28px)); max-height: min(72dvh, 430px); overflow-y: auto; z-index: 60; padding: 9px; border-radius: 20px;
     background: linear-gradient(145deg, rgba(34, 28, 66, 0.92), rgba(10, 13, 26, 0.95));
     -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%);
     border: 1px solid rgba(168, 85, 247, 0.3);
@@ -343,7 +343,7 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
     to   { opacity: 1; transform: translateY(0); }
 }
 .attachment-option {
-    display: flex; align-items: center; gap: 13px; width: 100%; padding: 10px 11px;
+    display: flex; align-items: center; gap: 12px; width: 100%; padding: 9px 10px;
     border-radius: 14px; text-align: left; color: #f1f5f9; font-size: 14px; font-weight: 700;
     background: transparent; transition: background .2s ease, transform .2s ease;
 }
@@ -449,6 +449,119 @@ body.light-mode .tool-modal-label { color:#334155; }
 body.light-mode .tool-modal-field { background:#fff; color:#0f172a; border-color:#cbd5e1; }
 body.light-mode .tool-modal-field::placeholder { color:#64748b; }
 
+
+/* ==========================================
+   FINAL MOBILE PASS — phone, small phone & keyboard-safe modals
+   Keeps desktop layout unchanged.
+   ========================================== */
+@media (max-width: 767px) {
+    html, body { width: 100%; max-width: 100%; overflow: hidden !important; }
+    body { overscroll-behavior: none; }
+    #sidebar-drawer { max-width: 88vw !important; }
+    main.flex-1 { min-width: 0 !important; width: 100% !important; }
+    main > header { padding-left: 10px !important; padding-right: 10px !important; }
+    main > header h2, main > header h1 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #chat-container { min-width: 0 !important; width: 100% !important; overscroll-behavior-y: contain; }
+    #messages-list, #typing-indicator, #welcome-screen { min-width: 0 !important; max-width: 100% !important; }
+    #messages-list > *, #messages-list .message-animation { min-width: 0; max-width: 100%; }
+    .ai-answer-content { max-width: 100% !important; overflow-wrap: anywhere !important; word-break: normal !important; }
+    .ai-answer-content pre, .ai-answer-content table { max-width: 100% !important; overflow-x: auto !important; }
+    .ai-answer-content img, #messages-list img { max-width: 100% !important; height: auto !important; }
+    .answer-actions { gap: 5px !important; }
+    .answer-actions button { min-height: 32px !important; }
+
+    /* Tool dialogs stay inside the visible phone viewport and can scroll */
+    .study-modal-backdrop {
+        align-items: flex-start !important;
+        justify-content: center !important;
+        padding: max(12px, env(safe-area-inset-top, 0px)) 10px max(12px, env(safe-area-inset-bottom, 0px)) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    .study-modal {
+        width: 100% !important;
+        max-width: 560px !important;
+        max-height: calc(100dvh - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+        padding: 16px !important;
+        border-radius: 18px !important;
+        margin: auto 0 !important;
+        overscroll-behavior: contain;
+    }
+    .study-modal h2 { font-size: 17px !important; line-height: 1.35 !important; }
+    .tool-modal-field { font-size: 16px !important; } /* avoids iOS zoom on focus */
+    .tool-modal-label { margin-top: 10px !important; }
+    #notes-source { min-height: 105px; }
+    #image-edit-prompt { min-height: 95px; }
+    #image-edit-result img, #image-edit-source-preview { max-width: 100% !important; height: auto !important; }
+
+    /* Keep the composer thumb-friendly without overflowing narrow screens */
+    main > footer { width: 100% !important; }
+    main > footer > div { width: 100% !important; min-width: 0 !important; }
+    #chat-form { width: calc(100% - 8px) !important; max-width: 100% !important; gap: 6px !important; }
+    #attach-btn, #send-button { width: 36px !important; height: 36px !important; flex: 0 0 36px !important; }
+    #chat-input { min-width: 0 !important; width: 100% !important; }
+    .attachment-menu { max-width: calc(100vw - 28px) !important; }
+}
+
+@media (max-width: 380px) {
+    #chat-form { padding: 4px 6px !important; gap: 4px !important; }
+    #attach-btn, #send-button { width: 33px !important; height: 33px !important; flex-basis: 33px !important; }
+    #chat-input { font-size: 14px !important; padding-left: 2px !important; padding-right: 2px !important; }
+    #welcome-screen .grid { grid-template-columns: minmax(0, 1fr) !important; }
+    .study-modal { padding: 13px !important; }
+}
+
+
+/* Readable chat typography: consistent word spacing and line height */
+.ai-answer-content {
+    font-size: 15px;
+    line-height: 1.85;
+    letter-spacing: 0.005em;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    white-space: normal;
+}
+.ai-answer-content p { margin: 0 0 1em; line-height: 1.85; }
+.ai-answer-content p:last-child { margin-bottom: 0; }
+.ai-answer-content li { margin: 0.35em 0; line-height: 1.8; }
+.ai-answer-content ul, .ai-answer-content ol { padding-left: 1.45rem; margin: 0.65em 0 1em; }
+.ai-answer-content h1, .ai-answer-content h2, .ai-answer-content h3 { line-height: 1.45; margin: 1.1em 0 0.55em; }
+.user-message-bubble .whitespace-pre-wrap {
+    font-size: 14.5px;
+    line-height: 1.8;
+    letter-spacing: 0.005em;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+#messages-list { gap: 1.5rem !important; }
+.attachment-menu.open .attachment-option:nth-child(4) { animation-delay: .19s; }
+.attachment-menu.open .attachment-option:nth-child(5) { animation-delay: .24s; }
+.attachment-menu.open .attachment-option:nth-child(6) { animation-delay: .29s; }
+@media (max-width: 767px) {
+    #welcome-screen { padding-left: 0 !important; padding-right: 0 !important; }
+    #welcome-screen .grid { gap: 8px !important; }
+    #welcome-screen .grid > button {
+        min-width: 0 !important;
+        min-height: 72px !important;
+        padding: 9px !important;
+        gap: 8px !important;
+        border-radius: 16px !important;
+    }
+    #welcome-screen .grid > button > span:first-child {
+        width: 32px !important; height: 32px !important; border-radius: 10px !important;
+    }
+    #welcome-screen .grid > button > span:last-child { min-width: 0 !important; }
+    #welcome-screen .grid > button > span:last-child > span:first-child {
+        font-size: 11.5px !important; line-height: 1.35 !important;
+        overflow-wrap: anywhere;
+    }
+    #welcome-screen .grid > button > span:last-child > span:last-child {
+        font-size: 10px !important; line-height: 1.4 !important;
+    }
+    .ai-answer-content { font-size: 14.5px; line-height: 1.9; }
+    .user-message-bubble .whitespace-pre-wrap { font-size: 14px; line-height: 1.85; }
+    .attachment-menu { max-height: min(68dvh, 400px) !important; }
+}
 </style>
 </head>
 
@@ -749,9 +862,9 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                 </p>
 
                 <!-- Prompt suggestions -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 md:mt-9 w-full max-w-3xl">
-                    <button onclick="setPrompt('Explain an important Physics concept with formulas and examples:')" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
-                        <span class="w-9 h-9 shrink-0 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
+                <div class="grid grid-cols-2 gap-2 mt-5 md:mt-9 w-full max-w-3xl">
+                    <button onclick="setPrompt('Explain an important Physics concept with formulas and examples:')" class="glass-card rounded-2xl p-2.5 md:p-3.5 text-left flex items-start gap-2 md:gap-3">
+                        <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
                             <i class="fa-solid fa-atom"></i>
                         </span>
                         <span class="min-w-0">
@@ -760,8 +873,8 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                         </span>
                     </button>
 
-                    <button onclick="setPrompt('Teach me a programming concept step by step with simple examples:')" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
-                        <span class="w-9 h-9 shrink-0 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                    <button onclick="setPrompt('Teach me a programming concept step by step with simple examples:')" class="glass-card rounded-2xl p-2.5 md:p-3.5 text-left flex items-start gap-2 md:gap-3">
+                        <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
                             <i class="fa-solid fa-code"></i>
                         </span>
                         <span class="min-w-0">
@@ -770,8 +883,8 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                         </span>
                     </button>
 
-                    <button onclick="openAttachmentMenu()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
-                        <span class="w-9 h-9 shrink-0 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center">
+                    <button onclick="openAttachmentMenu()" class="glass-card rounded-2xl p-2.5 md:p-3.5 text-left flex items-start gap-2 md:gap-3">
+                        <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center">
                             <i class="fa-solid fa-camera"></i>
                         </span>
                         <span class="min-w-0">
@@ -779,18 +892,8 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                             <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Attach a file or photo.</span>
                         </span>
                     </button>
-
-                    <button onclick="openVoiceAssistant()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
-                        <span class="w-9 h-9 shrink-0 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
-                            <i class="fa-solid fa-microphone"></i>
-                        </span>
-                        <span class="min-w-0">
-                            <span class="block text-xs md:text-sm font-bold text-gray-100">Voice Assistant</span>
-                            <span class="block text-[11px] text-gray-400 mt-0.5 leading-relaxed">Speak your question.</span>
-                        </span>
-                    </button>
-                    <button type="button" onclick="openNotesPdfModal()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
-                        <span class="w-9 h-9 shrink-0 rounded-xl bg-pink-500/15 text-pink-300 flex items-center justify-center">
+                    <button type="button" onclick="openNotesPdfModal()" class="glass-card rounded-2xl p-2.5 md:p-3.5 text-left flex items-start gap-2 md:gap-3">
+                        <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-pink-500/15 text-pink-300 flex items-center justify-center">
                             <i class="fa-solid fa-file-pdf"></i>
                         </span>
                         <span class="min-w-0">
@@ -799,8 +902,8 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                         </span>
                     </button>
 
-                    <button type="button" onclick="openImageEditorModal()" class="glass-card rounded-2xl p-3.5 text-left flex items-start gap-3">
-                        <span class="w-9 h-9 shrink-0 rounded-xl bg-fuchsia-500/15 text-fuchsia-300 flex items-center justify-center">
+                    <button type="button" onclick="openImageEditorModal()" class="glass-card rounded-2xl p-2.5 md:p-3.5 text-left flex items-start gap-2 md:gap-3">
+                        <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-xl bg-fuchsia-500/15 text-fuchsia-300 flex items-center justify-center">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                         </span>
                         <span class="min-w-0">
@@ -870,6 +973,18 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                             <button type="button" class="attachment-option" onclick="chooseAttachment('video')">
                                 <span class="opt-icon bg-emerald-500/15"><i class="fa-solid fa-film text-emerald-400 text-base"></i></span>
                                 <span>Video Link</span>
+                            </button>
+                            <button type="button" class="attachment-option" onclick="openNotesPdfModal()">
+                                <span class="opt-icon bg-pink-500/15"><i class="fa-solid fa-file-pen text-pink-300 text-base"></i></span>
+                                <span>Handwritten Notes</span>
+                            </button>
+                            <button type="button" class="attachment-option" onclick="openImageEditorModal()">
+                                <span class="opt-icon bg-fuchsia-500/15"><i class="fa-solid fa-wand-magic-sparkles text-fuchsia-300 text-base"></i></span>
+                                <span>AI Image Editor</span>
+                            </button>
+                            <button type="button" class="attachment-option" onclick="chooseAttachment('screenshot')">
+                                <span class="opt-icon bg-amber-500/15"><i class="fa-solid fa-camera-retro text-amber-300 text-base"></i></span>
+                                <span>Screenshot</span>
                             </button>
                         </div>
                     </div>
