@@ -357,6 +357,101 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
     width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
 }
+
+/* LUXURY PLUS BUTTON + GLASS ICONS */
+#attach-btn {
+    position: relative !important;
+    overflow: visible !important;
+    isolation: isolate;
+    background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(139,92,246,.10)) !important;
+    border: 1px solid rgba(196,181,253,.34) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 4px 16px rgba(124,58,237,.10);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), background .3s ease,
+                border-color .3s ease, box-shadow .3s ease, color .3s ease !important;
+}
+#attach-btn::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 999px;
+    border: 1px solid rgba(167,139,250,0);
+    transform: scale(.78);
+    opacity: 0;
+    pointer-events: none;
+}
+#attach-btn i {
+    display: inline-block;
+    transition: transform .42s cubic-bezier(.2,.8,.2,1), color .25s ease;
+}
+#attach-btn:hover {
+    color: #fff !important;
+    border-color: rgba(196,181,253,.78) !important;
+    background: linear-gradient(145deg, rgba(167,139,250,.30), rgba(99,102,241,.18)) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 0 0 4px rgba(139,92,246,.07), 0 8px 24px rgba(124,58,237,.24);
+    transform: translateY(-1px);
+}
+#attach-btn:active { transform: scale(.92); }
+#attach-btn[aria-expanded="true"] {
+    color: #fff !important;
+    border-color: rgba(196,181,253,.85) !important;
+    background: linear-gradient(135deg, rgba(139,92,246,.42), rgba(79,70,229,.30)) !important;
+    box-shadow: 0 0 0 4px rgba(139,92,246,.10), 0 0 22px rgba(139,92,246,.25), inset 0 1px 0 rgba(255,255,255,.24);
+}
+#attach-btn[aria-expanded="true"] i { transform: rotate(135deg); color: #e9d5ff; }
+#attach-btn[aria-expanded="true"]::before {
+    animation: attachAura .55s ease-out;
+}
+@keyframes attachAura {
+    0% { transform: scale(.78); opacity: .85; border-color: rgba(167,139,250,.8); }
+    100% { transform: scale(1.5); opacity: 0; border-color: rgba(167,139,250,0); }
+}
+.attachment-option .opt-icon {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(226,232,240,.15);
+    background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(255,255,255,.025)) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 5px 14px rgba(0,0,0,.12);
+    -webkit-backdrop-filter: blur(12px) saturate(145%);
+    backdrop-filter: blur(12px) saturate(145%);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
+}
+.attachment-option .opt-icon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(120deg, rgba(255,255,255,.15), transparent 48%, rgba(255,255,255,.035));
+    pointer-events: none;
+}
+.attachment-option .opt-icon i {
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 1px 5px currentColor);
+    transition: transform .3s ease, filter .3s ease;
+}
+.attachment-option:hover .opt-icon {
+    transform: translateY(-2px) scale(1.05);
+    border-color: rgba(196,181,253,.48);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 8px 20px rgba(139,92,246,.15);
+}
+.attachment-option:hover .opt-icon i { transform: scale(1.09); filter: drop-shadow(0 2px 8px currentColor); }
+body.light-mode #attach-btn {
+    background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(237,233,254,.8)) !important;
+    border-color: rgba(139,92,246,.3) !important;
+    color: #6d28d9 !important;
+    box-shadow: inset 0 1px 0 #fff, 0 4px 14px rgba(109,40,217,.10);
+}
+body.light-mode .attachment-option .opt-icon {
+    background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(237,233,254,.55)) !important;
+    border-color: rgba(139,92,246,.18);
+    box-shadow: inset 0 1px 0 #fff, 0 4px 12px rgba(76,29,149,.08);
+}
+@media (prefers-reduced-motion: reduce) {
+    #attach-btn, #attach-btn i, .attachment-option .opt-icon, .attachment-option .opt-icon i {
+        transition: none !important;
+    }
+    #attach-btn[aria-expanded="true"]::before { animation: none !important; }
+}
 body.light-mode .attachment-menu { background: rgba(255,255,255,.97) !important; border-color: #c4b5fd !important; box-shadow: 0 20px 50px rgba(76,29,149,.2) !important; }
 body.light-mode .attachment-option:hover { background: #ede9fe !important; }
 
@@ -988,10 +1083,11 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                 <!-- Input panel (ChatGPT Pill style) -->
                 <form id="chat-form" class="flex items-center gap-2 px-3 py-2 rounded-full bg-[#181b22] border border-white/10 shadow-2xl" onsubmit="handleChatSubmit(event)">
                     <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'image')">
+                    <input type="file" id="screenshot-input" class="hidden" accept="image/*" onchange="handleFileSelect(event,'screenshot')">
                     <input type="file" id="document-input" class="hidden" accept=".pdf,.txt,.md,.csv,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,text/plain" onchange="handleFileSelect(event,'file')">
 
                     <div class="relative">
-                        <button type="button" id="attach-btn" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center shrink-0 border border-white/10 transition" title="Attach file">
+                        <button type="button" id="attach-btn" aria-expanded="false" aria-controls="attachment-menu" onclick="toggleAttachmentMenu()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center shrink-0 border border-white/10 transition" title="Attach file">
                             <i class="fa-solid fa-plus text-sm"></i>
                         </button>
                         <div id="attachment-menu" class="attachment-menu">
@@ -1465,6 +1561,8 @@ function toggleAttachmentMenu(forceOpen) {
     if (!menu) return;
     const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !menu.classList.contains("open");
     menu.classList.toggle("open", shouldOpen);
+    const attachButton = document.getElementById("attach-btn");
+    if (attachButton) attachButton.setAttribute("aria-expanded", String(shouldOpen));
 }
 
 // Screen par kahin bhi click karo to menu band ho jayega
@@ -1479,6 +1577,12 @@ let pendingVideoUrl = "";
 
 function chooseAttachment(kind) {
     toggleAttachmentMenu(false);
+
+    if (kind === "screenshot") {
+        captureScreenshot();
+        return;
+    }
+
     if (kind === "video") {
         const url = window.prompt("Paste a YouTube video link:");
         if (!url || !url.trim()) return;
@@ -1496,9 +1600,74 @@ function chooseAttachment(kind) {
         showToast("Video link ready. Press Send to analyze its available captions.");
         return;
     }
+
     const ids = { image: "image-input", file: "document-input" };
     document.getElementById(ids[kind])?.click();
 }
+
+async function captureScreenshot() {
+    // Mobile browsers often don't support tab/screen capture; let users pick a saved screenshot instead.
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile || !navigator.mediaDevices?.getDisplayMedia) {
+        document.getElementById("screenshot-input")?.click();
+        return;
+    }
+
+    let stream;
+    try {
+        stream = await navigator.mediaDevices.getDisplayMedia({
+            video: { frameRate: 1 },
+            audio: false
+        });
+
+        const track = stream.getVideoTracks()[0];
+        if (!track) throw new Error("No screen video track was provided.");
+
+        const video = document.createElement("video");
+        video.srcObject = stream;
+        video.muted = true;
+        video.playsInline = true;
+
+        await new Promise((resolve, reject) => {
+            video.onloadedmetadata = resolve;
+            video.onerror = reject;
+        });
+        await video.play();
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth || track.getSettings().width || 1280;
+        canvas.height = video.videoHeight || track.getSettings().height || 720;
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Could not prepare screenshot canvas.");
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const blob = await new Promise((resolve, reject) => {
+            canvas.toBlob(result => result ? resolve(result) : reject(new Error("Could not create screenshot.")), "image/png");
+        });
+
+        const file = new File([blob], `screenshot-${Date.now()}.png`, { type: "image/png" });
+        selectedFile = file;
+        selectedAttachmentKind = "image";
+        pendingVideoUrl = "";
+
+        const name = document.getElementById("attachment-name");
+        if (name) name.textContent = `Screenshot: ${file.name}`;
+        document.getElementById("attachment-preview")?.classList.remove("hidden");
+        showToast("Screenshot captured. Ask your question, then press Send.");
+    } catch (error) {
+        if (error?.name === "NotAllowedError") {
+            showToast("Screen capture cancelled. You can choose a saved screenshot instead.");
+        } else {
+            console.error("Screenshot capture failed:", error);
+            showToast("Could not capture the screen. Choose a saved screenshot instead.");
+        }
+        document.getElementById("screenshot-input")?.click();
+    } finally {
+        stream?.getTracks().forEach(track => track.stop());
+    }
+}
+
 function handleFileSelect(event, kind = "file") {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -1508,18 +1677,19 @@ function handleFileSelect(event, kind = "file") {
         event.target.value = "";
         return;
     }
-    if (kind === "image" && !file.type.startsWith("image/")) {
+    if ((kind === "image" || kind === "screenshot") && !file.type.startsWith("image/")) {
         showToast("Please choose an image."); event.target.value = ""; return;
     }
     if (kind === "file" && !/\.(pdf|txt|md|csv|doc|docx|ppt|pptx|xls|xlsx)$/i.test(file.name)) {
         showToast("Choose a supported document (PDF, TXT, DOCX, etc.)."); event.target.value = ""; return;
     }
     selectedFile = file;
-    selectedAttachmentKind = kind;
+    selectedAttachmentKind = kind === "screenshot" ? "image" : kind;
     const name = document.getElementById("attachment-name");
-    if (name) name.textContent = `${kind === "image" ? "Image" : "File"}: ${file.name}`;
+    if (name) name.textContent = `${kind === "screenshot" ? "Screenshot" : kind === "image" ? "Image" : "File"}: ${file.name}`;
     document.getElementById("attachment-preview")?.classList.remove("hidden");
     showToast("Attachment ready. Ask a question, then press Send to analyze it.");
+    event.target.value = "";
 }
 function clearAttachment() {
     selectedFile = null;
