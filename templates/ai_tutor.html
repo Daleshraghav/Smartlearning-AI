@@ -393,26 +393,24 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
 #attach-btn:active { transform: scale(.92); }
 #attach-btn[aria-expanded="true"] {
     color: #fff !important;
-    border-color: rgba(196,181,253,.85) !important;
-    background: linear-gradient(135deg, rgba(139,92,246,.42), rgba(79,70,229,.30)) !important;
-    box-shadow: 0 0 0 4px rgba(139,92,246,.10), 0 0 22px rgba(139,92,246,.25), inset 0 1px 0 rgba(255,255,255,.24);
+    border-color: rgba(248, 113, 113, .98) !important;
+    background: linear-gradient(135deg, rgba(239,68,68,.24), rgba(127,29,29,.16)) !important;
+    box-shadow: 0 0 0 2px rgba(248,113,113,.10), 0 0 16px rgba(248,63,63,.24), inset 0 1px 0 rgba(255,255,255,.20);
 }
-#attach-btn[aria-expanded="true"] i { transform: rotate(135deg); color: #e9d5ff; }
-#attach-btn[aria-expanded="true"]::before {
-    animation: attachAura .55s ease-out;
-}
+#attach-btn[aria-expanded="true"] i { transform: rotate(135deg); color: #fca5a5; }
+#attach-btn[aria-expanded="true"]::before { animation: attachAura .55s ease-out; }
 @keyframes attachAura {
-    0% { transform: scale(.78); opacity: .85; border-color: rgba(167,139,250,.8); }
-    100% { transform: scale(1.5); opacity: 0; border-color: rgba(167,139,250,0); }
+    0% { transform: scale(.78); opacity: .85; border-color: rgba(248,113,113,.9); }
+    100% { transform: scale(1.5); opacity: 0; border-color: rgba(248,113,113,0); }
 }
 .attachment-option .opt-icon {
     position: relative;
     overflow: hidden;
     border: 1px solid rgba(226,232,240,.15);
     background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(255,255,255,.025)) !important;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 5px 14px rgba(0,0,0,.12);
-    -webkit-backdrop-filter: blur(12px) saturate(145%);
-    backdrop-filter: blur(12px) saturate(145%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
+    -webkit-backdrop-filter: blur(8px) saturate(110%);
+    backdrop-filter: blur(8px) saturate(110%);
     transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
 }
 .attachment-option .opt-icon::after {
@@ -426,15 +424,15 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
 .attachment-option .opt-icon i {
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 1px 5px currentColor);
+    filter: none;
     transition: transform .3s ease, filter .3s ease;
 }
 .attachment-option:hover .opt-icon {
     transform: translateY(-2px) scale(1.05);
-    border-color: rgba(196,181,253,.48);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 8px 20px rgba(139,92,246,.15);
+    border-color: rgba(196,181,253,.32);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
 }
-.attachment-option:hover .opt-icon i { transform: scale(1.09); filter: drop-shadow(0 2px 8px currentColor); }
+.attachment-option:hover .opt-icon i { transform: scale(1.04); filter: none; }
 body.light-mode #attach-btn {
     background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(237,233,254,.8)) !important;
     border-color: rgba(139,92,246,.3) !important;
@@ -701,6 +699,7 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
 }
 
 </style>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
 <body class="h-screen overflow-hidden flex relative">
@@ -1100,7 +1099,7 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                                 <span>Files</span>
                             </button>
                             <button type="button" class="attachment-option" onclick="chooseAttachment('video')">
-                                <span class="opt-icon bg-emerald-500/15"><i class="fa-solid fa-film text-emerald-400 text-base"></i></span>
+                                <span class="opt-icon bg-emerald-500/15"><i class="fa-solid fa-link text-emerald-400 text-base"></i></span>
                                 <span>Video Link</span>
                             </button>
                             <button type="button" class="attachment-option" onclick="openNotesPdfModal()">
@@ -1606,65 +1605,60 @@ function chooseAttachment(kind) {
 }
 
 async function captureScreenshot() {
-    // Mobile browsers often don't support tab/screen capture; let users pick a saved screenshot instead.
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (isMobile || !navigator.mediaDevices?.getDisplayMedia) {
-        document.getElementById("screenshot-input")?.click();
+    // Capture the Tutor chat area itself. Browsers do not allow silent full-screen capture,
+    // but this can snapshot the page UI without triggering the screen-sharing permission prompt.
+    const target = document.getElementById("chat-container") || document.getElementById("messages-list");
+    if (!target) {
+        showToast("Chat screen was not found. Please refresh and try again.");
         return;
     }
 
-    let stream;
+    if (typeof window.html2canvas !== "function") {
+        showToast("Screenshot helper did not load. Check your internet connection and retry.");
+        return;
+    }
+
     try {
-        stream = await navigator.mediaDevices.getDisplayMedia({
-            video: { frameRate: 1 },
-            audio: false
+        showToast("Taking a screenshot of your Tutor chat…");
+        const canvas = await window.html2canvas(target, {
+            backgroundColor: document.body.classList.contains("light-mode") ? "#f8fafc" : "#101116",
+            scale: Math.min(window.devicePixelRatio || 1, 2),
+            useCORS: true,
+            logging: false,
+            scrollX: 0,
+            scrollY: 0,
+            windowWidth: document.documentElement.clientWidth,
+            windowHeight: document.documentElement.clientHeight
         });
-
-        const track = stream.getVideoTracks()[0];
-        if (!track) throw new Error("No screen video track was provided.");
-
-        const video = document.createElement("video");
-        video.srcObject = stream;
-        video.muted = true;
-        video.playsInline = true;
-
-        await new Promise((resolve, reject) => {
-            video.onloadedmetadata = resolve;
-            video.onerror = reject;
-        });
-        await video.play();
-        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth || track.getSettings().width || 1280;
-        canvas.height = video.videoHeight || track.getSettings().height || 720;
-        const context = canvas.getContext("2d");
-        if (!context) throw new Error("Could not prepare screenshot canvas.");
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
         const blob = await new Promise((resolve, reject) => {
-            canvas.toBlob(result => result ? resolve(result) : reject(new Error("Could not create screenshot.")), "image/png");
+            canvas.toBlob(result => result ? resolve(result) : reject(new Error("Could not create screenshot image.")), "image/png");
         });
+        const fileName = `smartlearn-tutor-screenshot-${Date.now()}.png`;
+        const file = new File([blob], fileName, { type: "image/png" });
 
-        const file = new File([blob], `screenshot-${Date.now()}.png`, { type: "image/png" });
+        // Save a copy to the device's Downloads/photos import flow.
+        const downloadUrl = URL.createObjectURL(blob);
+        const downloadLink = document.createElement("a");
+        downloadLink.href = downloadUrl;
+        downloadLink.download = fileName;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
+
+        // Also attach the captured screenshot to the next Tutor message.
         selectedFile = file;
         selectedAttachmentKind = "image";
         pendingVideoUrl = "";
-
         const name = document.getElementById("attachment-name");
-        if (name) name.textContent = `Screenshot: ${file.name}`;
+        if (name) name.textContent = `Chat screenshot: ${file.name}`;
         document.getElementById("attachment-preview")?.classList.remove("hidden");
-        showToast("Screenshot captured. Ask your question, then press Send.");
+        showToast("Chat screenshot saved to Downloads and attached. On phones, move it to Gallery/Photos if needed.");
     } catch (error) {
-        if (error?.name === "NotAllowedError") {
-            showToast("Screen capture cancelled. You can choose a saved screenshot instead.");
-        } else {
-            console.error("Screenshot capture failed:", error);
-            showToast("Could not capture the screen. Choose a saved screenshot instead.");
-        }
-        document.getElementById("screenshot-input")?.click();
-    } finally {
-        stream?.getTracks().forEach(track => track.stop());
+        console.error("Chat screenshot failed:", error);
+        showToast("Could not capture the chat screen. Please try again.");
     }
 }
 
