@@ -8,6 +8,7 @@ import secrets
 import logging
 import re
 import requests
+import hashlib
 from collections import defaultdict, deque
 from pathlib import Path
 from functools import wraps
@@ -16,7 +17,7 @@ from urllib.parse import urlparse, parse_qs
 
 from flask import (
     Flask, render_template, request, redirect,
-    url_for, session, flash, jsonify
+    url_for, session, flash, jsonify, send_file
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -81,6 +82,12 @@ def add_security_headers(response):
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 GROQ_VISION_MODEL = os.getenv("GROQ_VISION_MODEL", "qwen/qwen3.8-27b")
+# OPENAI IMAGE EDITING CONFIGURATION
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_IMAGE_MODEL = os.getenv(
+    "OPENAI_IMAGE_MODEL",
+    "gpt-image-2.5-sunburst"
+)
 
 SMARTLEARN_SYSTEM_PROMPT = r"""
 You are SmartLearn AI, a friendly, capable, student-focused AI tutor and study assistant.
@@ -1161,6 +1168,371 @@ def chat_with_tutor():
         else:
             safe_error = "The AI tutor could not process this request right now. Please try again shortly. If this happens with every upload, check the Render logs for the exact provider error."
         return jsonify({"error": safe_error}), 500
+
+
+# ============================================================
+# SMARTLEARN AI: IMAGE EDITING + HANDWRITTEN NOTES PDF
+# ============================================================
+
+@app.route("/api/image/edit", methods=["POST"])
+@login_required
+def edit_uploaded_image():
+    """Edit an uploaded image using the OpenAI Images API."""
+
+    if not OPENAI_API_KEY:
+        return jsonify({
+            "error": "Image editing is not configured. Add OPENAI_API_KEY in Render Environment."
+        }), 503
+
+    image_file = request.files.get("image")
+    prompt = (request.form.get("prompt") or "").strip()
+
+    if not image_file or not image_file.filename:
+        return jsonify({"error": "Please upload an image to edit."}), 400
+
+    if not prompt:
+        return jsonify({
+            "error": "Please describe how you want the image edited."
+        }), 400
+
+    if len(prompt) > 4000:
+        return jsonify({"error": "The editing prompt is too long."}), 400
+
+    extension = Path(image_file.filename).suffix.lower()
+    allowed_extensions = {".png", ".jpg", ".jpeg", ".webp"}
+
+    if extension not in allowed_extensions:
+        return jsonify({
+            "error": "Please upload a PNG, JPG, JPEG, or WEBP image."
+        }), 400
+
+    image_bytes = image_file.read()
+
+    if not image_bytes:
+        return jsonify({"error": "The uploaded image is empty."}), 400
+
+    # OpenAI image-edit API accepts supported image formats.
+    mime_type = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".webp": "image/webp",
+    }[extension]
+
+    # Avoid sending identifying account information to the provider.
+    safety_id = hashlib.sha256(
+        str(session["user_id"]).encode("utf-8")
+    ).hexdigest()
+
+    try:
+        api_response = requests.post(
+            "https://api.openai.com/v1/images/edits",
+            headers={
+                "Authorization": f"Bearer {OPENAI_API_KEY}",
+            },
+            data={
+                "model": OPENAI_IMAGE_MODEL,
+                "prompt": prompt,
+                "n": "1",
+                "size": "1024x1024",
+                "output_format": "png",
+                "safety_identifier": safety_id,
+            },
+            files=[
+                (
+                    "image[]",
+                    (
+                        secure_filename(image_file.filename) or "upload.png",
+                        io.BytesIO(image_bytes),
+                        mime_type,
+                    ),
+                )
+            ],
+            timeout=180,
+        )
+
+        if not api_response.ok:
+            logger.error(
+                "OpenAI image edit failed with HTTP status %s",
+                api_response.status_code,
+            )
+
+            if api_response.status_code == 401:
+                return jsonify({
+                    "error": "OpenAI API key was rejected. Check OPENAI_API_KEY in Render."
+                }), 502
+
+            if api_response.status_code == 429:
+                return jsonify({
+                    "error": "Image editing has reached an API usage limit. Check your OpenAI API billing and limits."
+                }), 429
+
+            return jsonify({
+                "error": "The image editing service could not complete the edit. Check the OpenAI model, API access, and Render logs."
+            }), 502
+
+        result = api_response.json()
+        image_data = (result.get("data") or [{}])[0].get("b64_json")
+
+        if not image_data:
+            logger.error("OpenAI image edit response did not contain image data.")
+            return jsonify({
+                "error": "The image service returned no edited image. Please try again."
+            }), 502
+
+        edited_bytes = base64.b64decode(image_data, validate=True)
+
+        return send_file(
+            io.BytesIO(edited_bytes),
+            mimetype="image/png",
+            as_attachment=False,
+            download_name="smartlearn-edited-image.png",
+        )
+
+    except requests.Timeout:
+        return jsonify({
+            "error": "Image editing took too long. Please try again."
+        }), 504
+
+    except requests.RequestException:
+        logger.exception("Could not connect to OpenAI image editing API.")
+        return jsonify({
+            "error": "Could not connect to the image editing service."
+        }), 502
+
+    except (ValueError, KeyError, TypeError):
+        logger.exception("Invalid response from OpenAI image editing API.")
+        return jsonify({
+            "error": "The image editing service returned an invalid response."
+        }), 502
+
+
+@app.route("/api/notes/pdf", methods=["POST"])
+@login_required
+def generate_handwritten_notes_pdf():
+    """Convert AI-generated study notes into a downloadable PDF."""
+
+    try:
+        from reportlab.lib import colors
+        from reportlab.lib.enums import TA_LEFT, TA_CENTER
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib.units import mm
+        from reportlab.platypus import (
+            SimpleDocTemplate, Paragraph, Spacer, HRFlowable
+        )
+        from xml.sax.saxutils import escape
+    except ImportError:
+        return jsonify({
+            "error": "PDF support is not installed. Add reportlab to requirements.txt and redeploy."
+        }), 503
+
+    data = request.get_json(silent=True) or {}
+
+    notes_text = (data.get("notes_text") or "").strip()
+    title_text = (data.get("title") or "SmartLearn AI Study Notes").strip()
+    style_name = (data.get("style") or "neat").strip().lower()
+    language = (data.get("language") or "hinglish").strip().lower()
+
+    if not notes_text:
+        return jsonify({
+            "error": "Please provide the study notes text."
+        }), 400
+
+    if len(notes_text) > 50000:
+        return jsonify({
+            "error": "The notes are too long. Please generate shorter notes."
+        }), 400
+
+    if style_name not in {"student", "neat"}:
+        return jsonify({
+            "error": "Style must be 'student' or 'neat'."
+        }), 400
+
+    if language not in {"hinglish", "english", "hindi"}:
+        return jsonify({
+            "error": "Language must be 'hinglish', 'english', or 'hindi'."
+        }), 400
+
+    # PDF layout fonts. A compatible TrueType handwriting font can be
+    # placed in static/fonts/ComicNeue-Regular.ttf.
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+
+    font_folder = BASE_DIR / "static" / "fonts"
+    regular_font = "Helvetica"
+    italic_font = "Helvetica-Oblique"
+
+    handwriting_font_path = font_folder / "ComicNeue-Regular.ttf"
+    handwriting_italic_path = font_folder / "ComicNeue-Italic.ttf"
+
+    try:
+        if handwriting_font_path.exists():
+            pdfmetrics.registerFont(
+                TTFont("SmartLearnHandwriting", str(handwriting_font_path))
+            )
+            regular_font = "SmartLearnHandwriting"
+
+        if handwriting_italic_path.exists():
+            pdfmetrics.registerFont(
+                TTFont("SmartLearnHandwritingItalic", str(handwriting_italic_path))
+            )
+            italic_font = "SmartLearnHandwritingItalic"
+
+    except Exception:
+        logger.warning(
+            "Handwriting font could not be loaded; using a standard PDF font."
+        )
+        regular_font = "Helvetica"
+        italic_font = "Helvetica-Oblique"
+
+    buffer = io.BytesIO()
+
+    document = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=20 * mm,
+        leftMargin=23 * mm,
+        topMargin=20 * mm,
+        bottomMargin=18 * mm,
+        title=title_text[:150],
+        author="SmartLearn AI",
+    )
+
+    styles = getSampleStyleSheet()
+
+    if style_name == "student":
+        body_font = italic_font if italic_font != "Helvetica-Oblique" else regular_font
+        body_size = 12
+        leading = 19
+        line_color = colors.HexColor("#a9c8f2")
+        text_color = colors.HexColor("#243c70")
+    else:
+        body_font = regular_font
+        body_size = 11
+        leading = 16
+        line_color = colors.HexColor("#d6dce5")
+        text_color = colors.HexColor("#202b3c")
+
+    title_style = ParagraphStyle(
+        "SmartLearnTitle",
+        parent=styles["Title"],
+        fontName=regular_font,
+        fontSize=19,
+        leading=25,
+        alignment=TA_CENTER,
+        textColor=colors.HexColor("#243c70"),
+        spaceAfter=12,
+    )
+
+    body_style = ParagraphStyle(
+        "SmartLearnBody",
+        parent=styles["BodyText"],
+        fontName=body_font,
+        fontSize=body_size,
+        leading=leading,
+        textColor=text_color,
+        alignment=TA_LEFT,
+        spaceAfter=6,
+        splitLongWords=True,
+    )
+
+    story = [
+        Paragraph(escape(title_text[:150]), title_style),
+        HRFlowable(
+            width="100%",
+            thickness=1,
+            color=line_color,
+            spaceAfter=14,
+        ),
+    ]
+
+    # Preserve readable paragraphs and basic bullet formatting.
+    for raw_line in notes_text.splitlines():
+        line = raw_line.strip()
+
+        if not line:
+            story.append(Spacer(1, 4))
+            continue
+
+        safe_line = escape(line)
+
+        # Treat common heading styles as headings in the PDF.
+        is_heading = (
+            line.startswith("#")
+            or (
+                len(line) <= 90
+                and line.endswith(":")
+            )
+        )
+
+        if line.startswith("#"):
+            safe_line = escape(line.lstrip("#").strip())
+
+        if is_heading:
+            heading_style = ParagraphStyle(
+                "SmartLearnSection",
+                parent=body_style,
+                fontName=regular_font,
+                fontSize=body_size + 1,
+                leading=leading + 2,
+                spaceBefore=7,
+                spaceAfter=5,
+                textColor=colors.HexColor("#344f86"),
+            )
+            story.append(Paragraph(safe_line, heading_style))
+        else:
+            story.append(Paragraph(safe_line, body_style))
+
+    def draw_page(canvas, doc):
+        canvas.saveState()
+
+        # Subtle notebook-style ruled lines for the student style.
+        if style_name == "student":
+            page_width, page_height = A4
+            canvas.setStrokeColor(line_color)
+            canvas.setLineWidth(0.35)
+
+            y = 18 * mm
+            while y < page_height - 15 * mm:
+                canvas.line(18 * mm, y, page_width - 15 * mm, y)
+                y += 7 * mm
+
+        canvas.setFont("Helvetica", 8)
+        canvas.setFillColor(colors.HexColor("#7a8495"))
+        canvas.drawCentredString(
+            A4[0] / 2,
+            9 * mm,
+            f"SmartLearn AI  |  Page {doc.page}",
+        )
+        canvas.restoreState()
+
+    try:
+        document.build(
+            story,
+            onFirstPage=draw_page,
+            onLaterPages=draw_page,
+        )
+        buffer.seek(0)
+
+        filename = (
+            "smartlearn-student-handwritten-notes.pdf"
+            if style_name == "student"
+            else "smartlearn-neat-study-notes.pdf"
+        )
+
+        return send_file(
+            buffer,
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name=filename,
+        )
+
+    except Exception:
+        logger.exception("Could not generate study notes PDF.")
+        return jsonify({
+            "error": "Could not create the PDF. Please shorten the notes and try again."
+        }), 500
 
 
 @app.route("/api/chat/history")
