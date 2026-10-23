@@ -113,18 +113,18 @@ button {
 
 .nav {
   display: grid;
-  gap: 9px;
-  margin-top: 24px;
+  gap: 6px;
+  margin-top: 18px;
 }
 
 .nav a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 13px;
+  padding: 11px 12px;
   border: 1px solid transparent;
   border-radius: 14px;
-  color: #d0d7ff;
+  color: #e4e6f6;
   font-size: 12px;
   font-weight: 700;
   transition: .25s ease;
@@ -139,50 +139,10 @@ button {
 .nav a:hover,
 .nav a.active {
   color: white;
-  background: linear-gradient(105deg, #5555ff, #883eff);
-  border-color: #aaa0ff66;
-  box-shadow: 0 8px 24px #563dff55;
+  background: linear-gradient(105deg, #7568b8, #8c79bd);
+  border-color: #c8bce8;
+  box-shadow: 0 8px 22px #070b252c;
   transform: translateX(3px);
-}
-
-.sidebar-note {
-  position: relative;
-  margin-top: auto;
-  padding: 18px 14px;
-  border: 1px solid #a6b7ff45;
-  border-radius: 19px;
-  background: linear-gradient(145deg, #313c9b99, #6040c766);
-  overflow: hidden;
-}
-
-.sidebar-note::after {
-  content: "";
-  position: absolute;
-  width: 110px;
-  height: 110px;
-  right: -35px;
-  bottom: -55px;
-  background: #35d8ff;
-  filter: blur(35px);
-  opacity: .6;
-}
-
-.sidebar-note strong {
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.sidebar-note p {
-  margin-top: 8px;
-  color: #d0d9ff;
-  font-size: 11px;
-  line-height: 1.7;
-}
-
-.stars {
-  color: #ffdc82;
-  margin-top: 12px;
-  letter-spacing: 4px;
 }
 
 /* MAIN CONTENT */
@@ -271,19 +231,19 @@ button {
   isolation: isolate;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  min-height: 325px;
-  padding: clamp(25px, 3vw, 42px);
+  justify-content: center;
+  min-height: 255px;
+  padding: clamp(28px, 4vw, 52px) clamp(20px, 5vw, 64px);
+  text-align: center;
   margin-bottom: 30px;
-  border: 1px solid #aaa5ff55;
+  border: 1px solid #e7ddc8;
   border-radius: 26px;
   overflow: hidden;
   background:
-    radial-gradient(ellipse at 76% 45%, #193d9b, transparent 35%),
-    radial-gradient(ellipse at 96% 8%, #6325c8, transparent 33%),
-    linear-gradient(115deg, #080d2b, #0c1641 55%, #100b35);
-  box-shadow: 0 22px 55px #202b6b2b;
+    radial-gradient(ellipse at 18% 12%, #fff3d7, transparent 42%),
+    radial-gradient(ellipse at 88% 88%, #e4e9ff, transparent 42%),
+    linear-gradient(125deg, #fffdf8, #f5f3ff 55%, #f0faff);
+  box-shadow: 0 18px 48px #7d6b4517, inset 0 1px 0 #ffffff;
   animation: riseIn .8s both;
 }
 
@@ -318,7 +278,9 @@ button {
 .welcome-copy {
   position: relative;
   z-index: 2;
-  max-width: 560px;
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
 }
 
 .eyebrow {
@@ -327,10 +289,10 @@ button {
   gap: 8px;
   margin-bottom: 16px;
   padding: 7px 12px;
-  border: 1px solid #f8d68c75;
+  border: 1px solid #dfc99c;
   border-radius: 999px;
-  color: #ffdc91;
-  background: #ffd77d12;
+  color: #8b6a2c;
+  background: #fffaf0;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1px;
@@ -339,7 +301,7 @@ button {
 
 .welcome h1 {
   margin-bottom: 14px;
-  color: #fff;
+  color: #293047;
   font-size: clamp(32px, 3.4vw, 47px);
   font-weight: 800;
   line-height: 1.15;
@@ -348,7 +310,7 @@ button {
 
 .gradient-text {
   display: inline-block;
-  background: linear-gradient(95deg, #c49bff, #55cfff 58%, #7af5df);
+  background: linear-gradient(95deg, #9b7a43, #7164a8 58%, #4c94a2);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -356,136 +318,11 @@ button {
 
 .welcome-copy > p {
   max-width: 465px;
-  color: #c4d0f7;
+  color: #687086;
   font-size: 13px;
   line-height: 1.9;
 }
 
-.welcome-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 11px;
-  margin-top: 24px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  padding: 13px 19px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-  transition: transform .25s, box-shadow .25s;
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-}
-
-.btn-primary {
-  color: white;
-  background: linear-gradient(100deg, #d94dff, #645dff 52%, #27d8ff);
-  box-shadow: 0 8px 28px #7b4cff70;
-  background-size: 160% 100%;
-  animation: gradientFlow 5s ease infinite;
-}
-
-.btn-primary:hover {
-  box-shadow: 0 10px 35px #8d4dff99;
-}
-
-.btn-outline {
-  color: #f6f7ff;
-  border: 1px solid #c3caff91;
-  background: #ffffff08;
-}
-
-.btn-outline:hover {
-  background: #ffffff15;
-}
-
-/* ANIMATED HERO ART */
-
-.hero-art {
-  position: relative;
-  flex: 0 0 30%;
-  min-width: 185px;
-  height: 230px;
-  display: grid;
-  place-items: center;
-}
-
-.robot {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 112px;
-  height: 112px;
-  border: 1px solid #ffffffbb;
-  border-radius: 35px;
-  font-size: 51px;
-  background: radial-gradient(circle at 30% 20%, #f4f1ff, #a6a2ff 25%, #5559ff 65%, #172e9b);
-  box-shadow: 0 0 30px #4d8dffad, 0 0 75px #9d42ff70, inset 0 0 25px #ffffff88;
-  animation: floating 4s ease-in-out infinite;
-}
-
-.ring {
-  position: absolute;
-  width: 190px;
-  height: 190px;
-  border: 1px solid #64e9ff99;
-  border-radius: 50%;
-  transform: rotateX(65deg) rotateZ(-25deg);
-  animation: ringSpin 12s linear infinite;
-}
-
-.ring-two {
-  width: 230px;
-  height: 230px;
-  border-color: #c66cff99;
-  border-style: dashed;
-  animation-duration: 18s;
-  animation-direction: reverse;
-}
-
-.float-label {
-  position: absolute;
-  z-index: 3;
-  padding: 9px 12px;
-  border: 1px solid #ffffff36;
-  border-radius: 13px;
-  color: #e9eeff;
-  background: #101942d9;
-  backdrop-filter: blur(12px);
-  font-size: 10px;
-  font-weight: 750;
-  box-shadow: 0 9px 25px #0003;
-  animation: floating 4s ease-in-out infinite;
-}
-
-.label-one {
-  top: 14px;
-  left: -2px;
-}
-
-.label-two {
-  bottom: 16px;
-  right: -4px;
-  animation-delay: -2s;
-}
-
-.sparkle {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #75f7ff;
-  font-size: 20px;
-  text-shadow: 0 0 15px #39dfff;
-  animation: sparkle 2s ease-in-out infinite;
-}
 
 /* LEARNING TOOLS */
 
@@ -902,6 +739,40 @@ button {
   50% { background-position: 100% 50%; }
 }
 
+
+/* SOFT LUXURY SIDEBAR + TIGHTER NAV */
+.nav a {
+  position: relative;
+  overflow: hidden;
+  transition: transform .28s ease, background .28s ease, border-color .28s ease, box-shadow .28s ease;
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent, #ffffff14, transparent);
+  transform: translateX(-120%);
+  transition: transform .55s ease;
+  pointer-events: none;
+}
+.nav a:hover::after,
+.nav a.active::after { transform: translateX(120%); }
+.nav a:active { transform: scale(.985); }
+.sidebar {
+  background:
+    radial-gradient(circle at 12% 18%, #39335f, transparent 34%),
+    linear-gradient(160deg, #111426, #25213d 65%, #111426);
+}
+.welcome-copy > p { margin-inline: auto; }
+@media (max-width: 800px) {
+  .welcome { min-height: 235px; }
+}
+@media (max-width: 560px) {
+  .welcome { padding: 28px 18px; }
+  .welcome h1 { font-size: clamp(29px, 8vw, 36px); }
+  .welcome-copy > p { max-width: 100%; }
+}
+
 /* TABLETS */
 
 @media (max-width: 1200px) {
@@ -917,15 +788,6 @@ button {
     min-height: 220px;
   }
 
-  .hero-art {
-    flex-basis: 25%;
-    transform: scale(.85);
-  }
-
-  .welcome {
-    padding: 30px;
-  }
-}
 
 /* MOBILE NAVIGATION */
 
@@ -960,29 +822,6 @@ button {
     padding: 15px 16px 18px;
   }
 
-  .hero-art {
-    flex-basis: 170px;
-    transform: scale(.78);
-    margin-inline: -20px;
-  }
-
-  .welcome {
-    padding: 28px 24px;
-  }
-
-  .tools-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .motivation {
-    flex-wrap: wrap;
-  }
-
-  .steps {
-    justify-content: space-between;
-    width: 100%;
-  }
-}
 
 /* PHONE */
 
@@ -1048,175 +887,6 @@ button {
     line-height: 1.8;
   }
 
-  .welcome-actions {
-    gap: 8px;
-    margin-top: 18px;
-  }
-
-  .btn {
-    padding: 11px 13px;
-    font-size: 10px;
-  }
-
-  .hero-art {
-    width: 100%;
-    height: 125px;
-    min-width: 0;
-    margin: 7px 0 -5px;
-    transform: none;
-  }
-
-  .robot {
-    width: 70px;
-    height: 70px;
-    border-radius: 23px;
-    font-size: 34px;
-  }
-
-  .ring {
-    width: 125px;
-    height: 125px;
-  }
-
-  .ring-two {
-    width: 150px;
-    height: 150px;
-  }
-
-  .float-label {
-    padding: 7px 9px;
-    font-size: 8px;
-  }
-
-  .label-one {
-    top: 7px;
-    left: 8%;
-  }
-
-  .label-two {
-    right: 6%;
-    bottom: 5px;
-  }
-
-  .sparkle {
-    top: 4px;
-    right: 20%;
-  }
-
-  .section-heading {
-    align-items: flex-start;
-    margin-bottom: 13px;
-  }
-
-  .section-heading h2 {
-    font-size: 20px;
-  }
-
-  .section-heading p {
-    max-width: 255px;
-    font-size: 10px;
-  }
-
-  .tool-count {
-    margin-top: 23px;
-    padding: 7px 8px;
-    font-size: 8px;
-  }
-
-  .tools-grid {
-    gap: 10px;
-  }
-
-  .tool-card {
-    min-height: 205px;
-    padding: 15px 12px 13px;
-    border-radius: 17px;
-  }
-
-  .tool-icon {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 13px;
-    border-radius: 12px;
-    font-size: 20px;
-  }
-
-  .tool-card h3 {
-    font-size: 12px;
-  }
-
-  .tool-card p {
-    margin-bottom: 13px;
-    font-size: 9.5px;
-    line-height: 1.65;
-  }
-
-  .pill {
-    padding: 5px 6px;
-    font-size: 7.5px;
-  }
-
-  .active-label {
-    top: 8px;
-    right: 7px;
-    font-size: 7px;
-  }
-
-  .motivation {
-    gap: 10px;
-    margin-top: 16px;
-    padding: 13px;
-    border-radius: 16px;
-  }
-
-  .motivation-icon {
-    flex-basis: 39px;
-    width: 39px;
-    height: 39px;
-    font-size: 20px;
-  }
-
-  .motivation-copy {
-    min-width: calc(100% - 55px);
-  }
-
-  .motivation-copy strong {
-    font-size: 12px;
-  }
-
-  .motivation-copy p {
-    font-size: 9px;
-  }
-
-  .steps {
-    gap: 5px;
-    padding-top: 11px;
-    border-top: 1px solid #dfe5ff;
-  }
-
-  .step {
-    flex-direction: column;
-    gap: 5px;
-    font-size: 8px;
-    text-align: center;
-    white-space: normal;
-  }
-
-  .step-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  .footer {
-    padding-top: 14px;
-    font-size: 8px;
-  }
-
-  .footer strong {
-    font-size: 10px;
-  }
-}
-
 @media (max-width: 360px) {
   .back-button {
     padding: 9px;
@@ -1247,11 +917,6 @@ button {
   .tool-card p {
     font-size: 9px;
   }
-
-  .btn {
-    padding: 10px 11px;
-  }
-}
 
 /* ACCESSIBILITY */
 
@@ -1301,12 +966,6 @@ button {
         <span class="nav-icon">♙</span> Profile
       </a>
     </nav>
-
-    <div class="sidebar-note">
-      <strong>Small steps,<br>extraordinary progress.</strong>
-      <p>Keep showing up. Your future self is cheering for you.</p>
-      <div class="stars">✦ ✦ ✦ ━</div>
-    </div>
   </aside>
 
   <!-- MAIN DASHBOARD -->
@@ -1347,25 +1006,6 @@ button {
           Explore your tools, learn something new, and keep
           growing with SmartLearn AI.
         </p>
-
-        <div class="welcome-actions">
-          <a href="{{ url_for('ai_tutor') }}" class="btn btn-primary">
-            ✧ Start Learning <span>→</span>
-          </a>
-
-          <a href="{{ url_for('profile') }}" class="btn btn-outline">
-            ♙ View Profile
-          </a>
-        </div>
-      </div>
-
-      <div class="hero-art" aria-hidden="true">
-        <div class="ring"></div>
-        <div class="ring ring-two"></div>
-        <div class="robot">🤖</div>
-        <div class="sparkle">✦</div>
-        <div class="float-label label-one">✦ AI Powered</div>
-        <div class="float-label label-two">📚 Learn · Grow</div>
       </div>
     </section>
 
