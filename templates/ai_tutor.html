@@ -319,6 +319,16 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
 .answer-actions button i { font-size: 10.5px; }
 .answer-actions button:hover { color: #ffffff; border-color: #a78bfa !important; background: rgba(139, 92, 246, 0.12) !important; }
 
+/* Actions directly underneath each user's message */
+.user-message-row { display: flex; flex-direction: column; align-items: flex-end; min-width: 0; }
+.user-message-actions { display: flex; align-items: center; justify-content: flex-end; gap: 7px; margin-top: 6px; padding-right: 2px; }
+.user-message-actions button { display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; border: 1px solid rgba(148,163,184,.22); border-radius: 7px; background: transparent; color: #94a3b8; font-size: 11px; line-height: 1.3; transition: color .18s ease, background .18s ease, border-color .18s ease; }
+.user-message-actions button:hover { color: #e9d5ff; border-color: rgba(167,139,250,.55); background: rgba(139,92,246,.09); }
+.user-message-actions button:focus-visible { outline: 2px solid rgba(167,139,250,.7); outline-offset: 2px; }
+body.light-mode .user-message-actions button { color: #475569; border-color: rgba(100,116,139,.3); }
+body.light-mode .user-message-actions button:hover { color: #5b21b6; border-color: #a78bfa; background: #f5f3ff; }
+@media (max-width: 767px) { .user-message-actions button { min-height: 30px; padding: 5px 8px; } }
+
 /* ==========================================
    LUXURY ANIMATED ATTACHMENT MENU
    ========================================== */
@@ -1720,17 +1730,62 @@ function appendUserMessage(text, record = true) {
 
     row.className = "flex justify-end message-animation";
     row.innerHTML = `
-        <div class="user-message-bubble max-w-[92%] sm:max-w-[85%] rounded-2xl border border-purple-500/30 bg-purple-900/20 p-3 md:p-3.5">
-            <p class="message-user-label">You</p>
-            <div class="text-sm font-medium text-gray-100 whitespace-pre-wrap break-words"></div>
+        <div class="user-message-row max-w-full">
+            <div class="user-message-bubble max-w-[92vw] sm:max-w-[min(85vw,42rem)] rounded-2xl border border-purple-500/30 bg-purple-900/20 p-3 md:p-3.5">
+                <p class="message-user-label">You</p>
+                <div class="text-sm font-medium text-gray-100 whitespace-pre-wrap break-words"></div>
+            </div>
+            <div class="user-message-actions" aria-label="User message actions">
+                <button type="button" class="copy-user-message" title="Copy your message" aria-label="Copy your message">
+                    <i class="fa-regular fa-copy" aria-hidden="true"></i><span>Copy</span>
+                </button>
+                <button type="button" class="edit-user-message" title="Edit your message" aria-label="Edit your message">
+                    <i class="fa-solid fa-pen" aria-hidden="true"></i><span>Edit</span>
+                </button>
+            </div>
         </div>
     `;
 
     row.querySelector(".whitespace-pre-wrap").textContent = text;
+    row.querySelector(".copy-user-message")?.addEventListener("click", () => copyUserMessage(text));
+    row.querySelector(".edit-user-message")?.addEventListener("click", () => editUserMessage(text));
     list.appendChild(row);
     if (record) rememberMessage("user", text);
     scrollChatToLatest();
     return row;
+}
+
+async function copyUserMessage(text) {
+    if (!text) return;
+    try {
+        await navigator.clipboard.writeText(text);
+        showToast("Your message copied!");
+    } catch (_) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        try {
+            const copied = document.execCommand("copy");
+            showToast(copied ? "Your message copied!" : "Copy failed. Please copy it manually.");
+        } catch (_) {
+            showToast("Copy failed. Please copy it manually.");
+        }
+        area.remove();
+    }
+}
+
+function editUserMessage(text) {
+    const input = document.getElementById("chat-input");
+    if (!input) return;
+    input.value = text;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+    if (typeof updateCharCount === "function") updateCharCount();
+    showToast("Message loaded into the input. Edit it, then press Send.");
 }
 
 function appendAIMessage(text, record = true) {
