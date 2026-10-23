@@ -1810,14 +1810,15 @@ async function copyUserMessage(text) {
 function editUserMessage(text) {
     const input = document.getElementById("chat-input");
     if (!input) return;
-    input.value = text;
+
+    input.value = "";
     input.dispatchEvent(new Event("input", { bubbles: true }));
     input.focus();
-    input.setSelectionRange(input.value.length, input.value.length);
-    if (typeof updateCharCount === "function") updateCharCount();
-    showToast("Message loaded into the input. Edit it, then press Send.");
-}
 
+    if (typeof updateCharCount === "function") {
+        updateCharCount();
+    }
+}
 function appendAIMessage(text, record = true) {
     const list = document.getElementById("messages-list");
     const row = document.createElement("div");
