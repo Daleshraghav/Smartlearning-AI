@@ -1170,6 +1170,43 @@ def chat_with_tutor():
         return jsonify({"error": safe_error}), 500
 
 
+
+
+@app.route("/api/game/generate", methods=["POST"])
+@login_required
+def generate_game_from_drawing():
+    """Create a self-contained playable mini-game inspired by a user's drawing."""
+    if not GROQ_API_KEY:
+        return jsonify({"error": "AI game generation is not configured. Add GROQ_API_KEY in Render Environment."}), 503
+    data = request.get_json(silent=True) or {}
+    drawing = (data.get("drawing") or "").strip()
+    if not drawing.startswith("data:image/") or "," not in drawing:
+        return jsonify({"error": "Please create or load a drawing before generating a game."}), 400
+    if len(drawing) > 8_000_000:
+        return jsonify({"error": "The drawing is too large. Please simplify it and try again."}), 413
+    try:
+        base64.b64decode(drawing.split(",", 1)[1], validate=True)
+        client = Groq(api_key=GROQ_API_KEY)
+        prompt = ("Create a genuinely playable, child-friendly mini-game inspired by the attached drawing. Return ONLY one complete HTML document, no Markdown fences. Use inline CSS and JavaScript, no external libraries, network calls, or cross-origin requests. Include instructions, Start/Restart, score/progress, responsive layout, touch and keyboard controls when suitable, and a completion state. Make it visually related to the drawing. Keep under 25,000 characters. Do not use eval, Function, document.write, popups, or navigation.")
+        response = client.chat.completions.create(model=GROQ_VISION_MODEL or GROQ_MODEL, messages=[{"role":"user","content":[{"type":"text","text":prompt},{"type":"image_url","image_url":{"url":drawing}}]}], temperature=0.5, max_tokens=7000)
+        generated = (response.choices[0].message.content or "").strip()
+        generated = re.sub(r"^```(?:html)?\s*", "", generated, flags=re.IGNORECASE)
+        generated = re.sub(r"\s*```$", "", generated)
+        if "<html" not in generated.lower() or "<script" not in generated.lower():
+            return jsonify({"error": "The AI did not return a complete playable HTML game. Please try again."}), 502
+        if len(generated) > 30000:
+            return jsonify({"error": "The generated game was too long. Please try again."}), 502
+        return jsonify({"status": "success", "html": generated})
+    except Exception as exc:
+        logger.exception("Drawing-to-game generation failed")
+        msg = str(exc).lower()
+        if "rate limit" in msg or "429" in msg:
+            return jsonify({"error": "The AI service is busy. Please wait briefly and try again."}), 429
+        if any(x in msg for x in ("model not found", "decommission", "does not exist", "not available")):
+            return jsonify({"error": "The configured Groq vision model is unavailable. Check GROQ_VISION_MODEL in Render Environment."}), 503
+        return jsonify({"error": "Could not generate a game right now. Check the Render logs for the provider error."}), 502
+
+
 # ============================================================
 # SMARTLEARN AI: IMAGE EDITING + HANDWRITTEN NOTES PDF
 # ============================================================
@@ -1251,12 +1288,10 @@ def edit_uploaded_image():
             timeout=180,
         )
 
-     
         if not api_response.ok:
             logger.error(
-                "OpenAI image edit failed: status=%s response=%s",
+                "OpenAI image edit failed with HTTP status %s",
                 api_response.status_code,
-                api_response.text[:3000],
             )
 
             if api_response.status_code == 401:
@@ -1272,7 +1307,6 @@ def edit_uploaded_image():
             return jsonify({
                 "error": "The image editing service could not complete the edit. Check the OpenAI model, API access, and Render logs."
             }), 502
-
 
         result = api_response.json()
         image_data = (result.get("data") or [{}])[0].get("b64_json")
