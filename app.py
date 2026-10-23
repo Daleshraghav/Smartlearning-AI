@@ -846,6 +846,7 @@ def chat_with_tutor():
     attachment_kind = ""
     video_url = ""
     video_action = ""
+    tutor_preferences = {}
     if request.content_type and request.content_type.startswith("multipart/form-data"):
         user_message = (request.form.get("message") or "").strip()
         attachment = request.files.get("attachment")
@@ -857,6 +858,22 @@ def chat_with_tutor():
         user_message = (data.get("message") or "").strip()
         video_url = (data.get("video_url") or "").strip()
         video_action = (data.get("video_action") or "").strip().lower()
+        raw_preferences = data.get("preferences") or {}
+        if isinstance(raw_preferences, dict):
+            # Accept only expected fields and keep free-text instructions bounded.
+            allowed_values = {
+                "language": {"auto", "hinglish", "english", "hindi"},
+                "level": {"auto", "school", "college", "beginner", "advanced"},
+                "style": {"balanced", "step-by-step", "short", "detailed", "examples"},
+                "tone": {"friendly", "professional", "encouraging"},
+            }
+            for key, choices in allowed_values.items():
+                value = raw_preferences.get(key)
+                if isinstance(value, str) and value in choices:
+                    tutor_preferences[key] = value
+            extra = raw_preferences.get("extra", "")
+            if isinstance(extra, str):
+                tutor_preferences["extra"] = extra.strip()[:1000]
 
     url_match = re.search(
         r"https?://(?:www\.)?(?:youtube\.com/watch\?[^\s]+|youtu\.be/[^\s]+|youtube\.com/(?:shorts|embed|live)/[^\s]+)",
@@ -1035,6 +1052,43 @@ def chat_with_tutor():
 
     try:
         system_prompt = SMARTLEARN_SYSTEM_PROMPT + "\n\n" + response_language_instruction(user_message)
+        if tutor_preferences:
+            preference_rules = {
+                "language": {
+                    "auto": "Match the language and writing script of each user's latest message.",
+                    "hinglish": "Prefer natural Roman Hindi/Hinglish unless the user explicitly requests another language.",
+                    "english": "Prefer English unless the user explicitly requests another language.",
+                    "hindi": "Prefer Hindi in Devanagari unless the user explicitly requests another language/script.",
+                },
+                "level": {
+                    "auto": "Infer the explanation level from the user's question and adapt when they clarify.",
+                    "school": "Explain at school-student level, defining unfamiliar terms.",
+                    "college": "Use college-level depth while explaining necessary prerequisites.",
+                    "beginner": "Assume the user is a beginner; explain foundations and avoid unexplained jargon.",
+                    "advanced": "Use advanced depth and precise terminology, but remain clear.",
+                },
+                "style": {
+                    "balanced": "Use a balanced answer length based on the task.",
+                    "step-by-step": "Break solutions and instructions into ordered, easy-to-follow steps.",
+                    "short": "Be concise and direct unless the task needs more detail for correctness.",
+                    "detailed": "Give thorough explanations, reasoning, and important caveats.",
+                    "examples": "Include practical examples whenever they help explain the answer.",
+                },
+                "tone": {
+                    "friendly": "Use a warm, natural, friendly tone.",
+                    "professional": "Use a clear, professional tone.",
+                    "encouraging": "Be patient and encouraging; treat mistakes as part of learning.",
+                },
+            }
+            pref_lines = ["USER PERSONALIZATION SETTINGS (follow these where relevant; the user's latest explicit request takes priority):"]
+            for key in ("language", "level", "style", "tone"):
+                value = tutor_preferences.get(key)
+                if value in preference_rules[key]:
+                    pref_lines.append("- " + preference_rules[key][value])
+            if tutor_preferences.get("extra"):
+                pref_lines.append("- Additional user instructions: " + tutor_preferences["extra"])
+            pref_lines.append("Analyze the user's request and context to choose the appropriate help; personalization should adapt to the task, not restrict the user to a fixed use case. Follow safety and accuracy requirements.")
+            system_prompt += "\n\n" + "\n".join(pref_lines)
         durable_memory = load_user_memory(user_id)
         if durable_memory:
             system_prompt += "\n\nUSER-SPECIFIC SAVED MEMORY (use only when relevant):\n" + durable_memory[:3000]
