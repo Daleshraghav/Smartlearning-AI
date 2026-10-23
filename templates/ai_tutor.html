@@ -710,6 +710,26 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
 
 </style>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style id="smartlearn-targeted-updates">
+/* Targeted additions only: preserve the existing Tutor layout and menu. */
+.user-message-actions button, .answer-actions button {
+  display:inline-flex; align-items:center; justify-content:center; gap:0;
+  width:32px; height:32px; padding:0; min-width:32px; font-size:0;
+  border-radius:10px; transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.user-message-actions button i, .answer-actions button i { font-size:13px; }
+.user-message-actions button:hover, .answer-actions button:hover { transform:translateY(-1px); }
+.smartlearn-extra-backdrop { position:fixed; inset:0; z-index:120; display:flex; align-items:center; justify-content:center; padding:14px; background:rgba(2,6,23,.78); backdrop-filter:blur(12px); }
+.smartlearn-extra-panel { width:min(100%,760px); max-height:90dvh; overflow:auto; border:1px solid rgba(167,139,250,.32); border-radius:24px; padding:20px; color:#f8fafc; background:linear-gradient(145deg,#111827,#080b16); box-shadow:0 25px 90px #0009; animation:smartPanelIn .28s ease both; }
+@keyframes smartPanelIn { from {opacity:0;transform:translateY(12px) scale(.985)} to {opacity:1;transform:translateY(0) scale(1)} }
+.smart-field { width:100%; border:1px solid rgba(148,163,184,.24); background:rgba(15,23,42,.82); color:#f8fafc; border-radius:12px; padding:10px 12px; outline:none; }
+.smart-field:focus { border-color:#a78bfa; box-shadow:0 0 0 3px #8b5cf633; }
+.smart-action { border:1px solid rgba(167,139,250,.35); background:rgba(139,92,246,.14); border-radius:12px; padding:9px 12px; font-weight:700; font-size:13px; }
+.smart-action:hover { background:rgba(139,92,246,.26); }
+@media(max-width:640px) { .smartlearn-extra-panel {padding:15px;border-radius:19px;} }
+</style>
+
 </head>
 
 <body class="h-screen overflow-hidden flex relative">
@@ -763,6 +783,12 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
 
         <!-- 3 Compact, Bold & Animated Categories: Chat History, AI Capabilities, Expert Modes -->
         <div class="flex-1 overflow-y-auto px-3 py-3 space-y-1.5">
+
+            <!-- Personalization: persistent shortcut in the left sidebar -->
+            <button type="button" onclick="openPersonalizationPanel()" class="sidebar-category-btn w-full group" title="Personalize how your AI Tutor works">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-sliders text-violet-300 text-xs group-hover:rotate-90 transition-transform duration-300"></i><span>Personalization</span></span>
+                <i class="fa-solid fa-sparkles text-[10px] text-violet-300"></i>
+            </button>
 
             <!-- Category 1: CHAT HISTORY (Hidden until clicked) -->
             <div>
@@ -1123,6 +1149,10 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
                             <button type="button" class="attachment-option" onclick="chooseAttachment('screenshot')">
                                 <span class="opt-icon bg-amber-500/15"><i class="fa-solid fa-camera-retro text-amber-300 text-base"></i></span>
                                 <span>Screenshot</span>
+                            </button>
+                            <button type="button" class="attachment-option" onclick="openPersonalizationPanel()">
+                                <span class="opt-icon bg-violet-500/15"><i class="fa-solid fa-sliders text-violet-300 text-base"></i></span>
+                                <span>Personalization</span>
                             </button>
                         </div>
                     </div>
@@ -1737,10 +1767,10 @@ function appendUserMessage(text, record = true) {
             </div>
             <div class="user-message-actions" aria-label="User message actions">
                 <button type="button" class="copy-user-message" title="Copy your message" aria-label="Copy your message">
-                    <i class="fa-regular fa-copy" aria-hidden="true"></i><span>Copy</span>
+                    <i class="fa-regular fa-copy" aria-hidden="true"></i>
                 </button>
                 <button type="button" class="edit-user-message" title="Edit your message" aria-label="Edit your message">
-                    <i class="fa-solid fa-pen" aria-hidden="true"></i><span>Edit</span>
+                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
@@ -1809,15 +1839,15 @@ function appendAIMessage(text, record = true) {
 
             <div class="answer-actions">
                 <button type="button" onclick="copyAnswer(this)" title="Copy answer" aria-label="Copy answer">
-                    <i class="fa-regular fa-copy"></i> Copy
+                    <i class="fa-regular fa-copy" aria-hidden="true"></i>
                 </button>
 
                 <button type="button" onclick="saveAnswer(this)" title="Tap to save; double-tap to unsave" aria-label="Save answer">
-                    <i class="fa-regular fa-bookmark"></i> Save
+                    <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
                 </button>
 
                 <button type="button" onclick="speakAnswer(this)" title="Read answer aloud" aria-label="Read answer aloud">
-                    <i class="fa-solid fa-volume-high"></i> Read
+                    <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
@@ -2242,7 +2272,7 @@ function saveAnswer(button) {
             items = items.filter(item => item.content !== content);
 
             if (writeItems(SAVED_KEY, items)) {
-                button.innerHTML = '<i class="fa-regular fa-bookmark"></i> Save';
+                button.innerHTML = '<i class="fa-regular fa-bookmark" aria-hidden="true"></i>';
                 showToast("Answer unsaved.");
             }
         } else {
@@ -2254,7 +2284,7 @@ function saveAnswer(button) {
     }
 
     if (existing) {
-        button.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
+        button.innerHTML = '<i class="fa-solid fa-bookmark" aria-hidden="true"></i>';
         showToast("Already saved. Double-tap to unsave.");
         return;
     }
@@ -2267,7 +2297,7 @@ function saveAnswer(button) {
     });
 
     if (writeItems(SAVED_KEY, items)) {
-        button.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
+        button.innerHTML = '<i class="fa-solid fa-bookmark" aria-hidden="true"></i>';
         showToast("Answer saved!");
     }
 }
@@ -2532,5 +2562,34 @@ currentConversationId = String(Date.now());
 renderChatHistory();
 updateCharCount();
     </script>
+
+<!-- SmartLearn targeted additions; existing chat, history, login and attachment workflows remain untouched. -->
+<div id="personalization-panel" class="smartlearn-extra-backdrop hidden" onclick="if(event.target===this) closePersonalizationPanel()" role="dialog" aria-modal="true" aria-labelledby="personalization-title">
+  <section class="smartlearn-extra-panel">
+    <div class="flex items-center justify-between gap-3 mb-5"><div><h2 id="personalization-title" class="text-xl font-bold">✨ Personalization</h2><p class="text-sm text-slate-400 mt-1">Tell your AI Tutor how you want it to work. It will analyze these preferences and adapt its replies, within its capabilities.</p></div><button class="smart-action" onclick="closePersonalizationPanel()" aria-label="Close personalization"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <label class="text-sm font-semibold">Preferred language<select id="pref-language" class="smart-field mt-2"><option value="auto">Match my message (default)</option><option value="hinglish">Hinglish</option><option value="english">English</option><option value="hindi">Hindi</option></select></label>
+      <label class="text-sm font-semibold">Learning level<select id="pref-level" class="smart-field mt-2"><option value="auto">Auto detect</option><option value="school">School student</option><option value="college">College student</option><option value="beginner">Beginner</option><option value="advanced">Advanced</option></select></label>
+      <label class="text-sm font-semibold">Answer style<select id="pref-style" class="smart-field mt-2"><option value="balanced">Balanced</option><option value="step-by-step">Step by step</option><option value="short">Short and direct</option><option value="detailed">Detailed explanation</option><option value="examples">With examples</option></select></label>
+      <label class="text-sm font-semibold">Tone<select id="pref-tone" class="smart-field mt-2"><option value="friendly">Friendly</option><option value="professional">Professional</option><option value="encouraging">Encouraging</option></select></label>
+    </div>
+    <label class="block text-sm font-semibold mt-4">Custom instructions for your AI Tutor<textarea id="pref-extra" rows="3" maxlength="1000" class="smart-field mt-2" placeholder="e.g. Teach me coding from zero, use Hinglish, analyze my mistakes, give examples, then quiz me."></textarea></label>
+    <div class="flex flex-wrap gap-2 mt-5"><button class="smart-action" onclick="saveTutorPreferences()"><i class="fa-solid fa-check mr-1"></i> Save preferences</button><button class="smart-action" onclick="resetTutorPreferences()">Reset</button></div><p id="pref-status" class="text-xs text-slate-400 mt-3" aria-live="polite"></p>
+  </section>
+</div>
+<script id="smartlearn-targeted-functions">
+(function(){
+  const PREF_KEY='smartlearnTutorPreferences';
+  window.getTutorPreferences=function(){try{return JSON.parse(localStorage.getItem(PREF_KEY)||'{}')}catch(e){return {}}};
+  window.openPersonalizationPanel=function(){const p=getTutorPreferences();document.getElementById('pref-language').value=p.language||'auto';document.getElementById('pref-level').value=p.level||'auto';document.getElementById('pref-style').value=p.style||'balanced';document.getElementById('pref-tone').value=p.tone||'friendly';document.getElementById('pref-extra').value=p.extra||'';document.getElementById('personalization-panel').classList.remove('hidden');};
+  window.closePersonalizationPanel=function(){document.getElementById('personalization-panel').classList.add('hidden')};
+  window.saveTutorPreferences=function(){const p={language:document.getElementById('pref-language').value,level:document.getElementById('pref-level').value,style:document.getElementById('pref-style').value,tone:document.getElementById('pref-tone').value,extra:document.getElementById('pref-extra').value.trim()};localStorage.setItem(PREF_KEY,JSON.stringify(p));window.smartlearnTutorPreferences=p;document.getElementById('pref-status').textContent='Saved! Your AI Tutor will use these preferences to tailor explanations, tone, language and detail.';};
+  window.resetTutorPreferences=function(){localStorage.removeItem(PREF_KEY);['pref-language','pref-level'].forEach(id=>document.getElementById(id).value='auto');document.getElementById('pref-style').value='balanced';document.getElementById('pref-tone').value='friendly';document.getElementById('pref-extra').value='';window.smartlearnTutorPreferences={};document.getElementById('pref-status').textContent='Preferences reset. The Tutor will adapt to each message.';};
+  // Attach preferences to JSON chat requests. Existing multipart uploads and other APIs are left untouched.
+  const nativeFetch=window.fetch.bind(window);
+  window.fetch=function(input,init){const url=typeof input==='string'?input:(input&&input.url)||'';if(init&&init.body&&typeof init.body==='string'&&/\/api\/chat(?:\?|$)/.test(url)){try{const body=JSON.parse(init.body);const prefs=getTutorPreferences();if(Object.keys(prefs).length){body.preferences=prefs;init={...init,body:JSON.stringify(body)}}}catch(_){}}return nativeFetch(input,init)};
+})();
+</script>
+
 </body>
 </html>
