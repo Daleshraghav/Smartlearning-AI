@@ -325,6 +325,9 @@ button {
 
 
 /* LEARNING TOOLS */
+.violet-card { --card-accent:#7761bd; }
+.violet-card .tool-icon { color:#6e58b1; background:#f0ebff; }
+.violet-card .pill { background:#f0ebff; color:#5c489a; }
 
 .section-heading {
   display: flex;
@@ -1017,7 +1020,7 @@ button {
           <h2>Your Learning Tools</h2>
           <p>Everything you need to learn, practice and achieve your goals.</p>
         </div>
-        <span class="tool-count">▦ &nbsp;5 Tools</span>
+        <span class="tool-count">▦ &nbsp;6 Tools</span>
       </div>
 
       <div class="tools-grid">
@@ -1066,6 +1069,17 @@ button {
             <span class="card-arrow">✦</span>
           </div>
         </article>
+
+        <!-- MATHS FORMULA LIBRARY: WORKING ROUTE -->
+        <a href="{{ url_for('maths_formulas') }}" class="tool-card violet-card">
+          <div class="tool-icon">∑</div>
+          <h3>Maths Formula Library</h3>
+          <p>Search AKTU Maths-I to Maths-IV formulas chapter-wise and copy them for quick revision.</p>
+          <div class="card-bottom">
+            <span class="pill">Explore Formulas ↗</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
 
         <!-- PROFILE: WORKING ROUTE -->
         <a href="{{ url_for('profile') }}" class="tool-card gold-card">
