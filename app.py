@@ -1,4 +1,5 @@
 import os
+import json
 import time
 import base64
 import mimetypes
@@ -585,6 +586,41 @@ def profile():
 @login_required
 def dashboard():
     return render_template("dashboard.html", user=current_user())
+
+
+
+# MATHS FORMULA LIBRARY
+@app.route("/maths-formulas")
+@login_required
+def maths_formulas():
+    """Render the searchable Maths formula library for signed-in students."""
+    data_path = BASE_DIR / "formula_data.json"
+    try:
+        with data_path.open("r", encoding="utf-8") as formula_file:
+            formula_data = json.load(formula_file)
+    except (OSError, json.JSONDecodeError):
+        logger.exception("Could not load the Maths Formula Library data")
+        return "Maths Formula Library is temporarily unavailable. Please try again later.", 500
+
+    return render_template(
+        "maths_formulas.html",
+        formula_data=json.dumps(formula_data, ensure_ascii=False),
+    )
+
+
+@app.route("/maths-pdf")
+@login_required
+def maths_pdf():
+    """Download the included Maths reference PDF."""
+    pdf_path = BASE_DIR / "static" / "pdfs" / "AKTU_BTech_Maths_Formula_Book.pdf"
+    if not pdf_path.is_file():
+        return "Maths formula PDF is not installed.", 404
+    return send_file(
+        pdf_path,
+        mimetype="application/pdf",
+        as_attachment=True,
+        download_name=pdf_path.name,
+    )
 
 
 # AI TUTOR
