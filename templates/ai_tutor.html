@@ -1807,18 +1807,28 @@ async function copyUserMessage(text) {
     }
 }
 
+
 function editUserMessage(text) {
     const input = document.getElementById("chat-input");
     if (!input) return;
 
-    input.value = "";
+    // Selected message ko input mein wapas load karo
+    input.value = text || "";
+
+    // Input aur character counter update karo
     input.dispatchEvent(new Event("input", { bubbles: true }));
+
+    // Input par focus aur cursor end mein rakho
     input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
 
     if (typeof updateCharCount === "function") {
         updateCharCount();
     }
+
+    // Toast/message-loaded wali line intentionally removed
 }
+
 function appendAIMessage(text, record = true) {
     const list = document.getElementById("messages-list");
     const row = document.createElement("div");
