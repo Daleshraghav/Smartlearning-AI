@@ -621,7 +621,23 @@ def maths_pdf():
         as_attachment=True,
         download_name=pdf_path.name,
     )
+# NEW: Book 1-4 formulas (NCERT / RS Aggarwal / AKTU)
+@app.route("/formulas")
+@login_required
+def formulas():
+    return render_template("formulas.html")
 
+
+@app.route("/formulas/data")
+@login_required
+def formulas_data():
+    data_path = BASE_DIR / "static" / "formulas.json"
+    try:
+        with data_path.open("r", encoding="utf-8") as f:
+            return jsonify(json.load(f))
+    except (OSError, json.JSONDecodeError):
+        logger.exception("Could not load formulas.json")
+        return jsonify({"error": "Formulas are temporarily unavailable."}), 500
 
 # AI TUTOR
 MAX_MESSAGE_CHARS = 2000
