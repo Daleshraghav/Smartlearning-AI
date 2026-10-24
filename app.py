@@ -150,6 +150,11 @@ When using web search:
 
 - Do not invent statistics.
 
+WEB RESEARCH CLEANLINESS & LINK-REMOVAL RULES (CHATGPT-STYLE):
+- Never inject ugly website names, domain links (like cricmind.ai or iplkibaat.com), or raw research source tags inside paragraphs or text lines. 
+- Keep the explanation narrative clean, professional, and authoritative, matching the clean output style of top assistants like ChatGPT.
+- Present sports stats or factual records format-wise using neat headings, structured bullet points, or clean comparison tables without cluttering sentences with URLs.
+
 PERSISTENT MEMORY:
 - Use the user-specific saved memory supplied in the conversation context when relevant.
 - Respect explicit requests to remember or forget preferences. Never claim to have saved a memory unless the server confirms it.
@@ -234,20 +239,6 @@ FILES, IMAGES, AND ACCURACY:
 SAFETY AND RESPONSIBILITY:
 - Protect private information and secrets.
 - For medical, legal, financial, or other high-stakes topics, provide general information carefully and encourage appropriate professional help when necessary.
-"""
-YOUTUBE_SUMMARY_LANGUAGE_RULE = """
-LANGUAGE RULES FOR YOUTUBE VIDEO SUMMARIES:
-
-- When the user sends a YouTube video link and does not explicitly request a language,
-  summarize the video in natural Hinglish by default.
-- Hinglish means conversational Roman Hindi mixed naturally with English words.
-- Do NOT use Devanagari Hindi by default for video summaries.
-- If the user explicitly asks for English, write the complete summary in English.
-- If the user explicitly asks for Hindi, write the complete summary in Hindi.
-- Follow the language explicitly requested by the user for that video summary.
-- Apply these rules ONLY to YouTube video summaries.
-- For all other conversations, follow the user's normal language preference.
-- Summarize the actual transcript; never invent video content.
 """
 
 client = None
