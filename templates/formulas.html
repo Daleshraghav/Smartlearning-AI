@@ -2,59 +2,169 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Math Formulas – Book 1 to 4 | SmartLearning AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12151f">
+<title>Math Formulas – Book 1 to 4 | SmartLearn AI</title>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <style>
-  :root { --bg:#f6f7fb; --card:#fff; --text:#1c2333; --muted:#6b7280; --accent:#4f46e5; --border:#e5e7eb; }
+  :root { --bg:#f6f7fb; --card:#fff; --text:#1c2333; --muted:#6b7280; --accent:#4f46e5; --border:#e5e7eb; --ok:#059669; }
   @media (prefers-color-scheme: dark) {
-    :root { --bg:#12151f; --card:#1b2030; --text:#e8eaf2; --muted:#9aa3b5; --accent:#818cf8; --border:#2c3347; }
+    :root { --bg:#12151f; --card:#1b2030; --text:#e8eaf2; --muted:#9aa3b5; --accent:#818cf8; --border:#2c3347; --ok:#34d399; }
   }
-  * { box-sizing: border-box; }
-  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); }
-  header { padding:24px 16px 8px; max-width:1000px; margin:auto; }
-  h1 { margin:0 0 4px; font-size:1.6rem; }
-  .sub { color:var(--muted); margin:0 0 16px; }
-  .controls { max-width:1000px; margin:auto; padding:0 16px; display:flex; flex-wrap:wrap; gap:8px; }
-  .controls input { flex:1 1 220px; padding:10px 12px; border-radius:8px; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:1rem; }
-  .chip { padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--card); color:var(--text); cursor:pointer; font-size:.9rem; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--text);
+         padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right); padding-bottom:env(safe-area-inset-bottom); }
+
+  .wrap { max-width:1000px; margin:auto; padding:0 16px; }
+
+  /* TOP */
+  .top-row { padding-top:max(16px, env(safe-area-inset-top)); text-align:left; }
+  .back { display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px; border:1px solid var(--border);
+          background:var(--card); color:var(--text); text-decoration:none; font-size:.9rem; font-weight:600; transition:.25s; }
+  .back:hover { transform:translateX(-3px); border-color:var(--accent); color:var(--accent); }
+
+  header { text-align:center; padding:12px 0 6px; }
+  h1 { margin:8px 0 12px; font-size:2rem; font-weight:800; letter-spacing:-.5px; line-height:1.2; display:inline-block;
+       background:linear-gradient(95deg,#818cf8,#c084fc 55%,#38bdf8); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .sub { display:inline-block; margin:0 0 18px; padding:8px 18px; border-radius:999px; font-size:.9rem; font-weight:700; color:var(--accent);
+         background:color-mix(in srgb, var(--accent) 14%, transparent); border:1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+
+  /* FILTERS */
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+  .chip { padding:9px 15px; border-radius:999px; border:1px solid var(--border); background:var(--card); color:var(--text);
+          cursor:pointer; font-size:.9rem; font-family:inherit; white-space:nowrap; }
   .chip.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-  .group { max-width:1000px; margin:auto; padding:0 16px; }
-  .chap { margin:24px 0 8px; font-size:1.1rem; color:var(--accent); }
+  .search { width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text);
+            font-size:16px; font-family:inherit; margin-top:4px; }
+  .search:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .count { color:var(--muted); font-size:.8rem; margin:12px 2px 0; }
+
+  /* CARDS */
+  .chap { margin:26px 0 10px; font-size:1.05rem; color:var(--accent); line-height:1.4; }
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
-  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; }
-  .card .t { font-size:.85rem; color:var(--muted); margin-bottom:8px; }
-  .card .f { overflow-x:auto; padding:4px 0; }
-  .tag { display:inline-block; font-size:.7rem; padding:2px 8px; border-radius:6px; background:var(--border); color:var(--muted); margin-top:8px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; min-width:0; display:flex; flex-direction:column; }
+  .card .t { font-size:.85rem; color:var(--muted); margin-bottom:6px; }
+  .card .f { overflow-x:auto; overflow-y:hidden; padding:4px 0; flex:1; display:flex; align-items:center; }
+  .card .f .katex-display { margin:.4em 0; width:100%; }
+  .card-foot { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px; }
+  .tag { font-size:.7rem; padding:3px 9px; border-radius:6px; background:var(--border); color:var(--muted); }
+  .copy { display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:999px; border:1px solid var(--border);
+          background:transparent; color:var(--accent); font-size:.8rem; font-weight:700; font-family:inherit; cursor:pointer; transition:.2s; }
+  .copy:hover { border-color:var(--accent); }
+  .copy:active { transform:scale(.96); }
+  .copy.done { color:var(--ok); border-color:var(--ok); }
+
   .empty { text-align:center; color:var(--muted); padding:40px; }
-  footer { max-width:1000px; margin:32px auto; padding:0 16px; color:var(--muted); font-size:.8rem; }
+  footer { margin:34px auto 24px; color:var(--muted); font-size:.8rem; line-height:1.6; text-align:center; }
+
+  /* TOAST */
+  .toast { position:fixed; left:50%; bottom:max(20px, env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(20px);
+           background:var(--accent); color:#fff; padding:10px 18px; border-radius:999px; font-size:.85rem; font-weight:600;
+           opacity:0; pointer-events:none; transition:.25s; z-index:50; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* TABLET */
+  @media (max-width:820px) {
+    h1 { font-size:1.7rem; }
+    .grid { grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); }
+  }
+
+  /* PHONE */
+  @media (max-width:560px) {
+    .wrap { padding:0 12px; }
+    h1 { font-size:1.45rem; margin-bottom:10px; }
+    .sub { font-size:.78rem; padding:7px 14px; }
+    .back { padding:9px 14px; font-size:.85rem; }
+
+    /* filters scroll sideways in a single line instead of taking much height */
+    .chips { flex-wrap:nowrap; overflow-x:auto; margin-inline:-12px; padding:2px 12px 6px; scrollbar-width:none; }
+    .chips::-webkit-scrollbar { display:none; }
+    .chip { padding:9px 14px; font-size:.85rem; flex:0 0 auto; }
+
+    .chap { font-size:.95rem; margin:22px 0 8px; }
+    .grid { grid-template-columns:1fr; gap:10px; }
+    .card { padding:12px; }
+    .card .f { font-size:.95em; }
+    .copy { padding:9px 16px; font-size:.82rem; }  /* bigger tap target */
+  }
+
+  @media (max-width:360px) {
+    h1 { font-size:1.25rem; }
+    .card .f { font-size:.88em; }
+  }
 </style>
 </head>
 <body>
-<header>
-  <h1>📐 Math Formulas</h1>
-  <p class="sub">Book 1 se Book 4 &middot; NCERT, RS Aggarwal &amp; AKTU</p>
-</header>
+<div class="wrap">
 
-<div class="controls" id="bookChips"></div>
-<div class="controls" style="margin-top:8px" id="srcChips"></div>
-<div class="controls" style="margin-top:8px">
-  <input id="q" type="search" placeholder="Formula search karein (e.g. Laplace, Simpson, sin)...">
+  <div class="top-row">
+    <a href="{{ url_for('dashboard') }}" class="back">← Back to Dashboard</a>
+  </div>
+
+  <header>
+    <h1>📐 Math Formulas</h1><br>
+    <p class="sub">Book 1 se Book 4 &middot; NCERT, RS Aggarwal &amp; AKTU</p>
+  </header>
+
+  <div class="chips" id="bookChips"></div>
+  <div class="chips" id="srcChips"></div>
+  <input class="search" id="q" type="search" placeholder="Formula search karein (e.g. Laplace, Simpson, sin)..." autocomplete="off">
+  <div class="count" id="count"></div>
+
+  <div id="out"></div>
+
+  <footer>Note: AKTU ka syllabus saal aur branch ke hisaab se thoda badalta hai. Exam se pehle apne syllabus se match kar lein.<br>
+  Copy button formula ka LaTeX code copy karta hai (Word / Google Docs ke equation editor mein paste kar sakte hain).</footer>
 </div>
 
-<div class="group" id="out"></div>
-<footer>Note: AKTU ka syllabus saal aur branch ke hisaab se thoda badalta hai. Exam se pehle apne syllabus se match kar lein.</footer>
+<div class="toast" id="toast">Formula copy ho gaya ✓</div>
 
 <script>
 let DATA = [], book = 0, source = "", query = "";
 const BOOKS = [[0,"Sab"],[1,"Book 1"],[2,"Book 2"],[3,"Book 3"],[4,"Book 4"]];
 const SOURCES = [["","Sab Sources"],["NCERT / RS Aggarwal","NCERT / RS Aggarwal"],["AKTU","AKTU"]];
 
+/* ---------- copy ---------- */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 1600);
+}
+function fallbackCopy(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.setAttribute("readonly", "");
+  ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch (e) {}
+  document.body.removeChild(ta);
+  return ok;
+}
+async function copyText(text, btn) {
+  let ok = false;
+  try {
+    if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); ok = true; }
+  } catch (e) {}
+  if (!ok) ok = fallbackCopy(text);
+  if (ok) {
+    btn.classList.add("done"); btn.textContent = "✓ Copied";
+    showToast("Formula copy ho gaya ✓");
+    setTimeout(() => { btn.classList.remove("done"); btn.textContent = "⧉ Copy"; }, 1500);
+  } else {
+    showToast("Copy nahi hua, dobara try karein");
+  }
+}
+
+/* ---------- ui ---------- */
 function chips(elId, items, getActive, onClick) {
   const el = document.getElementById(elId); el.innerHTML = "";
   items.forEach(([v, label]) => {
     const b = document.createElement("button");
+    b.type = "button";
     b.className = "chip" + (getActive() === v ? " active" : "");
     b.textContent = label;
     b.onclick = () => { onClick(v); render(); };
@@ -65,10 +175,11 @@ function chips(elId, items, getActive, onClick) {
 function render() {
   chips("bookChips", BOOKS, () => book, v => book = v);
   chips("srcChips", SOURCES, () => source, v => source = v);
-  const q = query.toLowerCase();
+  const q = query.trim().toLowerCase();
   const list = DATA.filter(d =>
     (!book || d.book === book) && (!source || d.source === source) &&
     (!q || (d.title + " " + d.chapter + " " + d.latex).toLowerCase().includes(q)));
+  document.getElementById("count").textContent = list.length + " formulas";
   const out = document.getElementById("out"); out.innerHTML = "";
   if (!list.length) { out.innerHTML = '<div class="empty">Koi formula nahi mila.</div>'; return; }
   const groups = {};
@@ -78,10 +189,13 @@ function render() {
     const g = document.createElement("div"); g.className = "grid";
     items.forEach(d => {
       const c = document.createElement("div"); c.className = "card";
-      c.innerHTML = '<div class="t"></div><div class="f"></div><span class="tag"></span>';
+      c.innerHTML = '<div class="t"></div><div class="f"></div>' +
+        '<div class="card-foot"><span class="tag"></span><button type="button" class="copy" aria-label="Copy formula">⧉ Copy</button></div>';
       c.querySelector(".t").textContent = d.title;
       c.querySelector(".tag").textContent = d.source;
-      try { katex.render(d.latex, c.querySelector(".f"), { throwOnError: false, displayMode: true }); }
+      const btn = c.querySelector(".copy");
+      btn.addEventListener("click", () => copyText(d.latex, btn));
+      try { katex.render(d.latex, c.querySelector(".f"), { throwOnError:false, displayMode:true }); }
       catch (e) { c.querySelector(".f").textContent = d.latex; }
       g.appendChild(c);
     });
@@ -91,8 +205,10 @@ function render() {
 
 document.getElementById("q").addEventListener("input", e => { query = e.target.value; render(); });
 window.addEventListener("load", () =>
-  fetch("{{ url_for('formulas_data') }}").then(r => r.json()).then(d => { DATA = d; render(); }));
+  fetch("{{ url_for('formulas_data') }}")
+    .then(r => r.json())
+    .then(d => { DATA = Array.isArray(d) ? d : []; render(); })
+    .catch(() => { document.getElementById("out").innerHTML = '<div class="empty">Formulas load nahi ho paye. Page refresh karein.</div>'; }));
 </script>
 </body>
 </html>
-
