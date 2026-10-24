@@ -283,12 +283,44 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
 /* ==========================================
    REDUCED TEXT SIZE FOR MESSAGES & AI ANSWERS
    ========================================== */
+
+/* Clear, comfortable ChatGPT-style spacing */
 .ai-answer-content {
-    background: transparent !important; color: #f1f5f9; font-size: 13.5px !important;
-    line-height: 1.7 !important; letter-spacing: 0.1px; font-weight: 450;
-    overflow-wrap: anywhere; word-break: normal; min-width: 0; padding: 0 !important;
+    background: transparent !important;
+    color: #f1f5f9;
+    font-size: 14px !important;
+    line-height: 1.85 !important;
+    letter-spacing: 0.15px;
+    font-weight: 450;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    min-width: 0;
+    padding: 0 !important;
 }
-.ai-answer-content p { margin: 0 0 12px !important; }
+
+.ai-answer-content p {
+    margin: 0 0 16px !important;
+    line-height: 1.85 !important;
+}
+
+.ai-answer-content h1,
+.ai-answer-content h2,
+.ai-answer-content h3 {
+    margin: 22px 0 12px !important;
+    line-height: 1.5 !important;
+}
+
+.ai-answer-content ul,
+.ai-answer-content ol {
+    padding-left: 24px !important;
+    margin: 12px 0 18px !important;
+}
+
+.ai-answer-content li {
+    padding-left: 3px;
+    margin: 8px 0 !important;
+    line-height: 1.8 !important;
+}
 .ai-answer-content h1, .ai-answer-content h2, .ai-answer-content h3 {
     color: #ffffff; font-weight: 700; line-height: 1.4 !important; margin: 16px 0 8px !important;
 }
