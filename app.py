@@ -797,17 +797,99 @@ def is_math_question(message):
     return False
 
 
+
 def math_solution_instruction():
-    """Strict formatting requirements appended for detected maths questions."""
     return r"""
-MATHS QUESTION MODE — FOLLOW THESE INSTRUCTIONS FOR THIS RESPONSE:
-1. Start with **Question:** and rewrite the given expression/problem clearly using LaTeX. Do not change the values or signs.
-2. Use short, numbered steps. State the formula/rule, substitute the exact terms, then show each simplification on a separate display line.
-3. Write all maths in valid MathJax-compatible LaTeX: inline as \\( ... \\), displayed as \\[ ... \\]. Each displayed equation must have both opening and closing delimiters. Never leave raw expressions like x^2 or a^2 in ordinary text when they are mathematical notation.
-4. Put explanations in the user's language/script between equations. Avoid overly long paragraphs.
-5. End with **Final Answer:** and a separate displayed equation containing the complete boxed result, e.g. \\[\\boxed{x^2+10x+25}\\]. Do not let the final result omit any term.
-6. Check that each line follows algebraically from the previous line. If the problem is ambiguous or unreadable, say exactly what is unclear rather than guessing.
-""".strip()
+MATHS AND TECHNICAL SOLUTION RULES:
+
+1. LANGUAGE:
+- Answer in the same language and script as the user's latest message.
+- English question -> English answer.
+- Hinglish or Roman Hindi question -> natural Hinglish/Roman Hindi.
+- Hindi in Devanagari -> Hindi in Devanagari.
+- Keep standard mathematical and technical terms in English when that makes the explanation clearer.
+- Do not switch languages without a reason.
+
+2. SOLUTION DETAIL:
+- Solve the actual question carefully before presenting the answer.
+- For calculations, algebra, equations, calculus, probability, statistics,
+  physics numericals, and similar problems, explain the steps in order.
+- Start by stating what is given and what needs to be found, when relevant.
+- Identify the formula or mathematical rule being used.
+- Explain why that formula applies.
+- Substitute the known values and show the intermediate calculations.
+- Do not skip important algebraic steps.
+- Explain confusing transformations in simple language.
+- Verify the result when practical.
+- Adjust the number of steps to the difficulty of the question.
+- Do not provide only a final answer when the user needs a solution.
+
+3. MATHEMATICAL FORMATTING:
+- Use Markdown for headings, numbered steps, bullet points, and explanations.
+- Use $...$ for inline mathematical expressions.
+- Use $$...$$ on separate lines for displayed equations.
+- Put each important displayed equation on its own line.
+- Do not use square brackets alone to represent equations.
+- Do not mix \(...\), \[...\], $...$, and $$...$$ in the same answer.
+- Never put an entire solution inside one giant equation.
+- Keep variable names, operators, exponents, fractions, and units correct.
+- Use standard LaTeX syntax inside math delimiters.
+- For example, write $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+  rather than writing the formula as plain text.
+- Do not put Markdown bold markers inside mathematical delimiters.
+- Avoid unnecessary LaTeX commands such as \boxed{}.
+- Never output broken, incomplete, or unmatched math delimiters.
+
+4. REQUIRED ANSWER STRUCTURE FOR MULTI-STEP PROBLEMS:
+Use this structure when appropriate:
+
+### Given
+List the known values or information.
+
+### Formula
+Write the relevant formula using valid math delimiters.
+
+### Step-by-step solution
+Number the steps. Show the substitution, simplification, and calculations.
+Explain the important steps in ordinary text outside the equations.
+
+### Final Answer
+State the final result clearly, including the correct unit when applicable.
+Use a separate Markdown block such as:
+
+> **Final Answer:** [write the result here]
+
+Replace the placeholder with the actual answer. Do not include the square brackets.
+Do not claim that the final answer is inside a special visual box; the frontend
+is responsible for its visual appearance.
+
+5. SUBJECT-SPECIFIC CARE:
+- Algebra: show transformations and preserve equality correctly.
+- Arithmetic: show calculations and units where relevant.
+- Calculus: identify the differentiation or integration rule being applied.
+- Geometry: state the relevant theorem and explain the substitution.
+- Probability and statistics: define the quantities and show the calculation.
+- Physics numericals: state the formula, substitute values, and include units.
+- Word problems: translate the important information into mathematical terms.
+- Proofs: explain the reasoning in a logical sequence.
+
+6. ACCURACY:
+- Never invent values missing from the question.
+- If the question is ambiguous, state the assumption or ask a brief clarification.
+- If the user's proposed solution contains an error, identify the exact step and
+  explain the correction politely.
+- If a calculation cannot be completed from the available information, say why.
+- Do not fabricate mathematical symbols, variable labels, or intermediate steps.
+
+7. RESPONSE QUALITY:
+- Keep explanations clear, organized, and readable.
+- Explain mathematical terminology briefly when it is important to understanding.
+- Do not repeat the same explanation unnecessarily.
+- For a simple calculation, keep the answer concise.
+- For a difficult problem, provide a more detailed derivation.
+- Finish with a clearly stated final result.
+"""
+
 
 def explicit_memory_request(message):
     """Return memory text only for clear user requests to remember something."""
