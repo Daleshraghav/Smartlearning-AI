@@ -550,7 +550,7 @@ button {
   transform: translateX(4px);
 }
 
-  
+
 /* AI TUTOR — LIGHT LUXURY CARD */
 .active-card {
   --tint: #f0edff;
@@ -790,7 +790,7 @@ button {
   .tool-card {
     min-height: 220px;
   }
-
+}
 
 /* MOBILE NAVIGATION */
 
@@ -825,6 +825,18 @@ button {
     padding: 15px 16px 18px;
   }
 
+  .tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .motivation {
+    flex-wrap: wrap;
+  }
+
+  .steps {
+    flex-wrap: wrap;
+  }
+}
 
 /* PHONE */
 
@@ -890,6 +902,23 @@ button {
     line-height: 1.8;
   }
 
+  .tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .motivation {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+}
+
 @media (max-width: 360px) {
   .back-button {
     padding: 9px;
@@ -920,6 +949,7 @@ button {
   .tool-card p {
     font-size: 9px;
   }
+}
 
 /* ACCESSIBILITY */
 
@@ -1070,11 +1100,11 @@ button {
           </div>
         </article>
 
-        <!-- MATHS FORMULA LIBRARY: WORKING ROUTE -->
-      <a href="{{ url_for('formulas') }}" class="tool-card violet-card">
-  <div class="tool-icon">∑</div>
-  <h3>Maths Formula Library</h3>
-  <p>Search Book 1-4 formulas from NCERT, RS Aggarwal and AKTU, chapter-wise, for quick revision.</p>
+        <!-- MATHS FORMULA LIBRARY: NEW BOOK 1-4 PAGE -->
+        <a href="{{ url_for('formulas') }}" class="tool-card violet-card">
+          <div class="tool-icon">∑</div>
+          <h3>Maths Formula Library</h3>
+          <p>Search Book 1-4 formulas from NCERT, RS Aggarwal and AKTU, chapter-wise, for quick revision.</p>
           <div class="card-bottom">
             <span class="pill">Explore Formulas ↗</span>
             <span class="card-arrow">→</span>
