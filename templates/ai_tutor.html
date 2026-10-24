@@ -1714,7 +1714,10 @@ function formatAIResponse(text) {
     } else {
         html = escapeHtml(source).replace(/\n/g, "<br>");
     }
-
+html = html.replace(
+  /(?<!["'(])(https?:\/\/[^\s<]+)/g,
+  '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+);
     return html;
 }
 
