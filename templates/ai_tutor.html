@@ -806,6 +806,44 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
     #welcome-screen .grid > button > span:first-child { flex-basis: 30px !important; width: 30px !important; height: 30px !important; }
 }
 
+
+/* Targeted math readability fix only */
+#messages-list .ai-answer-content mjx-container[display="true"] {
+    display: block !important;
+    max-width: 100% !important;
+    margin: 24px auto !important;
+    text-align: center !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    font-size: 1.18em !important;
+}
+#messages-list .ai-answer-content mjx-container:not([display="true"]) {
+    font-size: 1.06em !important;
+}
+#messages-list .ai-answer-content .final-answer-box {
+    margin: 18px 0 22px !important;
+    padding: 14px 16px !important;
+    border: 1px solid #dbeafe !important;
+    border-left: 4px solid #6366f1 !important;
+    border-radius: 12px !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    overflow-wrap: anywhere !important;
+}
+#messages-list .ai-answer-content .final-answer-box h3 {
+    margin: 0 0 8px !important;
+    color: #3730a3 !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+}
+#messages-list .ai-answer-content .final-answer-box p {
+    margin: 0 0 8px !important;
+    color: #111827 !important;
+}
+#messages-list .ai-answer-content .final-answer-box mjx-container {
+    color: #111827 !important;
+}
+
 </style>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
@@ -1650,17 +1688,24 @@ function escapeHtml(value) {
 function formatAIResponse(text) {
     let source = String(text ?? "");
 
-    // Normalize common malformed display-math delimiters from AI output.
-    // Convert standalone [ ... ] blocks to MathJax display delimiters.
+    // Convert standalone [ ... ] equation blocks into MathJax display equations.
     source = source.replace(
         /^\s*\[\s*\n([\s\S]*?)\n\s*\]\s*$/gm,
         (_, equation) => `$$\n${equation.trim()}\n$$`
     );
 
-    // Also handle inline LaTeX delimiters if the model uses them.
+    // Repair malformed square-root output and common mathematical italic letters.
+    source = source.replace(/\\sqrt\{\s*,\s*([^{}]*?)\s*,\s*\}/g, "\\sqrt{$1}");
+    const mathLetterMap = {
+        "𝑎":"a","𝑏":"b","𝑐":"c","𝑑":"d","𝑒":"e","𝑓":"f","𝑔":"g",
+        "𝑥":"x","𝑦":"y","𝑧":"z","𝑛":"n","𝑚":"m","𝑝":"p","𝑞":"q",
+        "𝑟":"r","𝑡":"t","𝑢":"u","𝑣":"v","𝑤":"w","𝑖":"i","𝑗":"j","𝑘":"k","𝑙":"l"
+    };
+    source = source.replace(/[𝑎𝑏𝑐𝑑𝑒𝑓𝑔𝑥𝑦𝑧𝑛𝑚𝑝𝑞𝑟𝑡𝑢𝑣𝑤𝑖𝑗𝑘𝑙]/g, ch => mathLetterMap[ch]);
+
+    // Normalize inline LaTeX delimiters, without altering display delimiters.
     source = source.replace(/\\\(/g, "$").replace(/\\\)/g, "$");
 
-    // Render Markdown safely.
     let html;
     if (window.marked && window.DOMPurify) {
         marked.setOptions({ gfm: true, breaks: true });
@@ -1669,9 +1714,13 @@ function formatAIResponse(text) {
         html = escapeHtml(source).replace(/\n/g, "<br>");
     }
 
+    // Highlight a clearly labelled final-answer heading only.
+    html = html.replace(
+        /<h([1-6])([^>]*)>([\s\S]*?(?:Final Answer|Final Result|Final answer|Final result|Answer)\s*:?\s*[\s\S]*?)<\/h\1>/i,
+        '<div class="final-answer-box"><h3>Final Answer</h3><div>$3</div></div>'
+    );
     return html;
 }
-
  function showToast(message) {
     const toast = document.getElementById("toast");
 
