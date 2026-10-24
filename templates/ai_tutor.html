@@ -398,41 +398,7 @@ body.light-mode .three-white-dots span { color: #000000 !important; }
 .ai-answer-content strong { color: #ffffff; font-weight: 700; }
 .ai-answer-content blockquote { background: transparent !important; border-left: 3px solid #a78bfa; padding: 6px 12px; margin: 12px 0; }
 .ai-answer-content pre { max-width: 100%; overflow-x: auto; padding: 10px !important; line-height: 1.6; border-radius: 8px; background: rgba(15, 23, 42, 0.35) !important; font-size: 12.5px !important; }
-/* Responsive Markdown tables: prevent narrow columns from splitting years/numbers */
-.ai-answer-content .table-scroll-container {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    margin: 14px 0 22px !important;
-    -webkit-overflow-scrolling: touch;
-}
-.ai-answer-content table {
-    width: max-content !important;
-    min-width: 560px !important;
-    max-width: none !important;
-    border-collapse: collapse !important;
-    table-layout: auto !important;
-    overflow: visible !important;
-}
-.ai-answer-content th, .ai-answer-content td {
-    padding: 10px 12px !important;
-    min-width: 90px !important;
-    vertical-align: top !important;
-    white-space: normal !important;
-    overflow-wrap: break-word !important;
-    word-break: normal !important;
-}
-.ai-answer-content th:first-child, .ai-answer-content td:first-child {
-    min-width: 76px !important;
-    white-space: nowrap !important;
-}
-.ai-answer-content th { font-weight: 700 !important; }
-@media (max-width: 767px) {
-    .ai-answer-content table { min-width: 520px !important; }
-    .ai-answer-content th, .ai-answer-content td { padding: 8px 10px !important; }
-}
+.ai-answer-content table { max-width: 100%; overflow-x: auto; }
 
 /* User Message Bubble Smaller Text */
 .user-message-bubble .text-sm {
@@ -860,6 +826,21 @@ body.light-mode .tool-modal-field::placeholder { color:#64748b; }
 .smart-action { border:1px solid rgba(167,139,250,.35); background:rgba(139,92,246,.14); border-radius:12px; padding:9px 12px; font-weight:700; font-size:13px; }
 .smart-action:hover { background:rgba(139,92,246,.26); }
 @media(max-width:640px) { .smartlearn-extra-panel {padding:15px;border-radius:19px;} }
+
+/* Targeted research readability: prevent tables and citations from breaking the answer layout. */
+#messages-list .ai-answer-content { min-width: 0; overflow-wrap: anywhere; }
+#messages-list .ai-answer-content table { display: block; width: max-content; max-width: 100%; overflow-x: auto; border-collapse: collapse; margin: 14px 0 18px; }
+#messages-list .ai-answer-content th, #messages-list .ai-answer-content td { padding: 9px 12px; border: 1px solid rgba(148,163,184,.28); text-align: left; vertical-align: top; min-width: 72px; }
+#messages-list .ai-answer-content th { font-weight: 700; background: rgba(139,92,246,.12); }
+#messages-list .ai-answer-content a { color: #c4b5fd; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+#messages-list .ai-answer-content a:hover { color: #ddd6fe; }
+#messages-list .ai-answer-content pre { max-width: 100%; overflow-x: auto; }
+#messages-list .ai-answer-content mjx-container { max-width: 100%; }
+#messages-list .ai-answer-content mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; }
+@media (max-width: 767px) {
+  #messages-list .ai-answer-content table { width: 100%; }
+  #messages-list .ai-answer-content th, #messages-list .ai-answer-content td { padding: 7px 9px; }
+}
 </style>
 
 </head>
@@ -1685,39 +1666,34 @@ function formatAIResponse(text) {
     let source = String(text ?? "");
 
     // Normalize common malformed display-math delimiters from AI output.
-    // Convert standalone [ ... ] blocks to MathJax display delimiters.
-    source = source.replace(
-        /^\s*\[\s*\n([\s\S]*?)\n\s*\]\s*$/gm,
-        (_, equation) => `$$\n${equation.trim()}\n$$`
-    );
-
-    // Also handle inline LaTeX delimiters if the model uses them.
+    source = source.replace(/^\s*\[\s*\n([\s\S]*?)\n\s*\]\s*$/gm,
+        (_, equation) => `$$\n${equation.trim()}\n$$`);
     source = source.replace(/\\\(/g, "$").replace(/\\\)/g, "$");
 
-    // Render Markdown safely.
+    // Convert bare URLs into descriptive clickable links before Markdown parsing.
+    // Existing Markdown destinations [label](https://...) are left untouched.
+    source = source.replace(/(?<!\]\()(https?:\/\/[^\s<>)\]]+)/g, (url) => {
+        const cleanUrl = url.replace(/[.,!?;:]+$/, "");
+        const trailing = url.slice(cleanUrl.length);
+        let label = "Open source";
+        try {
+            const host = new URL(cleanUrl).hostname.replace(/^www\./i, "");
+            label = host || label;
+        } catch (_) {}
+        return `[${label}](${cleanUrl})${trailing}`;
+    });
+
     let html;
     if (window.marked && window.DOMPurify) {
-        marked.setOptions({ gfm: true, breaks: true });
-        html = DOMPurify.sanitize(marked.parse(source));
-        // Keep Markdown tables readable on desktop and mobile instead of squeezing columns.
-        const tableHost = document.createElement("div");
-        tableHost.innerHTML = html;
-        tableHost.querySelectorAll("table").forEach(table => {
-            if (!table.parentElement?.classList.contains("table-scroll-container")) {
-                const wrapper = document.createElement("div");
-                wrapper.className = "table-scroll-container";
-                table.parentNode.insertBefore(wrapper, table);
-                wrapper.appendChild(table);
-            }
+        marked.setOptions({ gfm: true, breaks: true, headerIds: false, mangle: false });
+        html = DOMPurify.sanitize(marked.parse(source), {
+            USE_PROFILES: { html: true },
+            ADD_ATTR: ["target", "rel"]
         });
-        html = tableHost.innerHTML;
     } else {
         html = escapeHtml(source).replace(/\n/g, "<br>");
     }
-html = html.replace(
-  /(?<!["'(])(https?:\/\/[^\s<]+)/g,
-  '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-);
+
     return html;
 }
 
