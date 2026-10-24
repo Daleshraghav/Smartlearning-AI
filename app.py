@@ -1051,12 +1051,12 @@ def should_web_research(message):
 
 
 def search_web_context(query, max_results=5):
-    """Retrieve and deduplicate live web evidence via Tavily for any current topic."""
+    """Retrieve diverse, deduplicated Tavily evidence using focused sub-queries."""
     if not TAVILY_API_KEY:
         logger.warning("Tavily search skipped: TAVILY_API_KEY is not configured")
         return ""
 
-    base_query = re.sub(r"\s+", " ", (query or "").strip())[:500]
+    base_query = re.sub(r"\s+", " ", (query or "").strip())[:400]
     if not base_query:
         return ""
 
@@ -1066,49 +1066,57 @@ def search_web_context(query, max_results=5):
         "developments", "this week", "this month", "right now", "currently",
     ))
     is_cricket_stats = any(term in lower_query for term in (
-        "shubman", "gill", "cricket", "ipl", "odi", "t20", "test", "runs scored", "year-wise", "year wise"
+        "cricket", "ipl", "odi", "t20", "test", "runs scored", "year-wise", "year wise",
+        "shubman", "gill", "kohli", "rohit", "cricketer"
     )) and any(term in lower_query for term in (
         "run", "stat", "year", "score", "career", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"
     ))
 
-    # Use focused follow-up searches for current topics instead of relying on one broad result.
+    # Search different angles separately so the first broad query cannot consume the source budget.
     queries = [base_query]
     if is_cricket_stats:
-        queries.extend([
-            f"{base_query} official year by year statistics ESPNcricinfo",
-            f"{base_query} year-wise runs by format ODI Test T20I IPL stats",
-        ])
+        player = base_query
+        year_match = re.search(r"(?:19|20)\d{2}.*?(?:19|20)\d{2}", base_query)
+        year_span = year_match.group(0) if year_match else "career"
+        queries = [
+            f"{player} IPL season batting runs year by year {year_span} statistics",
+            f"{player} Test ODI T20I international batting runs by calendar year {year_span}",
+            f"{player} year wise batting statistics ESPNcricinfo profile",
+            f"{player} official cricket statistics BCCI ICC batting runs",
+            base_query,
+        ]
     elif is_news_query:
         queries.extend([
-            f"{base_query} latest developments official statement",
-            f"{base_query} latest news reputable news sources",
+            f"{base_query} latest official announcement statement",
+            f"{base_query} latest news Reuters AP BBC",
         ])
     elif any(term in lower_query for term in ("research", "sources", "citations", "compare", "verify", "fact check")):
-        queries.extend([
-            f"{base_query} official source",
-            f"{base_query} independent reporting analysis",
-        ])
+        queries.extend([f"{base_query} official source", f"{base_query} independent reporting analysis"])
 
     chunks = []
     seen_urls = set()
-    total_results = 0
-    target_results = max(3, min(int(max_results), 8))
+    target_results = max(5, min(int(max_results), 12 if is_cricket_stats else 8))
+    # Keep a source from one query from crowding out all the other useful angles.
+    per_query_limit = 3 if is_cricket_stats else 4
     for search_query in queries:
-        if total_results >= target_results:
-            break
         try:
+            payload_body = {
+                "api_key": TAVILY_API_KEY,
+                "query": search_query[:400],
+                "search_depth": "advanced",
+                "topic": "news" if is_news_query else "general",
+                "max_results": per_query_limit,
+                "include_answer": False,
+                "include_raw_content": False,
+            }
+            if is_news_query:
+                payload_body["days"] = 30
+            if is_cricket_stats:
+                payload_body["exclude_domains"] = ["facebook.com", "instagram.com", "x.com", "twitter.com", "tiktok.com"]
             response = requests.post(
                 "https://api.tavily.com/search",
                 headers={"Content-Type": "application/json"},
-                json={
-                    "api_key": TAVILY_API_KEY,
-                    "query": search_query[:500],
-                    "search_depth": "advanced",
-                    "topic": "news" if is_news_query else "general",
-                    "max_results": 5,
-                    "include_answer": False,
-                    "include_raw_content": False,
-                },
+                json=payload_body,
                 timeout=(8, 25),
             )
             if not response.ok:
@@ -1122,18 +1130,20 @@ def search_web_context(query, max_results=5):
                 published = str(item.get("published_date") or item.get("date") or "").strip()[:100]
                 if not url or not content:
                     continue
-                # Deduplicate URLs while ignoring tracking parameters and trailing slash differences.
                 parsed = urlparse(url)
-                canonical = (parsed.netloc.lower(), parsed.path.rstrip("/"), parsed.query if not parsed.query else "")
+                host = parsed.netloc.lower().removeprefix("www.")
+                path = parsed.path.rstrip("/")
+                canonical = (host, path)
                 if canonical in seen_urls:
                     continue
                 seen_urls.add(canonical)
                 chunks.append(
                     f"Source title: {title}\nSource URL: {url}\nPublished/updated date: {published or 'Not provided by search result'}\nSearch snippet: {content}"
                 )
-                total_results += 1
-                if total_results >= target_results:
+                if len(chunks) >= target_results:
                     break
+            if len(chunks) >= target_results:
+                break
         except requests.HTTPError as exc:
             status = exc.response.status_code if exc.response is not None else "unknown"
             logger.warning("Tavily web search failed with HTTP %s", status)
@@ -1147,7 +1157,7 @@ def search_web_context(query, max_results=5):
     if not chunks:
         logger.warning("Tavily search returned no usable source snippets")
         return ""
-    return "\n\n".join(chunks)[:16000]
+    return "\n\n".join(chunks)[:22000]
 
 @app.route("/api/chat", methods=["POST"])
 @login_required
