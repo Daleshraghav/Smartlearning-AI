@@ -1580,23 +1580,31 @@ function escapeHtml(value) {
     })[character]);
 }
 
-function formatAIResponse(text) {
-    const source = String(text ?? "");
 
+function formatAIResponse(text) {
+    let source = String(text ?? "");
+
+    // Normalize common malformed display-math delimiters from AI output.
+    // Convert standalone [ ... ] blocks to MathJax display delimiters.
+    source = source.replace(
+        /^\s*\[\s*\n([\s\S]*?)\n\s*\]\s*$/gm,
+        (_, equation) => `$$\n${equation.trim()}\n$$`
+    );
+
+    // Also handle inline LaTeX delimiters if the model uses them.
+    source = source.replace(/\\\(/g, "$").replace(/\\\)/g, "$");
+
+    // Render Markdown safely.
+    let html;
     if (window.marked && window.DOMPurify) {
         marked.setOptions({ gfm: true, breaks: true });
-        return DOMPurify.sanitize(marked.parse(source));
+        html = DOMPurify.sanitize(marked.parse(source));
+    } else {
+        html = escapeHtml(source).replace(/\n/g, "<br>");
     }
 
-    return escapeHtml(source).replace(/\n/g, "<br>");
+    return html;
 }
-
-function showToast(message) {
-    const toast = document.getElementById("toast-message");
-    if (!toast) {
-        alert(message);
-        return;
-    }
 
     toast.textContent = message;
     toast.classList.remove("hidden");
