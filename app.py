@@ -99,12 +99,19 @@ CREATOR / OWNER RESPONSE — EXACT RULE:
 - Recognize English, Hindi, Devanagari Hindi, and Hinglish/Roman Hindi phrasings, including "who made you", "who created you", "who is your owner", "tera malik kaun hai", "tujhe kisne banaya", and similar meanings.
 - Do not add any other words, punctuation, explanation, or greeting to that exact reply.
 
-MATHS AND COMPLEX REASONING:
-- For maths and hard academic questions, solve methodically in readable steps.
-- State the formula or principle, substitute values carefully, show important intermediate calculations, and clearly mark the final answer.
-- Check signs, arithmetic, units, domain restrictions, and solutions by substitution when practical.
-- For difficult problems, choose an appropriate method and explain why it works; do not invent steps or claim verification that was not performed.
-- Use valid LaTeX delimiters for inline and displayed equations. Avoid raw LaTeX fragments outside math delimiters.
+MATHS AND COMPLEX REASONING — STRICT TEACHING FORMAT:
+- Solve maths questions in a clear, classroom-tutor style, step by step. Never jump straight to the answer unless the user explicitly asks for only the answer.
+- First restate the given question or expression using correct mathematical notation.
+- Identify the formula/rule and briefly explain why it applies.
+- Substitute the values or terms into the formula on a separate line.
+- Show each meaningful algebraic manipulation/calculation on its own line. Do not skip the middle steps that a student needs to understand.
+- Explain the purpose of each step in the user's language (for example, “Formula apply karo”, “Values substitute karo”, “Simplify karo”). Adapt headings to the actual method; do not force irrelevant steps.
+- Finish with a clearly labelled Final Answer and put the result in a LaTeX box, e.g. \boxed{x^2+10x+25}. Check that the boxed result is complete and exactly matches the last calculation.
+- MATHEMATICAL NOTATION IS MANDATORY: use LaTeX for every mathematical expression. Use \( ... \) for inline maths and \[ ... \] for displayed equations. Never write powers as plain x^2 when it is intended as maths; render it as \(x^2\). Use proper notation for fractions (\frac{a}{b}), roots (\sqrt{x}), subscripts, Greek letters, limits, sums, integrals, matrices, derivatives, vectors, and inequalities as appropriate.
+- Put each important equation in its own display-math block. Do not put a whole worked solution into one equation. Do not place equations inside code fences or use backticks around maths.
+- Avoid ambiguous or incorrect notation such as ((x+5)^2), a^2 + 2ab + b^2 in plain prose, or malformed/unclosed LaTeX delimiters. Keep explanatory prose outside the equation delimiters.
+- For expansions, show formula -> substitution -> simplification -> boxed result. For differentiation/integration, state the rule, apply it term by term, and include the constant of integration where required. For matrices, show the relevant operation clearly. For word problems, define variables and units first. Use the method appropriate to the question rather than forcing the expansion template onto every topic.
+- Check signs, arithmetic, units, domain restrictions, and solutions by substitution when practical. Do not invent steps or claim verification that was not performed.
 - If information is missing, state the assumption or ask one concise clarifying question.
 
 PERSISTENT MEMORY:
@@ -750,6 +757,44 @@ def response_language_instruction(message):
     return "LANGUAGE OVERRIDE: Reply in English unless the user clearly uses another language."
 
 
+def is_math_question(message):
+    """Detect likely maths requests so the tutor can use a stricter worked-solution format."""
+    text = (message or "").strip().lower()
+    if not text:
+        return False
+
+    math_terms = (
+        "math", "maths", "mathematics", "formula", "equation", "solve", "simplify",
+        "expand", "factorize", "factorise", "differentiate", "derivative", "integrate",
+        "integration", "differentiation", "matrix", "matrices", "determinant", "eigenvalue",
+        "laplace", "fourier", "probability", "permutation", "combination", "limit", "limits",
+        "trigonometry", "sin(", "cos(", "tan(", "calculus", "quadratic", "polynomial",
+        "fraction", "square root", "sqrt", "logarithm", "log(", "prove that", "find x",
+        "find the value", "step by step", "engineering mathematics", "aktu"
+    )
+    if any(term in text for term in math_terms):
+        return True
+
+    # Common mathematical symbols or an equation/expression with an operator and digits/variables.
+    if any(symbol in text for symbol in ("=", "²", "³", "√", "∫", "∑", "∂", "≤", "≥", "≠", "±", "÷", "×", "^")):
+        return True
+    if re.search(r"\b[a-z]\s*[+*/=^-]\s*[a-z0-9(]", text) and re.search(r"\d|[a-z]\s*[+*/=^-]\s*[a-z]", text):
+        return True
+    return False
+
+
+def math_solution_instruction():
+    """Strict formatting requirements appended for detected maths questions."""
+    return r"""
+MATHS QUESTION MODE — FOLLOW THESE INSTRUCTIONS FOR THIS RESPONSE:
+1. Start with **Question:** and rewrite the given expression/problem clearly using LaTeX. Do not change the values or signs.
+2. Use short, numbered steps. State the formula/rule, substitute the exact terms, then show each simplification on a separate display line.
+3. Write all maths in valid MathJax-compatible LaTeX: inline as \\( ... \\), displayed as \\[ ... \\]. Each displayed equation must have both opening and closing delimiters. Never leave raw expressions like x^2 or a^2 in ordinary text when they are mathematical notation.
+4. Put explanations in the user's language/script between equations. Avoid overly long paragraphs.
+5. End with **Final Answer:** and a separate displayed equation containing the complete boxed result, e.g. \\[\\boxed{x^2+10x+25}\\]. Do not let the final result omit any term.
+6. Check that each line follows algebraically from the previous line. If the problem is ambiguous or unreadable, say exactly what is unclear rather than guessing.
+""".strip()
+
 def explicit_memory_request(message):
     """Return memory text only for clear user requests to remember something."""
     raw = (message or "").strip()
@@ -1104,6 +1149,11 @@ def chat_with_tutor():
 
     try:
         system_prompt = SMARTLEARN_SYSTEM_PROMPT + "\n\n" + response_language_instruction(user_message)
+        math_context = user_message
+        if not math_context and extracted_document_text:
+            math_context = extracted_document_text[:5000]
+        if is_math_question(math_context) or (image_content and any(word in (user_message or "").lower() for word in ("math", "maths", "solve", "question", "equation", "formula"))):
+            system_prompt += "\n\n" + math_solution_instruction()
         if tutor_preferences:
             preference_rules = {
                 "language": {
@@ -1193,10 +1243,11 @@ def chat_with_tutor():
             model_to_use = GROQ_MODEL
 
         # Keep this outside the image/text branch so it exists for both request types.
+        is_math_response = is_math_question(math_context if "math_context" in locals() else user_message)
         request_kwargs = {
             "messages": messages,
-            "temperature": 0.3 if image_content or extracted_document_text else 0.5,
-            "max_completion_tokens": 1500,
+            "temperature": 0.2 if is_math_response else (0.3 if image_content or extracted_document_text else 0.5),
+            "max_completion_tokens": 2500 if is_math_response else 1500,
         }
 
         try:
