@@ -1,0 +1,858 @@
+[
+  {
+    "id": 1,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Algebraic Identities",
+    "title": "Square of sum",
+    "latex": "(a+b)^2 = a^2 + 2ab + b^2"
+  },
+  {
+    "id": 2,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Algebraic Identities",
+    "title": "Square of difference",
+    "latex": "(a-b)^2 = a^2 - 2ab + b^2"
+  },
+  {
+    "id": 3,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Algebraic Identities",
+    "title": "Difference of squares",
+    "latex": "a^2 - b^2 = (a+b)(a-b)"
+  },
+  {
+    "id": 4,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Algebraic Identities",
+    "title": "Cube of sum",
+    "latex": "(a+b)^3 = a^3 + 3a^2b + 3ab^2 + b^3"
+  },
+  {
+    "id": 5,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Algebraic Identities",
+    "title": "Sum of cubes",
+    "latex": "a^3 + b^3 = (a+b)(a^2 - ab + b^2)"
+  },
+  {
+    "id": 6,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Quadratic Equations",
+    "title": "Quadratic formula",
+    "latex": "x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}"
+  },
+  {
+    "id": 7,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Quadratic Equations",
+    "title": "Discriminant",
+    "latex": "D = b^2 - 4ac"
+  },
+  {
+    "id": 8,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Quadratic Equations",
+    "title": "Sum and product of roots",
+    "latex": "\\alpha+\\beta = -\\frac{b}{a},\\quad \\alpha\\beta = \\frac{c}{a}"
+  },
+  {
+    "id": 9,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Arithmetic Progression",
+    "title": "nth term",
+    "latex": "a_n = a + (n-1)d"
+  },
+  {
+    "id": 10,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Arithmetic Progression",
+    "title": "Sum of n terms",
+    "latex": "S_n = \\frac{n}{2}\\left[2a + (n-1)d\\right]"
+  },
+  {
+    "id": 11,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Geometric Progression",
+    "title": "nth term",
+    "latex": "a_n = a r^{n-1}"
+  },
+  {
+    "id": 12,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Geometric Progression",
+    "title": "Sum of n terms (r ≠ 1)",
+    "latex": "S_n = \\frac{a(r^n-1)}{r-1}"
+  },
+  {
+    "id": 13,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Geometric Progression",
+    "title": "Sum to infinity (|r|<1)",
+    "latex": "S_\\infty = \\frac{a}{1-r}"
+  },
+  {
+    "id": 14,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Exponents & Logarithms",
+    "title": "Product of powers",
+    "latex": "a^m \\cdot a^n = a^{m+n}"
+  },
+  {
+    "id": 15,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Exponents & Logarithms",
+    "title": "Log of product",
+    "latex": "\\log(mn) = \\log m + \\log n"
+  },
+  {
+    "id": 16,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Exponents & Logarithms",
+    "title": "Change of base",
+    "latex": "\\log_a b = \\frac{\\log b}{\\log a}"
+  },
+  {
+    "id": 17,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Profit, Loss & Interest",
+    "title": "Profit percent",
+    "latex": "\\text{Profit \\%} = \\frac{SP-CP}{CP}\\times 100"
+  },
+  {
+    "id": 18,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Profit, Loss & Interest",
+    "title": "Simple interest",
+    "latex": "SI = \\frac{P R T}{100}"
+  },
+  {
+    "id": 19,
+    "source": "NCERT / RS Aggarwal",
+    "book": 1,
+    "chapter": "Profit, Loss & Interest",
+    "title": "Compound amount",
+    "latex": "A = P\\left(1+\\frac{R}{100}\\right)^n"
+  },
+  {
+    "id": 20,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Circle",
+    "title": "Area",
+    "latex": "A = \\pi r^2"
+  },
+  {
+    "id": 21,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Circle",
+    "title": "Circumference",
+    "latex": "C = 2\\pi r"
+  },
+  {
+    "id": 22,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Circle",
+    "title": "Sector area",
+    "latex": "A = \\frac{\\theta}{360^\\circ}\\,\\pi r^2"
+  },
+  {
+    "id": 23,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Circle",
+    "title": "Arc length",
+    "latex": "l = \\frac{\\theta}{360^\\circ}\\,2\\pi r"
+  },
+  {
+    "id": 24,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Triangle",
+    "title": "Area",
+    "latex": "A = \\tfrac{1}{2}\\,b\\,h"
+  },
+  {
+    "id": 25,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Triangle",
+    "title": "Heron's formula",
+    "latex": "A = \\sqrt{s(s-a)(s-b)(s-c)},\\quad s=\\frac{a+b+c}{2}"
+  },
+  {
+    "id": 26,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Triangle",
+    "title": "Pythagoras theorem",
+    "latex": "c^2 = a^2 + b^2"
+  },
+  {
+    "id": 27,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cuboid",
+    "title": "Volume",
+    "latex": "V = l\\,b\\,h"
+  },
+  {
+    "id": 28,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cuboid",
+    "title": "Total surface area",
+    "latex": "TSA = 2(lb + bh + hl)"
+  },
+  {
+    "id": 29,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cuboid",
+    "title": "Diagonal",
+    "latex": "d = \\sqrt{l^2 + b^2 + h^2}"
+  },
+  {
+    "id": 30,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cylinder",
+    "title": "Curved surface area",
+    "latex": "CSA = 2\\pi r h"
+  },
+  {
+    "id": 31,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cylinder",
+    "title": "Total surface area",
+    "latex": "TSA = 2\\pi r (r + h)"
+  },
+  {
+    "id": 32,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cylinder",
+    "title": "Volume",
+    "latex": "V = \\pi r^2 h"
+  },
+  {
+    "id": 33,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cone",
+    "title": "Slant height",
+    "latex": "l = \\sqrt{r^2 + h^2}"
+  },
+  {
+    "id": 34,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cone",
+    "title": "Curved surface area",
+    "latex": "CSA = \\pi r l"
+  },
+  {
+    "id": 35,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Cone",
+    "title": "Volume",
+    "latex": "V = \\tfrac{1}{3}\\pi r^2 h"
+  },
+  {
+    "id": 36,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Sphere",
+    "title": "Surface area",
+    "latex": "SA = 4\\pi r^2"
+  },
+  {
+    "id": 37,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Sphere",
+    "title": "Volume",
+    "latex": "V = \\tfrac{4}{3}\\pi r^3"
+  },
+  {
+    "id": 38,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Hemisphere",
+    "title": "Total surface area",
+    "latex": "TSA = 3\\pi r^2"
+  },
+  {
+    "id": 39,
+    "source": "NCERT / RS Aggarwal",
+    "book": 2,
+    "chapter": "Hemisphere",
+    "title": "Volume",
+    "latex": "V = \\tfrac{2}{3}\\pi r^3"
+  },
+  {
+    "id": 40,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Identities",
+    "title": "Pythagorean identity",
+    "latex": "\\sin^2\\theta + \\cos^2\\theta = 1"
+  },
+  {
+    "id": 41,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Identities",
+    "title": "Tan-sec identity",
+    "latex": "1 + \\tan^2\\theta = \\sec^2\\theta"
+  },
+  {
+    "id": 42,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Identities",
+    "title": "Cot-cosec identity",
+    "latex": "1 + \\cot^2\\theta = \\operatorname{cosec}^2\\theta"
+  },
+  {
+    "id": 43,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Compound Angles",
+    "title": "sin(A ± B)",
+    "latex": "\\sin(A\\pm B) = \\sin A\\cos B \\pm \\cos A\\sin B"
+  },
+  {
+    "id": 44,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Compound Angles",
+    "title": "cos(A ± B)",
+    "latex": "\\cos(A\\pm B) = \\cos A\\cos B \\mp \\sin A\\sin B"
+  },
+  {
+    "id": 45,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Compound Angles",
+    "title": "tan(A ± B)",
+    "latex": "\\tan(A\\pm B) = \\frac{\\tan A \\pm \\tan B}{1 \\mp \\tan A\\tan B}"
+  },
+  {
+    "id": 46,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Multiple Angles",
+    "title": "sin 2A",
+    "latex": "\\sin 2A = 2\\sin A\\cos A"
+  },
+  {
+    "id": 47,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Multiple Angles",
+    "title": "cos 2A",
+    "latex": "\\cos 2A = \\cos^2 A - \\sin^2 A = 1 - 2\\sin^2 A = 2\\cos^2 A - 1"
+  },
+  {
+    "id": 48,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Multiple Angles",
+    "title": "tan 2A",
+    "latex": "\\tan 2A = \\frac{2\\tan A}{1-\\tan^2 A}"
+  },
+  {
+    "id": 49,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Sum to Product",
+    "title": "sin C + sin D",
+    "latex": "\\sin C + \\sin D = 2\\sin\\frac{C+D}{2}\\cos\\frac{C-D}{2}"
+  },
+  {
+    "id": 50,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Sum to Product",
+    "title": "cos C + cos D",
+    "latex": "\\cos C + \\cos D = 2\\cos\\frac{C+D}{2}\\cos\\frac{C-D}{2}"
+  },
+  {
+    "id": 51,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Triangle Rules",
+    "title": "Sine rule",
+    "latex": "\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R"
+  },
+  {
+    "id": 52,
+    "source": "NCERT / RS Aggarwal",
+    "book": 3,
+    "chapter": "Triangle Rules",
+    "title": "Cosine rule",
+    "latex": "a^2 = b^2 + c^2 - 2bc\\cos A"
+  },
+  {
+    "id": 53,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Coordinate Geometry",
+    "title": "Distance formula",
+    "latex": "d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}"
+  },
+  {
+    "id": 54,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Coordinate Geometry",
+    "title": "Section formula (internal)",
+    "latex": "\\left(\\frac{m x_2 + n x_1}{m+n},\\ \\frac{m y_2 + n y_1}{m+n}\\right)"
+  },
+  {
+    "id": 55,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Coordinate Geometry",
+    "title": "Slope",
+    "latex": "m = \\frac{y_2-y_1}{x_2-x_1}"
+  },
+  {
+    "id": 56,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Coordinate Geometry",
+    "title": "Area of triangle",
+    "latex": "A = \\tfrac{1}{2}\\left|x_1(y_2-y_3)+x_2(y_3-y_1)+x_3(y_1-y_2)\\right|"
+  },
+  {
+    "id": 57,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Differentiation",
+    "title": "Power rule",
+    "latex": "\\frac{d}{dx}x^n = n x^{n-1}"
+  },
+  {
+    "id": 58,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Differentiation",
+    "title": "Product rule",
+    "latex": "\\frac{d}{dx}(uv) = u\\frac{dv}{dx} + v\\frac{du}{dx}"
+  },
+  {
+    "id": 59,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Differentiation",
+    "title": "Quotient rule",
+    "latex": "\\frac{d}{dx}\\left(\\frac{u}{v}\\right) = \\frac{v\\,u' - u\\,v'}{v^2}"
+  },
+  {
+    "id": 60,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Differentiation",
+    "title": "Chain rule",
+    "latex": "\\frac{dy}{dx} = \\frac{dy}{du}\\cdot\\frac{du}{dx}"
+  },
+  {
+    "id": 61,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Integration",
+    "title": "Power rule",
+    "latex": "\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C,\\ n\\neq -1"
+  },
+  {
+    "id": 62,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Integration",
+    "title": "1/x",
+    "latex": "\\int \\frac{1}{x}\\,dx = \\ln|x| + C"
+  },
+  {
+    "id": 63,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Integration",
+    "title": "Integration by parts",
+    "latex": "\\int u\\,dv = uv - \\int v\\,du"
+  },
+  {
+    "id": 64,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Probability",
+    "title": "Basic probability",
+    "latex": "P(E) = \\frac{\\text{favourable outcomes}}{\\text{total outcomes}}"
+  },
+  {
+    "id": 65,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Probability",
+    "title": "Addition rule",
+    "latex": "P(A\\cup B) = P(A) + P(B) - P(A\\cap B)"
+  },
+  {
+    "id": 66,
+    "source": "NCERT / RS Aggarwal",
+    "book": 4,
+    "chapter": "Statistics",
+    "title": "Empirical relation",
+    "latex": "\\text{Mode} = 3\\,\\text{Median} - 2\\,\\text{Mean}"
+  },
+  {
+    "id": 67,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Series Expansion",
+    "title": "Taylor's series",
+    "latex": "f(x) = f(a) + (x-a)f'(a) + \\frac{(x-a)^2}{2!}f''(a) + \\cdots"
+  },
+  {
+    "id": 68,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Series Expansion",
+    "title": "Maclaurin's series",
+    "latex": "f(x) = f(0) + x f'(0) + \\frac{x^2}{2!}f''(0) + \\cdots"
+  },
+  {
+    "id": 69,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Successive Differentiation",
+    "title": "Leibnitz theorem",
+    "latex": "(uv)_n = \\sum_{r=0}^{n}\\binom{n}{r} u_{n-r}\\,v_r"
+  },
+  {
+    "id": 70,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Partial Differentiation",
+    "title": "Euler's theorem (homogeneous, degree n)",
+    "latex": "x\\frac{\\partial f}{\\partial x} + y\\frac{\\partial f}{\\partial y} = n f"
+  },
+  {
+    "id": 71,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Partial Differentiation",
+    "title": "Jacobian",
+    "latex": "J = \\frac{\\partial(u,v)}{\\partial(x,y)} = \\begin{vmatrix} u_x & u_y \\\\ v_x & v_y \\end{vmatrix}"
+  },
+  {
+    "id": 72,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Curvature",
+    "title": "Radius of curvature (Cartesian)",
+    "latex": "\\rho = \\frac{\\left(1+y_1^2\\right)^{3/2}}{y_2}"
+  },
+  {
+    "id": 73,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Matrices",
+    "title": "Characteristic equation",
+    "latex": "|A - \\lambda I| = 0"
+  },
+  {
+    "id": 74,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Matrices",
+    "title": "Cayley–Hamilton theorem",
+    "latex": "\\text{Every square matrix satisfies its own characteristic equation}"
+  },
+  {
+    "id": 75,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Beta & Gamma",
+    "title": "Gamma function",
+    "latex": "\\Gamma(n) = \\int_0^\\infty e^{-x}x^{n-1}\\,dx,\\quad \\Gamma(n+1)=n\\Gamma(n),\\quad \\Gamma\\!\\left(\\tfrac12\\right)=\\sqrt{\\pi}"
+  },
+  {
+    "id": 76,
+    "source": "AKTU",
+    "book": 1,
+    "chapter": "Beta & Gamma",
+    "title": "Beta function",
+    "latex": "B(m,n) = \\int_0^1 x^{m-1}(1-x)^{n-1}dx = \\frac{\\Gamma(m)\\Gamma(n)}{\\Gamma(m+n)}"
+  },
+  {
+    "id": 77,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Linear ODE",
+    "title": "Integrating factor method",
+    "latex": "\\frac{dy}{dx}+Py=Q,\\quad IF = e^{\\int P\\,dx},\\quad y\\cdot IF = \\int Q\\cdot IF\\,dx + C"
+  },
+  {
+    "id": 78,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Laplace Transform",
+    "title": "L{t^n}",
+    "latex": "\\mathcal{L}\\{t^n\\} = \\frac{n!}{s^{n+1}}"
+  },
+  {
+    "id": 79,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Laplace Transform",
+    "title": "L{e^{at}}",
+    "latex": "\\mathcal{L}\\{e^{at}\\} = \\frac{1}{s-a}"
+  },
+  {
+    "id": 80,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Laplace Transform",
+    "title": "L{sin at}",
+    "latex": "\\mathcal{L}\\{\\sin at\\} = \\frac{a}{s^2+a^2}"
+  },
+  {
+    "id": 81,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Laplace Transform",
+    "title": "L{cos at}",
+    "latex": "\\mathcal{L}\\{\\cos at\\} = \\frac{s}{s^2+a^2}"
+  },
+  {
+    "id": 82,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Laplace Transform",
+    "title": "First shifting theorem",
+    "latex": "\\mathcal{L}\\{e^{at}f(t)\\} = F(s-a)"
+  },
+  {
+    "id": 83,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Laplace Transform",
+    "title": "Transform of derivative",
+    "latex": "\\mathcal{L}\\{f'(t)\\} = sF(s) - f(0)"
+  },
+  {
+    "id": 84,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Fourier Series",
+    "title": "Series on (-π, π)",
+    "latex": "f(x) = \\frac{a_0}{2} + \\sum_{n=1}^{\\infty}\\left(a_n\\cos nx + b_n\\sin nx\\right)"
+  },
+  {
+    "id": 85,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Fourier Series",
+    "title": "Coefficients",
+    "latex": "a_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\cos nx\\,dx,\\quad b_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\sin nx\\,dx"
+  },
+  {
+    "id": 86,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Vector Calculus",
+    "title": "Gradient",
+    "latex": "\\nabla\\phi = \\frac{\\partial\\phi}{\\partial x}\\hat i + \\frac{\\partial\\phi}{\\partial y}\\hat j + \\frac{\\partial\\phi}{\\partial z}\\hat k"
+  },
+  {
+    "id": 87,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Vector Calculus",
+    "title": "Divergence and curl",
+    "latex": "\\operatorname{div}\\vec F = \\nabla\\cdot\\vec F,\\qquad \\operatorname{curl}\\vec F = \\nabla\\times\\vec F"
+  },
+  {
+    "id": 88,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Vector Calculus",
+    "title": "Gauss divergence theorem",
+    "latex": "\\iint_S \\vec F\\cdot\\hat n\\,dS = \\iiint_V \\nabla\\cdot\\vec F\\,dV"
+  },
+  {
+    "id": 89,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Vector Calculus",
+    "title": "Stokes' theorem",
+    "latex": "\\oint_C \\vec F\\cdot d\\vec r = \\iint_S (\\nabla\\times\\vec F)\\cdot\\hat n\\,dS"
+  },
+  {
+    "id": 90,
+    "source": "AKTU",
+    "book": 2,
+    "chapter": "Vector Calculus",
+    "title": "Green's theorem",
+    "latex": "\\oint_C (M\\,dx + N\\,dy) = \\iint_R\\left(\\frac{\\partial N}{\\partial x}-\\frac{\\partial M}{\\partial y}\\right)dx\\,dy"
+  },
+  {
+    "id": 91,
+    "source": "AKTU",
+    "book": 3,
+    "chapter": "Correlation & Regression",
+    "title": "Karl Pearson's coefficient",
+    "latex": "r = \\frac{\\operatorname{Cov}(x,y)}{\\sigma_x\\sigma_y}"
+  },
+  {
+    "id": 92,
+    "source": "AKTU",
+    "book": 3,
+    "chapter": "Correlation & Regression",
+    "title": "Regression line of y on x",
+    "latex": "y-\\bar y = r\\frac{\\sigma_y}{\\sigma_x}(x-\\bar x)"
+  },
+  {
+    "id": 93,
+    "source": "AKTU",
+    "book": 3,
+    "chapter": "Distributions",
+    "title": "Binomial distribution",
+    "latex": "P(X=r) = \\binom{n}{r}p^r q^{n-r},\\quad \\text{mean}=np,\\ \\text{var}=npq"
+  },
+  {
+    "id": 94,
+    "source": "AKTU",
+    "book": 3,
+    "chapter": "Distributions",
+    "title": "Poisson distribution",
+    "latex": "P(X=r) = \\frac{e^{-\\lambda}\\lambda^r}{r!},\\quad \\text{mean}=\\text{var}=\\lambda"
+  },
+  {
+    "id": 95,
+    "source": "AKTU",
+    "book": 3,
+    "chapter": "Distributions",
+    "title": "Normal distribution",
+    "latex": "f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}},\\quad Z = \\frac{x-\\mu}{\\sigma}"
+  },
+  {
+    "id": 96,
+    "source": "AKTU",
+    "book": 3,
+    "chapter": "Numerical Methods",
+    "title": "Newton–Raphson method",
+    "latex": "x_{n+1} = x_n - \\frac{f(x_n)}{f'(x_n)}"
+  },
+  {
+    "id": 97,
+    "source": "AKTU",
+    "book": 3,
+    "chapter": "Numerical Methods",
+    "title": "Trapezoidal rule",
+    "latex": "\\int_a^b f\\,dx \\approx \\frac{h}{2}\\left[y_0 + 2(y_1+\\cdots+y_{n-1}) + y_n\\right]"
+  },
+  {
+    "id": 98,
+    "source": "AKTU",
+    "book": 3,
+    "chapter": "Numerical Methods",
+    "title": "Simpson's 1/3 rule",
+    "latex": "\\int_a^b f\\,dx \\approx \\frac{h}{3}\\left[y_0 + 4(y_1+y_3+\\cdots) + 2(y_2+y_4+\\cdots) + y_n\\right]"
+  },
+  {
+    "id": 99,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Complex Analysis",
+    "title": "Cauchy–Riemann equations",
+    "latex": "\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y},\\qquad \\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}"
+  },
+  {
+    "id": 100,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Complex Analysis",
+    "title": "Cauchy integral formula",
+    "latex": "f(a) = \\frac{1}{2\\pi i}\\oint_C \\frac{f(z)}{z-a}\\,dz"
+  },
+  {
+    "id": 101,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Complex Analysis",
+    "title": "Cauchy residue theorem",
+    "latex": "\\oint_C f(z)\\,dz = 2\\pi i\\sum \\operatorname{Res} f(z)"
+  },
+  {
+    "id": 102,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Complex Analysis",
+    "title": "Residue at a simple pole z = a",
+    "latex": "\\operatorname{Res}f(a) = \\lim_{z\\to a}(z-a)f(z)"
+  },
+  {
+    "id": 103,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Partial Differential Equations",
+    "title": "One-dimensional wave equation",
+    "latex": "\\frac{\\partial^2 y}{\\partial t^2} = c^2\\frac{\\partial^2 y}{\\partial x^2}"
+  },
+  {
+    "id": 104,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Partial Differential Equations",
+    "title": "One-dimensional heat equation",
+    "latex": "\\frac{\\partial u}{\\partial t} = c^2\\frac{\\partial^2 u}{\\partial x^2}"
+  },
+  {
+    "id": 105,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Partial Differential Equations",
+    "title": "Laplace equation (2D)",
+    "latex": "\\frac{\\partial^2 u}{\\partial x^2} + \\frac{\\partial^2 u}{\\partial y^2} = 0"
+  },
+  {
+    "id": 106,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Numerical ODE",
+    "title": "Euler's method",
+    "latex": "y_{n+1} = y_n + h\\,f(x_n, y_n)"
+  },
+  {
+    "id": 107,
+    "source": "AKTU",
+    "book": 4,
+    "chapter": "Numerical ODE",
+    "title": "Runge–Kutta (4th order)",
+    "latex": "y_{n+1} = y_n + \\frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)"
+  }
+]
