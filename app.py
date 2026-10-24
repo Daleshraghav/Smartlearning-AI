@@ -833,18 +833,6 @@ MATH FORMATTING — STRICT:
 - Do not use \boxed{} for the final answer.
 - Never omit a variable, exponent, minus sign, multiplication term, or label.
 - Use valid LaTeX only; never output malformed or incomplete expressions.
-- Never place equations inside bare square brackets such as [ equation ].
-- Never insert Unicode mathematical italic characters such as 𝑎 or 𝑏
-  in place of ordinary LaTeX variables.
-- Write variables as ordinary LaTeX letters inside math delimiters:
-  $a$, $b$, $a^2$, and $ab$.
-- Do not put equations inside Markdown tables.
-- Do not split one equation into separate symbols, lines, or columns.
-- Keep each complete equation together in a single math expression.
-- Use simple multiplication notation such as $ab$ instead of unnecessary
-  \cdot or \qquad commands.
-- Do not include invisible or decorative Unicode mathematical characters.
-- Use the same math delimiter format consistently throughout the answer.
 
 FOR ALGEBRAIC IDENTITIES:
 When asked to expand or explain an identity:
