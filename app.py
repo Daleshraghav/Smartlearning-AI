@@ -1008,58 +1008,85 @@ def should_web_research(message):
 
 
 def search_web_context(query, max_results=5):
-    """Retrieve current web evidence via Tavily; return only actual retrieved source details."""
+    """Retrieve current web evidence via Tavily, using focused searches for sports statistics."""
     if not TAVILY_API_KEY:
+        logger.warning("Tavily search skipped: TAVILY_API_KEY is not configured")
         return ""
-    try:
-        response = requests.post(
-            "https://api.tavily.com/search",
-            headers={
-                "Authorization": f"Bearer {TAVILY_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "query": (query or "")[:500],
-                "search_depth": "advanced",
-                "topic": "general",
-                "max_results": max(1, min(int(max_results), 10)),
-                "include_answer": True,
-                "include_raw_content": False,
-            },
-            timeout=(8, 25),
-        )
-        if not response.ok:
-            # Log status only; never log the API key or request headers.
-            logger.warning("Tavily search returned HTTP %s", response.status_code)
-            response.raise_for_status()
-        payload = response.json()
-        chunks = []
-        answer = payload.get("answer")
-        if isinstance(answer, str) and answer.strip():
-            chunks.append("Tavily search summary (secondary aid, verify against source results): " + answer.strip())
-        for item in payload.get("results", [])[:max_results]:
-            title = str(item.get("title") or "Untitled source")[:250]
-            url = str(item.get("url") or "").strip()[:1000]
-            content = str(item.get("content") or "").strip()[:1800]
-            published = str(item.get("published_date") or item.get("date") or "").strip()[:100]
-            if url and content:
+
+    base_query = (query or "").strip()[:500]
+    if not base_query:
+        return ""
+
+    # A single broad query often returns highlights rather than complete yearly totals.
+    # For cricket/player statistics, run a few focused searches and merge real results.
+    lower_query = base_query.lower()
+    is_cricket_stats = any(term in lower_query for term in (
+        "shubman", "gill", "cricket", "ipl", "odi", "t20", "test", "runs scored", "year-wise", "year wise"
+    )) and any(term in lower_query for term in (
+        "run", "stat", "year", "score", "career", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"
+    ))
+    queries = [base_query]
+    if is_cricket_stats:
+        queries.extend([
+            f"{base_query} official year by year batting statistics ESPNcricinfo",
+            f"{base_query} year-wise runs by format ODI Test T20I IPL stats",
+        ])
+
+    chunks = []
+    seen_urls = set()
+    total_results = 0
+    for search_query in queries:
+        if total_results >= max_results * (2 if is_cricket_stats else 1):
+            break
+        try:
+            response = requests.post(
+                "https://api.tavily.com/search",
+                headers={
+                    "Authorization": f"Bearer {TAVILY_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "query": search_query[:500],
+                    "search_depth": "advanced",
+                    "topic": "general",
+                    "max_results": max(1, min(int(max_results), 5)),
+                    "include_answer": False,
+                    "include_raw_content": False,
+                },
+                timeout=(8, 25),
+            )
+            if not response.ok:
+                logger.warning("Tavily search returned HTTP %s", response.status_code)
+                response.raise_for_status()
+            payload = response.json()
+            for item in payload.get("results", []):
+                title = str(item.get("title") or "Untitled source")[:250]
+                url = str(item.get("url") or "").strip()[:1000]
+                content = str(item.get("content") or "").strip()[:1800]
+                published = str(item.get("published_date") or item.get("date") or "").strip()[:100]
+                if not url or not content or url in seen_urls:
+                    continue
+                seen_urls.add(url)
                 chunks.append(
                     f"Source: {title}\nURL: {url}\nPublished/updated date: {published or 'Not provided by search result'}\nSnippet: {content}"
                 )
-        return "\n\n".join(chunks)[:9000]
-    except requests.HTTPError as exc:
-        status = exc.response.status_code if exc.response is not None else "unknown"
-        logger.warning("Tavily web search failed with HTTP %s", status)
+                total_results += 1
+                if total_results >= max_results * (2 if is_cricket_stats else 1):
+                    break
+        except requests.HTTPError as exc:
+            status = exc.response.status_code if exc.response is not None else "unknown"
+            logger.warning("Tavily web search failed with HTTP %s", status)
+        except requests.Timeout:
+            logger.warning("Tavily web search timed out")
+        except requests.RequestException as exc:
+            logger.warning("Tavily web search network error (%s)", type(exc).__name__)
+        except (ValueError, TypeError, KeyError) as exc:
+            logger.warning("Tavily response could not be parsed (%s)", type(exc).__name__)
+
+    if not chunks:
+        logger.warning("Tavily search returned no usable source snippets")
         return ""
-    except requests.Timeout:
-        logger.warning("Tavily web search timed out")
-        return ""
-    except requests.RequestException as exc:
-        logger.warning("Tavily web search network error (%s)", type(exc).__name__)
-        return ""
-    except (ValueError, TypeError, KeyError) as exc:
-        logger.warning("Tavily response could not be parsed (%s)", type(exc).__name__)
-        return ""
+    return "\n\n".join(chunks)[:12000]
 
 @app.route("/api/chat", methods=["POST"])
 @login_required
@@ -1288,7 +1315,12 @@ def chat_with_tutor():
                 "\n\nWEB RESEARCH RULES: If real search results are supplied, use them as evidence for current/factual claims. "
                 "Prioritize official/primary sources, check date and scope, distinguish verified facts from estimates, "
                 "and include a compact Sources list with the exact URLs supplied. Never invent statistics or URLs. "
-                "For year-wise sports statistics, use a readable Markdown table, clearly state whether figures mean calendar-year runs or season totals, mark unavailable/incomplete years, and never guess missing values. "
+                "For year-wise sports statistics, DO NOT use a Markdown table. Use separate year-by-year bullet sections so sources remain visible on mobile and desktop. "
+                "For every year use this shape: **YEAR** — **format/scope**: verified total if supported; otherwise explicitly say 'Exact annual total not verified from the retrieved sources'. Then put the relevant clickable source URL on the same bullet. "
+                "Keep year totals, single-match scores, innings highlights, IPL season totals, and format-specific totals clearly separate; never substitute one for another. "
+                "Before giving cricket runs, explicitly state the scope. If the user has not specified calendar-year all-format runs versus format-wise annual runs versus IPL season runs, explain this distinction and present only clearly labelled figures supported by sources. Never combine unlike scopes into one total column. "
+                "For each year, give a numeric total only when the supplied source evidence supports that exact total; otherwise say which year/source is not verified and do not fill the gap with highlights or unrelated match innings. "
+                "Give a clickable source URL next to each set of figures, prefer official/primary scorecards or reputable statistics pages, and do not present Wikipedia or social-media posts alone as verification for every year. "
                 "If no search results are supplied, explicitly say live verification was unavailable and do not claim to have browsed."
             )
         math_context = user_message
@@ -1338,7 +1370,7 @@ def chat_with_tutor():
             system_prompt += "\n\nUSER-SPECIFIC SAVED MEMORY (use only when relevant):\n" + durable_memory[:3000]
         # Latest-message language/script wins over history, stored preferences, and earlier replies.
         system_prompt += (
-            "\\n\\nFINAL LANGUAGE PRIORITY (highest priority): "
+            "\n\nFINAL LANGUAGE PRIORITY (highest priority): "
             + response_language_instruction(user_message)
             + " This rule overrides conversation history, stored preferences, and earlier assistant replies. "
             "For Roman Hindi/Hinglish, use Latin letters only; never use Devanagari unless the current user message uses Devanagari or explicitly asks for it."
